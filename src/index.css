@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+@theme {
+  --font-royal: 'Cinzel Decorative', 'Cinzel', serif;
+  --font-serif: 'Cinzel', serif;
+  --font-devanagari: 'Rozha One', 'Yatra One', serif;
+  --font-script: 'Great Vibes', cursive;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-editorial: 'Playfair Display', serif;
+
+  --color-maroon-950: #200007;
+  --color-maroon-900: #38010d;
+  --color-maroon-800: #540217;
+  --color-maroon-700: #730022;
+  --color-maroon-600: #94032d;
+
+  --color-emerald-950: #041712;
+  --color-emerald-900: #08241c;
+  --color-emerald-800: #0f382c;
+  --color-emerald-700: #175240;
+
+  --color-gold-50: #fffdf5;
+  --color-gold-100: #fcf4db;
+  --color-gold-200: #f7e7b4;
+  --color-gold-300: #ecc874;
+  --color-gold-400: #dfb045;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #b38328;
+  --color-gold-700: #8f601b;
+  --color-gold-800: #6d4414;
+}
+
+/* Custom Royal scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #200007;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4af37, #8f601b);
+  border-radius: 4px;
+  border: 1px solid #ecc874;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f7e7b4;
+}
+
+/* Royal Pattern Backgrounds */
+.bg-royal-maroon {
+  background-color: #2a010a;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 100% 50%, rgba(148, 3, 45, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 0% 50%, rgba(8, 36, 28, 0.35) 0%, transparent 50%),
+    radial-gradient(#d4af37 0.65px, transparent 0.65px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+}
+
+.bg-royal-emerald {
+  background-color: #061c16;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.18) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(56, 1, 13, 0.3) 0%, transparent 60%),
+    radial-gradient(#dfb045 0.65px, transparent 0.65px);
+  background-size: 100% 100%, 100% 100%, 30px 30px;
+}
+
+/* Royal Gold Text Gradient */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF6D6 0%, #F5D77F 25%, #D4AF37 55%, #AA771C 85%, #F5D77F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
+}
+
+.gold-gradient-subtle {
+  background: linear-gradient(135deg, #FDF7E7 0%, #E8C87A 50%, #C49A32 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Royal Ornate Borders */
+.royal-card {
+  background: linear-gradient(145deg, rgba(46, 2, 12, 0.92) 0%, rgba(26, 1, 7, 0.95) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 10px 35px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.12) inset;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.royal-card:hover {
+  border-color: rgba(236, 200, 116, 0.65);
+  box-shadow: 0 15px 45px -5px rgba(0, 0, 0, 0.85), 0 0 30px rgba(212, 175, 55, 0.2) inset;
+}
+
+.royal-emerald-card {
+  background: linear-gradient(145deg, rgba(8, 36, 28, 0.92) 0%, rgba(4, 23, 18, 0.96) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  box-shadow: 0 10px 35px -5px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.12) inset;
+  backdrop-filter: blur(12px);
+}
+
+/* Royal Gold Border Frame with Corner Notches */
+.royal-border-frame {
+  position: relative;
+  border: 2px solid transparent;
+  background: 
+    linear-gradient(#2a010a, #2a010a) padding-box,
+    linear-gradient(135deg, #D4AF37 0%, #FFF3C4 30%, #AA771C 60%, #F5D77F 100%) border-box;
+}
+
+/* Royal Mandap Arch effect */
+.royal-arch {
+  border-top-left-radius: 120px;
+  border-top-right-radius: 120px;
+}
+
+/* Sound wave animation */
+@keyframes waveAnim {
+  0%, 100% {
+    height: 6px;
+  }
+  50% {
+    height: 20px;
+  }
+}
+
+.sound-bar {
+  animation: waveAnim 1.2s ease-in-out infinite;
+}
+.sound-bar:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.sound-bar:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.sound-bar:nth-child(4) {
+  animation-delay: 0.1s;
+}
+
+/* Floating animation */
+@keyframes royalFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-royal-float {
+  animation: royalFloat 6s ease-in-out infinite;
+}
+
+/* Diya / Lamp Flame Glow */
+@keyframes diyaGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.7));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.95));
+  }
+}
+
+.diya-flame {
+  animation: diyaGlow 2.5s ease-in-out infinite;
+}
