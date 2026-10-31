@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Calendar, MapPin, Heart, ChevronDown, Sparkles, Clock, Share2 } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { createGoogleCalendarUrl, downloadIcsFile } from "../utils/calendar";
-import { triggerCelebration } from "../utils/confetti";
 
 export default function Hero({ onOpenShareModal }) {
   const [calendarMenuOpen, setCalendarMenuOpen] = useState(false);
@@ -180,14 +179,6 @@ export default function Hero({ onOpenShareModal }) {
             )}
           </div>
 
-          {/* Confetti button */}
-          <button
-            onClick={triggerCelebration}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#540217] hover:bg-[#730022] border border-amber-400 text-amber-200 text-xs sm:text-sm font-semibold shadow transition-transform active:scale-95"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>पुष्प वर्षा (Petals)</span>
-          </button>
 
           {/* Generate Link modal button */}
           {onOpenShareModal && (
