@@ -1,28 +1,4 @@
 import { useEffect, useState } from "react";
-import confetti from "canvas-confetti";
-
-export function triggerCelebration() {
-  // Traditional Royal Indian Wedding celebration: Gold foil, Sindoor red, and auspicious Marigold yellow
-  const count = 240;
-  const defaults = {
-    origin: { y: 0.7 },
-    colors: ["#D4AF37", "#FFD700", "#990024", "#DC2626", "#F59E0B", "#FFF5CC"],
-  };
-
-  function fire(particleRatio, opts) {
-    confetti({
-      ...defaults,
-      ...opts,
-      particleCount: Math.floor(count * particleRatio),
-    });
-  }
-
-  fire(0.25, { spread: 30, startVelocity: 60 });
-  fire(0.2, { spread: 65 });
-  fire(0.35, { spread: 110, decay: 0.91, scalar: 0.9 });
-  fire(0.1, { spread: 130, startVelocity: 30, decay: 0.92, scalar: 1.2 });
-  fire(0.1, { spread: 130, startVelocity: 50 });
-}
 
 export default function PetalShower({ enabled, onToggle }) {
   const [petals, setPetals] = useState([]);
@@ -33,13 +9,12 @@ export default function PetalShower({ enabled, onToggle }) {
       return;
     }
 
-    // Mix of Red Rose and Marigold (Genda) petals
-    const newPetals = Array.from({ length: 22 }).map((_, i) => ({
+    const newPetals = Array.from({ length: 20 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       size: 15 + Math.random() * 18,
-      duration: 8 + Math.random() * 11,
-      delay: Math.random() * 7,
+      duration: 8 + Math.random() * 10,
+      delay: Math.random() * 6,
       opacity: 0.45 + Math.random() * 0.45,
       rotation: Math.random() * 360,
       isMarigold: i % 2 === 0,
@@ -64,7 +39,6 @@ export default function PetalShower({ enabled, onToggle }) {
               }}
             >
               {p.isMarigold ? (
-                // Auspicious Marigold (गेंदा) Petal
                 <svg
                   width={p.size}
                   height={p.size}
@@ -85,7 +59,6 @@ export default function PetalShower({ enabled, onToggle }) {
                   </defs>
                 </svg>
               ) : (
-                // Royal Crimson Rose Petal
                 <svg
                   width={p.size}
                   height={p.size}
@@ -115,13 +88,13 @@ export default function PetalShower({ enabled, onToggle }) {
       <button
         onClick={onToggle}
         aria-label="Toggle falling flower petals"
-        className="fixed bottom-6 left-6 z-30 flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#38010d]/90 to-[#200007]/90 text-amber-200 border border-amber-500/50 shadow-2xl backdrop-blur-md hover:border-amber-300 transition-all duration-300 text-xs font-serif"
+        className="fixed bottom-5 left-5 z-30 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#38010d]/90 text-amber-200 border border-amber-500/50 shadow-xl backdrop-blur-md hover:border-amber-300 transition-all text-xs font-serif"
       >
-        <span className={`inline-block text-base ${enabled ? "animate-spin" : "opacity-40"}`} style={{ animationDuration: "8s" }}>
+        <span className={`inline-block text-sm ${enabled ? "animate-spin" : "opacity-40"}`} style={{ animationDuration: "8s" }}>
           🌸
         </span>
-        <span className="hidden sm:inline tracking-wider">
-          पुष्प वर्षा (Petals): <strong className={enabled ? "text-amber-400 font-bold" : "text-stone-400 font-normal"}>{enabled ? "चालू" : "बंद"}</strong>
+        <span className="hidden sm:inline">
+          पुष्प वर्षा: <strong className={enabled ? "text-amber-300 font-bold" : "text-stone-400 font-normal"}>{enabled ? "चालू" : "बंद"}</strong>
         </span>
       </button>
 
@@ -131,10 +104,10 @@ export default function PetalShower({ enabled, onToggle }) {
             transform: translateY(0vh) translateX(0px) rotate(0deg);
           }
           50% {
-            transform: translateY(50vh) translateX(40px) rotate(180deg);
+            transform: translateY(50vh) translateX(35px) rotate(180deg);
           }
           100% {
-            transform: translateY(105vh) translateX(-25px) rotate(360deg);
+            transform: translateY(105vh) translateX(-20px) rotate(360deg);
           }
         }
       `}</style>

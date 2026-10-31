@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Calendar, MapPin, Heart, ChevronDown, Sparkles, Clock } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { createGoogleCalendarUrl, downloadIcsFile } from "../utils/calendar";
-import { triggerCelebration } from "./PetalShower";
+import { triggerCelebration } from "../utils/confetti";
 
 export default function Hero() {
   const [calendarMenuOpen, setCalendarMenuOpen] = useState(false);

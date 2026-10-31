@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Send, CheckCircle2, Heart, Sparkles, MessageSquareHeart } from "lucide-react";
 import { weddingData } from "../data/weddingData";
-import { triggerCelebration } from "./PetalShower";
+import { triggerCelebration } from "../utils/confetti";
 
 export default function RsvpForm() {
   const [formData, setFormData] = useState({
