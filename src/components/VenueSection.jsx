@@ -78,14 +78,6 @@ export default function VenueSection() {
             })}
           </div>
 
-          {/* Tatanagar Winter Weather Advisory */}
-          <div className="w-full px-3.5 py-1.5 rounded-xl bg-amber-950/70 border border-amber-400/35 flex items-center justify-center gap-2 text-center shadow-md">
-            <CloudSun className="w-4 h-4 text-amber-300 flex-shrink-0 animate-pulse" />
-            <p className="text-[11px] sm:text-xs text-amber-100">
-              <strong className="text-amber-300 font-bold">मौसम सूचना (Weather Advisory):</strong> दिसम्बर की सुहावनी शीतकालीन शाम (~16°C) • रात्रि 9:00 बजे शुभ लग्न हेतु हल्की ऊनी शॉल या ब्लेज़र अनुशंसित।
-            </p>
-          </div>
-
           {/* Interactive Google Map Preview */}
           <div className="rounded-2xl overflow-hidden border border-amber-500/40 h-32 sm:h-40 relative bg-stone-950 shadow-xl w-full">
             <iframe
@@ -99,6 +91,12 @@ export default function VenueSection() {
               referrerPolicy="no-referrer-when-downgrade"
               className="w-full h-full opacity-90"
             />
+          </div>
+
+          {/* Simplified Weather Information Below Map */}
+          <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-amber-950/60 border border-amber-400/30 text-amber-200 text-xs sm:text-sm shadow">
+            <CloudSun className="w-4 h-4 text-amber-400 flex-shrink-0 animate-pulse" />
+            <span>दिसम्बर की सुहावनी शीतकालीन शाम 9:00 बजे (~16°C)</span>
           </div>
 
           {/* 1-Tap Google Maps Directions Button */}

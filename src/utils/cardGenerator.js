@@ -1,12 +1,12 @@
-// Royal Wedding Digital E-Card Image Generator
-// Generates a high-definition (1200x1800) royal invitation card image in phone gallery / downloads
+// Royal Wedding Digital E-Card Image Generator & WhatsApp Native Sharer
+// Generates a high-definition (1200x1800) royal invitation card image in phone gallery / WhatsApp status
 
-export function downloadWeddingCard() {
+function renderCardCanvas() {
   const canvas = document.createElement("canvas");
   canvas.width = 1200;
   canvas.height = 1800;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return;
+  if (!ctx) return null;
 
   // 1. Royal Maroon Velvet Background Gradient
   const bgGrad = ctx.createRadialGradient(600, 400, 100, 600, 900, 1000);
@@ -182,11 +182,50 @@ export function downloadWeddingCard() {
   ctx.fillStyle = "#fff8dc";
   ctx.fillText("दर्शनाभिलाषी: समस्त पंडित परिवार", 600, 1695);
 
-  // 10. Trigger Download
+  return canvas;
+}
+
+export function downloadWeddingCard() {
+  const canvas = renderCardCanvas();
+  if (!canvas) return;
+
   const link = document.createElement("a");
   link.download = "Monika-weds-Ritesh-Wedding-Invitation.png";
   link.href = canvas.toDataURL("image/png");
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+// 1-Tap WhatsApp Share: Shares Royal Card Image directly via Web Share API on mobile,
+// with graceful fallback to WhatsApp Web / App
+export async function shareWeddingCardOnWhatsApp(compactCaption) {
+  const canvas = renderCardCanvas();
+  if (!canvas) return;
+
+  // Check if browser supports sharing image files directly to WhatsApp
+  if (navigator.share && navigator.canShare) {
+    try {
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+      if (blob) {
+        const file = new File([blob], "Monika-Ritesh-Wedding-Invitation.png", { type: "image/png" });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "॥ शुभ विवाह ॥ मोनिका संग रितेश",
+            text: compactCaption,
+          });
+          return;
+        }
+      }
+    } catch (err) {
+      // User cancelled share or browser fallback
+      if (err.name === "AbortError") return;
+      console.log("Web Share error, falling back to URL scheme:", err);
+    }
+  }
+
+  // Fallback for browsers without direct file sharing: download card and open WhatsApp
+  downloadWeddingCard();
+  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(compactCaption)}`, "_blank");
 }

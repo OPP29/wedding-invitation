@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { Calendar, Heart, Clock, Download, Send } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { createGoogleCalendarUrl } from "../utils/calendar";
-import { downloadWeddingCard } from "../utils/cardGenerator";
+import { downloadWeddingCard, shareWeddingCardOnWhatsApp } from "../utils/cardGenerator";
+import { playSacredBellChime } from "../utils/audioChime";
+import { triggerTouchPetals } from "../utils/confetti";
 
 export default function Hero() {
   const [guestName, setGuestName] = useState("");
@@ -14,22 +16,64 @@ export default function Hero() {
   });
 
   useEffect(() => {
-    // Smart Guest URL Scanner:
-    // Supports any of:
-    // .../wedding-invitation/guest=Sharma Family
-    // .../wedding-invitation/?guest=Sharma Family
-    // .../wedding-invitation/#guest=Sharma Family
-    // .../wedding-invitation/guest=Sharma%20Family
-    const href = window.location.href;
-    const match = href.match(/guest=([^&#?]+)/i);
-    if (match && match[1]) {
+    // Smart Multi-Format Guest URL Scanner:
+    // Supports:
+    // 1. ?guest=Sharma Family or ?guest=Sharma%20Family
+    // 2. #guest=Sharma Family or #guest=Sharma%20Family
+    // 3. ?Sharma Family (direct query string)
+    // 4. #Sharma Family (direct hash after link)
+    // 5. .../wedding-invitation/guest=Sharma Family
+    const parseGuest = () => {
       try {
-        const decoded = decodeURIComponent(match[1].replace(/\+/g, " "));
-        setGuestName(decoded.replace(/\/+$/, "").trim());
-      } catch {
-        setGuestName(match[1].replace(/[+/]/g, " ").trim());
+        const href = window.location.href;
+        const search = window.location.search;
+        const hash = window.location.hash;
+
+        // A. Standard URLSearchParams (?guest=... or ?to=... or ?name=...)
+        if (search) {
+          const params = new URLSearchParams(search);
+          const val = params.get("guest") || params.get("to") || params.get("name") || params.get("n");
+          if (val && val.trim()) {
+            setGuestName(val.trim());
+            return;
+          }
+          // Direct query string without key: e.g. ?Sharma%20Family
+          const rawQuery = search.replace(/^\?/, "").trim();
+          if (rawQuery && !rawQuery.includes("=") && rawQuery.length < 50) {
+            setGuestName(decodeURIComponent(rawQuery.replace(/\+/g, " ")).trim());
+            return;
+          }
+        }
+
+        // B. Hash string (#guest=... or direct #Sharma Family)
+        if (hash) {
+          const cleanHash = hash.replace(/^#/, "").trim();
+          if (/^guest=/i.test(cleanHash)) {
+            const rawVal = cleanHash.replace(/^guest=/i, "").trim();
+            setGuestName(decodeURIComponent(rawVal.replace(/\+/g, " ")).trim());
+            return;
+          }
+          if (cleanHash && !cleanHash.includes("=") && cleanHash.length < 50) {
+            setGuestName(decodeURIComponent(cleanHash.replace(/\+/g, " ")).trim());
+            return;
+          }
+        }
+
+        // C. Full URL match for guest=... anywhere
+        const match = href.match(/guest=([^&#?]+)/i);
+        if (match && match[1]) {
+          const decoded = decodeURIComponent(match[1].replace(/\+/g, " "));
+          setGuestName(decoded.replace(/\/+$/, "").trim());
+          return;
+        }
+      } catch (err) {
+        console.log("Guest parse error:", err);
       }
-    }
+    };
+
+    parseGuest();
+    window.addEventListener("hashchange", parseGuest);
+    window.addEventListener("popstate", parseGuest);
 
     const target = new Date(weddingData.weddingDate).getTime();
     const calculateTime = () => {
@@ -46,7 +90,11 @@ export default function Hero() {
     };
     calculateTime();
     const interval = setInterval(calculateTime, 1000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("hashchange", parseGuest);
+      window.removeEventListener("popstate", parseGuest);
+    };
   }, []);
 
   const handleOpenGoogleCalendar = () => {
@@ -54,10 +102,11 @@ export default function Hero() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  const handleDirectWhatsAppShare = () => {
+  const handleDirectWhatsAppShare = async () => {
     const shareUrl = window.location.href.split("#")[0].split("?")[0];
-    const text = `॥ श्री गणेशाय नमः ॥\n\n🌸 सादर प्रणाम!\nआप सपरिवार *मोनिका पंडित (दिव्या)* संग *रितेश कु. पंडित (चिंटू)* के पावन शुभ विवाह में सादर आमंत्रित हैं।\n\n📅 *दिनांक:* शुक्रवार, 11 दिसम्बर 2026 (रात्रि 9:00 बजे से)\n📍 *स्थान:* टाटानगर (झारखण्ड)\n\n✨ डिजिटल निमंत्रण पत्र एवं विस्तृत कार्यक्रम देखने हेतु लिंक खोलें:\n👉 ${shareUrl}\n\nसस्नेह निमंत्रित: समस्त पंडित परिवार 🙏`;
-    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
+    // Compact, poetic caption crafted for WhatsApp Status (< 300 chars, < 8 lines)
+    const compactCaption = `॥ श्री गणेशाय नमः ॥ 🌸\nमोनिका (दिव्या) संग रितेश (चिंटू)\nपावन शुभ विवाह निमंत्रण\n📅 11 दिसम्बर 2026 • 📍 टाटानगर\n👉 डिजिटल निमंत्रण देखें:\n${shareUrl}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
+    await shareWeddingCardOnWhatsApp(compactCaption);
   };
 
   return (
@@ -72,6 +121,47 @@ export default function Hero() {
             </span>
           </div>
         )}
+
+        {/* Simple Auspicious Ganesh Icon at Top Center - Interactive Bell Ring & Petals */}
+        <div className="mb-1.5 flex items-center justify-center">
+          <button
+            onClick={() => {
+              playSacredBellChime();
+              triggerTouchPetals(window.innerWidth / 2, 120);
+            }}
+            type="button"
+            title="शुभ घंटा ध्वनि एवं पुष्प वर्षा"
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-amber-500/25 via-amber-400/15 to-amber-950/80 border border-amber-400/60 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-transform active:scale-90 hover:scale-105 cursor-pointer group"
+          >
+            <svg
+              viewBox="0 0 100 100"
+              className="w-8 h-8 sm:w-9 sm:h-9 text-amber-300 drop-shadow-[0_2px_6px_rgba(212,175,55,0.7)] group-hover:scale-105 transition-transform"
+              fill="currentColor"
+            >
+              {/* Crown Mukut */}
+              <polygon points="50,12 43,24 57,24" fill="#f5d77f" />
+              <circle cx="50" cy="10" r="3" fill="#f5d77f" />
+              {/* Head & Ears */}
+              <path
+                d="M32 30 C22 30, 22 46, 32 48 C34 44, 35 36, 36 32 Z"
+                fill="#dfb045"
+              />
+              <path
+                d="M68 30 C78 30, 78 46, 68 48 C66 44, 65 36, 64 32 Z"
+                fill="#dfb045"
+              />
+              {/* Face & Trunk curving gently */}
+              <path
+                d="M38 28 C38 28, 50 26, 62 28 C64 34, 63 42, 57 48 C53 52, 53 60, 56 68 C58 73, 56 79, 50 81 C44 83, 38 78, 40 73 C41 70, 44 71, 44 73 C44 75, 47 77, 50 76 C53 75, 53 71, 51 66 C48 59, 47 51, 51 46 C55 42, 56 36, 52 32 C46 32, 40 32, 38 28 Z"
+                fill="#f5d77f"
+              />
+              {/* Sacred Tilak */}
+              <path d="M48 24 L52 24 L52 30 L48 30 Z" fill="#e11d48" />
+              {/* Sweet Modak on Side */}
+              <circle cx="63" cy="62" r="4.5" fill="#f5d77f" />
+            </svg>
+          </button>
+        </div>
 
         {/* Sacred Vedic Header */}
         <div className="mb-2">

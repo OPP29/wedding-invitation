@@ -63,7 +63,7 @@ export default function MusicPlayer() {
         {showHint && !isPlaying && (
           <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#200007]/95 text-amber-200 text-xs shadow-2xl animate-bounce backdrop-blur-md border border-amber-400/60">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-            <span>राजसी शहनाई संगीत बजाएं 🎵</span>
+            <span>मधुर संगीत बजाएं 🎵</span>
           </div>
         )}
 

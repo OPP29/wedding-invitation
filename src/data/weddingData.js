@@ -198,9 +198,9 @@ export const weddingData = {
 
   googleSheetScriptUrl: "",
 
-  // Traditional Shehnai & Sitar Royal Indian Instrumental
+  // User provided custom audio track: Bin Tere Kya Jeen
   audioTrack: {
-    title: "Royal Shehnai & Sitar Festive Melody",
-    src: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-113271.mp3",
+    title: "Bin Tere Kya Jeena",
+    src: `${import.meta.env.BASE_URL}music.mp3`,
   },
 };
