@@ -29,48 +29,49 @@ export default function VenueSection() {
   ];
 
   return (
-    <div className="snap-section bg-royal-maroon font-serif text-center">
-      <div className="max-w-2xl w-full my-auto px-2 flex flex-col items-center">
-        {/* Header */}
-        <div className="mb-2 sm:mb-3">
-          <span className="inline-block px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-widest mb-1">
-            विवाह स्थल एवं मार्ग निर्देश
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-bold gold-gradient-text mt-0.5">
-            टाटानगर (झारखण्ड)
-          </h2>
-        </div>
+    <div className="snap-section bg-royal-maroon font-serif text-center flex flex-col justify-between p-0">
+      {/* Top Header Zone */}
+      <header className="w-full pt-3 sm:pt-5 pb-2 px-3 flex flex-col items-center flex-shrink-0 border-b border-amber-400/25 bg-gradient-to-b from-black/40 via-black/20 to-transparent">
+        <span className="inline-block px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-widest mb-1">
+          विवाह स्थल एवं मार्ग निर्देश
+        </span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold gold-gradient-text mt-0.5">
+          टाटानगर (झारखण्ड)
+        </h2>
+      </header>
 
+      {/* Main Body Zone */}
+      <div className="flex-1 w-full max-w-2xl mx-auto px-2 flex flex-col items-center justify-center py-2">
         {/* Venue Information */}
-        <div className="w-full space-y-3">
+        <div className="w-full space-y-2 sm:space-y-2.5">
           <div className="text-center">
-            <h3 className="text-xl sm:text-2xl font-bold text-amber-100">
+            <h3 className="text-lg sm:text-xl font-bold text-amber-100">
               {location.venueName}
             </h3>
-            <p className="text-xs sm:text-sm text-amber-200/90 mt-0.5 max-w-lg mx-auto">
+            <p className="text-[11px] sm:text-xs text-amber-200/90 mt-0.5 max-w-lg mx-auto">
               {location.address}
             </p>
           </div>
 
           {/* 3 Transit Cards - Strictly Uniform Height, Font Sizes, and Symmetrical Layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full">
             {transitInfo.map((item, idx) => {
               const IconComp = item.icon;
               return (
                 <div
                   key={idx}
-                  className="p-3 sm:p-3.5 rounded-2xl bg-amber-950/45 border border-amber-500/25 flex flex-col items-center justify-center text-center shadow-md min-h-[92px] sm:min-h-[105px]"
+                  className="p-2 sm:p-2.5 rounded-2xl bg-amber-950/45 border border-amber-500/25 flex flex-col items-center justify-center text-center shadow-md min-h-[80px] sm:min-h-[96px]"
                 >
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <IconComp className={`w-4 h-4 ${item.iconColor} flex-shrink-0`} />
-                    <span className="font-bold text-amber-300 text-xs sm:text-sm">
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <IconComp className={`w-3.5 h-3.5 ${item.iconColor} flex-shrink-0`} />
+                    <span className="font-bold text-amber-300 text-xs">
                       {item.title}
                     </span>
                   </div>
-                  <p className="font-bold text-amber-100 text-xs sm:text-sm leading-tight">
+                  <p className="font-bold text-amber-100 text-xs leading-tight">
                     {item.primary}
                   </p>
-                  <p className="text-[11px] sm:text-xs text-amber-300/80 mt-1">
+                  <p className="text-[10px] sm:text-xs text-amber-300/80 mt-0.5">
                     {item.detail}
                   </p>
                 </div>
@@ -79,7 +80,7 @@ export default function VenueSection() {
           </div>
 
           {/* Interactive Google Map Preview */}
-          <div className="rounded-2xl overflow-hidden border border-amber-500/40 h-36 sm:h-44 relative bg-stone-950 shadow-xl w-full">
+          <div className="rounded-2xl overflow-hidden border border-amber-500/40 h-28 sm:h-36 relative bg-stone-950 shadow-xl w-full">
             <iframe
               title="Venue Location Map"
               src={location.embedMapUrl}
@@ -99,7 +100,7 @@ export default function VenueSection() {
               href={location.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 py-2.5 px-6 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
+              className="inline-flex items-center justify-center gap-2 py-2 px-5 sm:px-6 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
             >
               <Navigation className="w-4 h-4 text-stone-950" />
               <span>Google Maps ऐप में मार्ग देखें (Directions)</span>
