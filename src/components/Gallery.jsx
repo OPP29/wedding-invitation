@@ -30,26 +30,25 @@ export default function Gallery() {
   ];
 
   return (
-    <div className="snap-section bg-royal-emerald font-serif text-center flex flex-col justify-between p-0">
-      {/* Top Header Zone */}
-      <header className="w-full pt-3 sm:pt-5 pb-2 px-3 flex flex-col items-center flex-shrink-0 border-b border-amber-400/25 bg-gradient-to-b from-black/40 via-black/20 to-transparent">
-        <span className="inline-block px-4 py-1 rounded-full bg-amber-500/10 border border-amber-400/40 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-widest mb-1">
-          राजसी छायाचित्र वीथिका
-        </span>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold gold-gradient-text mt-0.5">
-          स्नेहमयी स्मृतियां (Gallery)
-        </h2>
-      </header>
+    <div className="snap-section bg-royal-emerald font-serif text-center">
+      <div className="max-w-2xl w-full my-auto px-1 flex flex-col items-center">
+        {/* Header */}
+        <div className="mb-3">
+          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
+            राजसी छायाचित्र वीथिका
+          </span>
+          <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
+            स्नेहमयी स्मृतियां (Gallery)
+          </h2>
+        </div>
 
-      {/* Main Body Zone */}
-      <div className="flex-1 w-full max-w-2xl mx-auto px-2 flex flex-col items-center justify-center py-2">
         {/* 4 Photo Grid - Auto-fits cleanly to any screen */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-3.5 w-full">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-4 w-full">
           {couplePhotos.map((photo, index) => (
             <div
               key={index}
               onClick={() => setSelectedPhotoIndex(index)}
-              className="group relative h-32 sm:h-48 rounded-2xl overflow-hidden cursor-pointer shadow-xl royal-card border-2 border-amber-400/50 hover:border-amber-300 transition-all duration-300"
+              className="group relative h-36 sm:h-52 rounded-2xl overflow-hidden cursor-pointer shadow-xl royal-card border-2 border-amber-400/50 hover:border-amber-300 transition-all duration-300"
             >
               <img
                 src={photo.src}
@@ -57,7 +56,7 @@ export default function Gallery() {
                 loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-2 sm:p-2.5 text-white">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-2.5 sm:p-3 text-white">
                 <span className="text-xs sm:text-sm text-amber-200 font-bold truncate">
                   {photo.title}
                 </span>
@@ -66,7 +65,7 @@ export default function Gallery() {
           ))}
         </div>
 
-        <p className="text-[11px] sm:text-xs text-amber-300/80 text-center mt-2 font-medium">
+        <p className="text-xs text-amber-300/80 text-center mt-3 font-medium">
           * किसी भी चित्र पर स्पर्श करके बड़े रूप में देखें (Tap to enlarge)
         </p>
       </div>

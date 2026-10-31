@@ -68,11 +68,11 @@ html, body {
   scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px) 0;
+  padding: env(safe-area-inset-top, 1rem) 1rem env(safe-area-inset-bottom, 1rem) 1rem;
   box-sizing: border-box;
 }
 
@@ -101,7 +101,11 @@ html, body {
   background: linear-gradient(135deg, #FFF8DC 0%, #F5D77F 25%, #D4AF37 55%, #AA771C 85%, #F5D77F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.35));
+}
+
+.gold-glow {
+  filter: drop-shadow(0 2px 14px rgba(212, 175, 55, 0.5));
 }
 
 /* Card styling for event cards and photos */
