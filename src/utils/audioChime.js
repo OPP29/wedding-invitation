@@ -1,51 +1,64 @@
-// Sacred Temple Bell & Auspicious Chime Generator using Web Audio API
-// Produces a loud, serene, resonant brass temple bell chime (घंटा / शंख ध्वनि)
+// Real Temple Bell Audio Player
+// Plays an authentic recording of a 15cm bronze temple bell with clear resonance
 
-let audioCtx = null;
+let bellAudioInstance = null;
 
-export async function playSacredBellChime() {
+export function playSacredBellChime() {
+  try {
+    const audioUrl = `${import.meta.env.BASE_URL}temple-bell.mp3`;
+
+    // Create and trigger audio
+    const audio = new Audio(audioUrl);
+    audio.volume = 1.0;
+    bellAudioInstance = audio;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        console.log("Real bell audio autoplay restricted, attempting synthesized bell:", err);
+        playSynthesizedBell();
+      });
+    }
+    return audio;
+  } catch (err) {
+    console.log("Real bell play error, falling back to synthesis:", err);
+    playSynthesizedBell();
+  }
+}
+
+// Resonant fallback synthesizer if audio element is blocked
+function playSynthesizedBell() {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
     if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    if (ctx.state === "suspended") ctx.resume();
 
-    if (!audioCtx || audioCtx.state === "closed") {
-      audioCtx = new AudioContextClass();
-    }
-
-    if (audioCtx.state === "suspended") {
-      await audioCtx.resume();
-    }
-
-    const now = audioCtx.currentTime;
-
-    // Resonant brass temple bell harmonics with loud, crystal-clear projection
+    const now = ctx.currentTime;
     const partials = [
-      { freq: 528, gain: 0.85, decay: 3.2 },  // Auspicious 528 Hz (Sacred Chime)
-      { freq: 440, gain: 0.55, decay: 3.0 },  // Deep brass body resonance
-      { freq: 1056, gain: 0.65, decay: 2.4 }, // 1st overtone
-      { freq: 1584, gain: 0.40, decay: 1.8 }, // 2nd overtone
-      { freq: 2420, gain: 0.30, decay: 0.8 }, // Crisp strike transient (Ting clapper)
+      { freq: 528, gain: 0.95, decay: 3.5 },
+      { freq: 440, gain: 0.65, decay: 3.2 },
+      { freq: 1056, gain: 0.75, decay: 2.6 },
+      { freq: 2420, gain: 0.40, decay: 0.9 },
     ];
 
-    partials.forEach(({ freq, gain: initGain, decay }) => {
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
+    partials.forEach(({ freq, gain, decay }) => {
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
       osc.type = "sine";
       osc.frequency.setValueAtTime(freq, now);
 
-      // Instant strike attack, long reverberant exponential decay
-      gainNode.gain.setValueAtTime(0.0001, now);
-      gainNode.gain.linearRampToValueAtTime(initGain, now + 0.012);
+      gainNode.gain.setValueAtTime(0.001, now);
+      gainNode.gain.linearRampToValueAtTime(gain, now + 0.015);
       gainNode.gain.exponentialRampToValueAtTime(0.0001, now + decay);
 
       osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
+      gainNode.connect(ctx.destination);
 
       osc.start(now);
       osc.stop(now + decay + 0.1);
     });
-  } catch (err) {
-    console.log("Audio chime error:", err);
+  } catch (e) {
+    console.log("Synthesizer error:", e);
   }
 }

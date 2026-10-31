@@ -122,43 +122,50 @@ export default function Hero() {
           </div>
         )}
 
-        {/* Simple Auspicious Ganesh Icon at Top Center - Interactive Bell Ring & Petals */}
-        <div className="mb-1.5 flex items-center justify-center">
+        {/* Large Borderless Auspicious Ganesh Icon at Top Center */}
+        <div className="mb-2 flex items-center justify-center">
           <button
             onClick={() => {
               playSacredBellChime();
-              triggerTouchPetals(window.innerWidth / 2, 120);
+              triggerTouchPetals(window.innerWidth / 2, 130);
             }}
             type="button"
-            title="शुभ घंटा ध्वनि एवं पुष्प वर्षा"
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-amber-500/25 via-amber-400/15 to-amber-950/80 border border-amber-400/60 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-transform active:scale-90 hover:scale-105 cursor-pointer group"
+            title="पवित्र मंदिर घंटा ध्वनि एवं पुष्प वर्षा"
+            className="transition-transform active:scale-95 hover:scale-105 cursor-pointer bg-transparent border-0 p-0 outline-none"
           >
             <svg
               viewBox="0 0 100 100"
-              className="w-8 h-8 sm:w-9 sm:h-9 text-amber-300 drop-shadow-[0_2px_6px_rgba(212,175,55,0.7)] group-hover:scale-105 transition-transform"
+              className="w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 text-amber-300 drop-shadow-[0_4px_16px_rgba(212,175,55,0.7)]"
               fill="currentColor"
             >
               {/* Crown Mukut */}
-              <polygon points="50,12 43,24 57,24" fill="#f5d77f" />
-              <circle cx="50" cy="10" r="3" fill="#f5d77f" />
-              {/* Head & Ears */}
+              <polygon points="50,6 40,22 60,22" fill="#FFF8DC" />
+              <circle cx="50" cy="4" r="3" fill="#F5D77F" />
+              <path d="M43 14 L57 14 L50 7 Z" fill="#D4AF37" />
+
+              {/* Ears */}
               <path
-                d="M32 30 C22 30, 22 46, 32 48 C34 44, 35 36, 36 32 Z"
+                d="M30 28 C18 28, 16 48, 30 52 C32 46, 34 36, 36 30 Z"
                 fill="#dfb045"
               />
               <path
-                d="M68 30 C78 30, 78 46, 68 48 C66 44, 65 36, 64 32 Z"
+                d="M70 28 C82 28, 84 48, 70 52 C68 46, 66 36, 64 30 Z"
                 fill="#dfb045"
               />
-              {/* Face & Trunk curving gently */}
+
+              {/* Forehead, Face & Graceful Trunk */}
               <path
-                d="M38 28 C38 28, 50 26, 62 28 C64 34, 63 42, 57 48 C53 52, 53 60, 56 68 C58 73, 56 79, 50 81 C44 83, 38 78, 40 73 C41 70, 44 71, 44 73 C44 75, 47 77, 50 76 C53 75, 53 71, 51 66 C48 59, 47 51, 51 46 C55 42, 56 36, 52 32 C46 32, 40 32, 38 28 Z"
+                d="M36 26 C36 26, 50 24, 64 26 C67 34, 66 44, 59 50 C54 54, 54 62, 58 72 C60 78, 58 84, 51 86 C44 88, 37 83, 39 77 C40 73, 44 74, 44 77 C44 80, 48 82, 51 81 C55 80, 55 75, 53 69 C49 61, 48 52, 53 46 C58 41, 59 34, 54 30 C47 30, 40 30, 36 26 Z"
                 fill="#f5d77f"
               />
-              {/* Sacred Tilak */}
-              <path d="M48 24 L52 24 L52 30 L48 30 Z" fill="#e11d48" />
-              {/* Sweet Modak on Side */}
-              <circle cx="63" cy="62" r="4.5" fill="#f5d77f" />
+
+              {/* Sacred Raktachandan Tilak */}
+              <path d="M48 20 L52 20 L52 28 L48 28 Z" fill="#e11d48" />
+              <circle cx="50" cy="31" r="2" fill="#e11d48" />
+
+              {/* Auspicious Modak on Palm */}
+              <circle cx="68" cy="66" r="5" fill="#FFF8DC" />
+              <circle cx="68" cy="66" r="3" fill="#D4AF37" />
             </svg>
           </button>
         </div>

@@ -4,34 +4,52 @@ import { weddingData } from "../data/weddingData";
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
   const [showHint, setShowHint] = useState(true);
   const audioRef = useRef(null);
 
   useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (!hasInteracted) {
-        setHasInteracted(true);
-        if (audioRef.current) {
-          audioRef.current
-            .play()
-            .then(() => {
-              setIsPlaying(true);
-              setShowHint(false);
-            })
-            .catch(() => {});
-        }
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // 50% volume level as requested
+    audio.volume = 0.5;
+
+    // Attempt to make it audible by default immediately on page load
+    const startAudio = () => {
+      if (!audio) return;
+      audio.volume = 0.5;
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+            setShowHint(false);
+          })
+          .catch((err) => {
+            console.log("Audio autoplay waiting for user interaction:", err);
+          });
       }
     };
 
-    window.addEventListener("click", handleFirstInteraction, { once: true });
-    window.addEventListener("touchstart", handleFirstInteraction, { once: true });
+    startAudio();
+
+    // If browser autoplay policy requires user gesture, start immediately on first interaction
+    const handleGesture = () => {
+      startAudio();
+    };
+
+    window.addEventListener("click", handleGesture, { once: true });
+    window.addEventListener("touchstart", handleGesture, { once: true });
+    window.addEventListener("pointerdown", handleGesture, { once: true });
+    window.addEventListener("scroll", handleGesture, { once: true });
 
     return () => {
-      window.removeEventListener("click", handleFirstInteraction);
-      window.removeEventListener("touchstart", handleFirstInteraction);
+      window.removeEventListener("click", handleGesture);
+      window.removeEventListener("touchstart", handleGesture);
+      window.removeEventListener("pointerdown", handleGesture);
+      window.removeEventListener("scroll", handleGesture);
     };
-  }, [hasInteracted]);
+  }, []);
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -39,6 +57,7 @@ export default function MusicPlayer() {
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
+      audioRef.current.volume = 0.5;
       audioRef.current
         .play()
         .then(() => {
@@ -97,7 +116,7 @@ export default function MusicPlayer() {
           )}
 
           <span className="text-xs font-bold tracking-wider uppercase">
-            {isPlaying ? "शहनाई चालू" : "संगीत"}
+            {isPlaying ? "संगीत चालू" : "संगीत"}
           </span>
         </button>
       </div>

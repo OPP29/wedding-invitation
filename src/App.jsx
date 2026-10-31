@@ -21,16 +21,28 @@ export default function App() {
   const AUTO_ADVANCE_DELAY = 12000; // 12 seconds per slide (in 10-15s range)
   const TOTAL_SLIDES = 6;
 
-  // Global touch/pointer petals effect on every tap + sacred bell chime on first tap
+  // Ring real temple bell right at page load & handle touch petal blooms
   useEffect(() => {
-    let lastTriggerTime = 0;
     let hasPlayedChime = false;
 
-    const handlePointerDown = (e) => {
+    const ringBellOnce = () => {
       if (!hasPlayedChime) {
         hasPlayedChime = true;
         playSacredBellChime();
       }
+    };
+
+    // 1. Ring immediately at the very beginning of page load
+    ringBellOnce();
+
+    // 2. Also register on first user gesture in case browser blocked initial autoplay
+    window.addEventListener("pointerdown", ringBellOnce, { once: true });
+    window.addEventListener("touchstart", ringBellOnce, { once: true });
+    window.addEventListener("click", ringBellOnce, { once: true });
+
+    let lastTriggerTime = 0;
+    const handlePointerDown = (e) => {
+      ringBellOnce();
 
       const now = Date.now();
       // Throttle by 120ms to keep 60fps smooth scrolling
@@ -47,7 +59,12 @@ export default function App() {
     };
 
     window.addEventListener("pointerdown", handlePointerDown, { passive: true });
-    return () => window.removeEventListener("pointerdown", handlePointerDown);
+    return () => {
+      window.removeEventListener("pointerdown", ringBellOnce);
+      window.removeEventListener("touchstart", ringBellOnce);
+      window.removeEventListener("click", ringBellOnce);
+      window.removeEventListener("pointerdown", handlePointerDown);
+    };
   }, []);
 
   const scrollToSlide = (index) => {
