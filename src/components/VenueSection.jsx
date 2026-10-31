@@ -1,72 +1,62 @@
 import { MapPin, Navigation, Train, Plane, Phone, ExternalLink } from "lucide-react";
 import { weddingData } from "../data/weddingData";
-import SwipeUpIndicator from "./SwipeUpIndicator";
 
-export default function VenueSection({ onNext }) {
+export default function VenueSection() {
   const { location } = weddingData;
 
   return (
-    <div className="snap-section bg-royal-maroon font-serif">
-      <div className="max-w-2xl w-full my-auto px-1">
+    <div className="snap-section bg-royal-maroon font-serif text-center">
+      <div className="max-w-2xl w-full my-auto px-2 flex flex-col items-center">
         {/* Header */}
-        <div className="text-center mb-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-amber-500/10 border border-amber-400/50 text-amber-300 text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-1">
-            <MapPin className="w-3 h-3 text-amber-400" />
-            <span>विवाह स्थल एवं मार्ग निर्देश</span>
-          </div>
-          <h2 className="text-xl sm:text-3xl font-bold gold-gradient-text">
+        <div className="mb-3">
+          <span className="inline-block px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-400/40 text-amber-300 text-xs font-bold uppercase tracking-widest mb-1">
+            विवाह स्थल एवं मार्ग निर्देश
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-bold gold-gradient-text mt-1">
             टाटानगर (झारखण्ड)
           </h2>
         </div>
 
-        {/* Venue Card */}
-        <div className="rounded-2xl p-4 sm:p-5 royal-card border-2 border-amber-400/60 shadow-xl space-y-3">
-          <div className="flex items-start gap-3 border-b border-amber-500/20 pb-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400/60 text-amber-300 flex items-center justify-center flex-shrink-0">
-              <MapPin className="w-5 h-5 text-rose-400" />
-            </div>
-            <div>
-              <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider">
-                पावन परिणय स्थल (Venue)
-              </span>
-              <h3 className="text-base sm:text-lg font-bold text-amber-100">
-                {location.venueName}
-              </h3>
-              <p className="text-xs text-amber-200/90 mt-0.5">
-                {location.address}
-              </p>
-            </div>
+        {/* Venue Information - Borderless Layout */}
+        <div className="w-full space-y-3">
+          <div className="text-center">
+            <h3 className="text-lg sm:text-xl font-bold text-amber-100">
+              {location.venueName}
+            </h3>
+            <p className="text-xs sm:text-sm text-amber-200/90 mt-1 max-w-lg mx-auto">
+              {location.address}
+            </p>
           </div>
 
           {/* Transit & Helpline Details */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[11px] sm:text-xs">
-            <div className="p-2.5 rounded-xl bg-amber-950/50 border border-amber-500/20 flex items-center gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+            <div className="p-2.5 rounded-2xl bg-amber-950/40 border border-amber-500/20 flex items-center justify-center gap-2">
               <Train className="w-4 h-4 text-amber-400 flex-shrink-0" />
-              <div>
+              <div className="text-left">
                 <p className="font-bold text-amber-300 text-[10px]">रेलवे स्टेशन</p>
                 <p className="text-amber-100">{location.nearestStation}</p>
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-amber-950/50 border border-amber-500/20 flex items-center gap-2">
+            <div className="p-2.5 rounded-2xl bg-amber-950/40 border border-amber-500/20 flex items-center justify-center gap-2">
               <Plane className="w-4 h-4 text-sky-400 flex-shrink-0" />
-              <div>
+              <div className="text-left">
                 <p className="font-bold text-amber-300 text-[10px]">हवाई अड्डा</p>
-                <p className="text-amber-100">रांची (IXR)</p>
+                <p className="text-amber-100">रांची (IXR - 130 km)</p>
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-amber-950/50 border border-amber-500/20 flex items-center gap-2">
+            <div className="p-2.5 rounded-2xl bg-amber-950/40 border border-amber-500/20 flex items-center justify-center gap-2">
               <Phone className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-              <div>
+              <div className="text-left">
                 <p className="font-bold text-amber-300 text-[10px]">हेल्पलाइन</p>
                 <p className="text-amber-100">{location.helplinePhone}</p>
               </div>
             </div>
           </div>
 
-          {/* Interactive Google Map Preview */}
-          <div className="rounded-xl overflow-hidden border border-amber-500/40 h-32 sm:h-44 relative bg-stone-950">
+          {/* Map View */}
+          <div className="rounded-2xl overflow-hidden border border-amber-500/40 h-36 sm:h-48 relative bg-stone-950 shadow-xl w-full">
             <iframe
               title="Venue Location Map"
               src={location.embedMapUrl}
@@ -76,17 +66,17 @@ export default function VenueSection({ onNext }) {
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="w-full h-full opacity-85"
+              className="w-full h-full opacity-90"
             />
           </div>
 
           {/* 1-Tap Google Maps Button */}
-          <div>
+          <div className="pt-1">
             <a
               href={location.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 text-xs sm:text-sm font-bold shadow-md transition-transform active:scale-98"
+              className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
             >
               <Navigation className="w-4 h-4 text-stone-950" />
               <span>Google Maps ऐप में मार्ग देखें (Directions)</span>
@@ -95,9 +85,6 @@ export default function VenueSection({ onNext }) {
           </div>
         </div>
       </div>
-
-      {/* Swipe up cue */}
-      <SwipeUpIndicator onNext={onNext} label="छायाचित्र वीथिका देखें" />
     </div>
   );
 }

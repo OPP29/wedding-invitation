@@ -31,7 +31,7 @@
   --color-gold-800: #6d4414;
 }
 
-/* Vertical Fullscreen Snap Scroll Container */
+/* Vertical Fullscreen Snap Scroll Container - No scrollbars */
 .snap-wrapper {
   height: 100vh;
   height: 100dvh;
@@ -39,6 +39,12 @@
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge */
+}
+
+.snap-wrapper::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .snap-section {
@@ -55,37 +61,30 @@
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 1rem 0.75rem;
+  padding: 1.5rem 1rem;
 }
 
-/* Custom Royal scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #200007;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d4af37, #8f601b);
-  border-radius: 4px;
+/* Hide scrollbars on internal elements */
+.snap-section::-webkit-scrollbar {
+  display: none;
 }
 
 /* Royal Pattern Backgrounds */
 .bg-royal-maroon {
-  background-color: #2a010a;
+  background-color: #240108;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
-    radial-gradient(circle at 100% 50%, rgba(148, 3, 45, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 0% 50%, rgba(8, 36, 28, 0.35) 0%, transparent 50%),
+    radial-gradient(circle at 50% 10%, rgba(212, 175, 55, 0.16) 0%, transparent 65%),
+    radial-gradient(circle at 100% 50%, rgba(148, 3, 45, 0.22) 0%, transparent 55%),
+    radial-gradient(circle at 0% 50%, rgba(8, 36, 28, 0.3) 0%, transparent 55%),
     radial-gradient(#d4af37 0.65px, transparent 0.65px);
   background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
 }
 
 .bg-royal-emerald {
-  background-color: #061c16;
+  background-color: #051913;
   background-image: 
-    radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.18) 0%, transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(56, 1, 13, 0.3) 0%, transparent 60%),
+    radial-gradient(circle at 50% 10%, rgba(212, 175, 55, 0.18) 0%, transparent 65%),
+    radial-gradient(circle at 100% 100%, rgba(56, 1, 13, 0.25) 0%, transparent 60%),
     radial-gradient(#dfb045 0.65px, transparent 0.65px);
   background-size: 100% 100%, 100% 100%, 30px 30px;
 }
@@ -95,10 +94,10 @@
   background: linear-gradient(135deg, #FFF6D6 0%, #F5D77F 25%, #D4AF37 55%, #AA771C 85%, #F5D77F 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+  text-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
 }
 
-/* Royal Ornate Card */
+/* Subtle card styling for event and photo tiles only */
 .royal-card {
   background: linear-gradient(145deg, rgba(46, 2, 12, 0.94) 0%, rgba(26, 1, 7, 0.97) 100%);
   border: 1px solid rgba(212, 175, 55, 0.45);
