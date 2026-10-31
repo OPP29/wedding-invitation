@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Send, CheckCircle2, Heart, ArrowUp } from "lucide-react";
+import { Send, CheckCircle2, Heart, ArrowUp, Sparkles } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { triggerCelebration } from "../utils/confetti";
+import { playSacredBellChime } from "../utils/audioChime";
 
 export default function RsvpForm({ onScrollToTop }) {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function RsvpForm({ onScrollToTop }) {
 
   const [status, setStatus] = useState("idle");
   const [submittedData, setSubmittedData] = useState(null);
+  const [wishes, setWishes] = useState(weddingData.initialWishes || []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,6 +50,19 @@ export default function RsvpForm({ onScrollToTop }) {
       }
     }
 
+    if (formData.notes && formData.notes.trim()) {
+      const newWish = {
+        id: `w-${Date.now()}`,
+        name: formData.name || "सम्मानित अतिथि",
+        relation: "शुभचिंतक अतिथि (Esteemed Guest)",
+        message: formData.notes.trim(),
+        time: "Just now",
+        hearts: 1,
+      };
+      setWishes((prev) => [newWish, ...prev]);
+    }
+
+    playSacredBellChime();
     triggerCelebration();
     setSubmittedData(formData);
     setStatus("success");
@@ -209,6 +224,27 @@ export default function RsvpForm({ onScrollToTop }) {
               </div>
             </form>
           )}
+        </div>
+
+        {/* Auspicious Family Blessings Marquee (Ticker) */}
+        <div className="w-full my-2 overflow-hidden rounded-xl bg-amber-950/50 border border-amber-400/30 py-1.5 px-2 text-left relative">
+          <div className="flex items-center gap-1.5 mb-1 text-[11px] sm:text-xs text-amber-300 font-bold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse flex-shrink-0" />
+            <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
+          </div>
+          <div className="overflow-hidden w-full">
+            <div className="animate-marquee flex items-center gap-4 whitespace-nowrap">
+              {wishes.concat(wishes).map((item, idx) => (
+                <div
+                  key={idx}
+                  className="inline-flex items-center gap-1.5 bg-amber-900/40 px-3 py-1 rounded-full border border-amber-400/25 text-xs text-amber-200 flex-shrink-0"
+                >
+                  <span className="text-amber-400 font-bold">✨ {item.name}:</span>
+                  <span className="italic text-amber-100">"{item.message}"</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Sacred Vedic Shloka & Pandit Family Honors with Increased Text Size */}

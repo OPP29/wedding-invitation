@@ -108,6 +108,27 @@ html, body {
   filter: drop-shadow(0 2px 14px rgba(212, 175, 55, 0.5));
 }
 
+/* Continuous Auspicious Marquee Ticker */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 36s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee:active {
+  animation-play-state: paused;
+}
+
 /* Card styling for event cards and photos */
 .royal-card {
   background: linear-gradient(145deg, rgba(46, 2, 12, 0.94) 0%, rgba(26, 1, 7, 0.97) 100%);

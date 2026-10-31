@@ -9,6 +9,7 @@ import PetalShower from "./components/PetalShower";
 import MusicPlayer from "./components/MusicPlayer";
 import InviteShareModal from "./components/InviteShareModal";
 import { triggerTouchPetals } from "./utils/confetti";
+import { playSacredBellChime } from "./utils/audioChime";
 
 export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -20,11 +21,17 @@ export default function App() {
   const AUTO_ADVANCE_DELAY = 12000; // 12 seconds per slide (in 10-15s range)
   const TOTAL_SLIDES = 6;
 
-  // Global touch/pointer petals effect on every tap
+  // Global touch/pointer petals effect on every tap + sacred bell chime on first tap
   useEffect(() => {
     let lastTriggerTime = 0;
+    let hasPlayedChime = false;
 
     const handlePointerDown = (e) => {
+      if (!hasPlayedChime) {
+        hasPlayedChime = true;
+        playSacredBellChime();
+      }
+
       const now = Date.now();
       // Throttle by 120ms to keep 60fps smooth scrolling
       if (now - lastTriggerTime < 120) return;

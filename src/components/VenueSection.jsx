@@ -1,4 +1,4 @@
-import { MapPin, Navigation, Train, Plane, Phone, ExternalLink } from "lucide-react";
+import { MapPin, Navigation, Train, Plane, Phone, ExternalLink, CloudSun } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 
 export default function VenueSection() {
@@ -78,8 +78,16 @@ export default function VenueSection() {
             })}
           </div>
 
+          {/* Tatanagar Winter Weather Advisory */}
+          <div className="w-full px-3.5 py-1.5 rounded-xl bg-amber-950/70 border border-amber-400/35 flex items-center justify-center gap-2 text-center shadow-md">
+            <CloudSun className="w-4 h-4 text-amber-300 flex-shrink-0 animate-pulse" />
+            <p className="text-[11px] sm:text-xs text-amber-100">
+              <strong className="text-amber-300 font-bold">मौसम सूचना (Weather Advisory):</strong> दिसम्बर की सुहावनी शीतकालीन शाम (~16°C) • रात्रि 9:00 बजे शुभ लग्न हेतु हल्की ऊनी शॉल या ब्लेज़र अनुशंसित।
+            </p>
+          </div>
+
           {/* Interactive Google Map Preview */}
-          <div className="rounded-2xl overflow-hidden border border-amber-500/40 h-36 sm:h-44 relative bg-stone-950 shadow-xl w-full">
+          <div className="rounded-2xl overflow-hidden border border-amber-500/40 h-32 sm:h-40 relative bg-stone-950 shadow-xl w-full">
             <iframe
               title="Venue Location Map"
               src={location.embedMapUrl}

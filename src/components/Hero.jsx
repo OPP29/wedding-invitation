@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Calendar, Heart, Clock } from "lucide-react";
+import { Calendar, Heart, Clock, Download, Send } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { createGoogleCalendarUrl } from "../utils/calendar";
+import { downloadWeddingCard } from "../utils/cardGenerator";
 
 export default function Hero() {
   const [guestName, setGuestName] = useState("");
@@ -51,6 +52,12 @@ export default function Hero() {
   const handleOpenGoogleCalendar = () => {
     const url = createGoogleCalendarUrl({});
     window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const handleDirectWhatsAppShare = () => {
+    const shareUrl = window.location.href.split("#")[0].split("?")[0];
+    const text = `॥ श्री गणेशाय नमः ॥\n\n🌸 सादर प्रणाम!\nआप सपरिवार *मोनिका पंडित (दिव्या)* संग *रितेश कु. पंडित (चिंटू)* के पावन शुभ विवाह में सादर आमंत्रित हैं।\n\n📅 *दिनांक:* शुक्रवार, 11 दिसम्बर 2026 (रात्रि 9:00 बजे से)\n📍 *स्थान:* टाटानगर (झारखण्ड)\n\n✨ डिजिटल निमंत्रण पत्र एवं विस्तृत कार्यक्रम देखने हेतु लिंक खोलें:\n👉 ${shareUrl}\n\nसस्नेह निमंत्रित: समस्त पंडित परिवार 🙏`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, "_blank");
   };
 
   return (
@@ -153,14 +160,30 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Direct 1-Click Google Calendar Action Button */}
-        <div className="mt-3">
+        {/* 3 Royal Action Buttons: Calendar, E-Card Download & WhatsApp Share */}
+        <div className="mt-2.5 sm:mt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 max-w-lg mx-auto">
           <button
             onClick={handleOpenGoogleCalendar}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-md transition-transform active:scale-95"
           >
-            <Calendar className="w-4 h-4 text-stone-950" />
-            <span>तिथि सुरक्षित करें (Add to Google Calendar)</span>
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-stone-950 flex-shrink-0" />
+            <span>तिथि सुरक्षित करें</span>
+          </button>
+
+          <button
+            onClick={downloadWeddingCard}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-amber-950/80 hover:bg-amber-900 border border-amber-400/60 text-amber-200 text-xs sm:text-sm font-bold shadow-md transition-transform active:scale-95"
+          >
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 flex-shrink-0" />
+            <span>ई-कार्ड डाउनलोड</span>
+          </button>
+
+          <button
+            onClick={handleDirectWhatsAppShare}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-400/60 text-emerald-200 text-xs sm:text-sm font-bold shadow-md transition-transform active:scale-95"
+          >
+            <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 flex-shrink-0" />
+            <span>WhatsApp पर भेजें</span>
           </button>
         </div>
       </div>
