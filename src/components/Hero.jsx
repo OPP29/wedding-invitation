@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Calendar, MapPin, Heart, ChevronDown, Sparkles, Clock } from "lucide-react";
+import { Calendar, MapPin, Heart, ChevronDown, Sparkles, Clock, Share2 } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { createGoogleCalendarUrl, downloadIcsFile } from "../utils/calendar";
 import { triggerCelebration } from "../utils/confetti";
 
-export default function Hero() {
+export default function Hero({ onOpenShareModal }) {
   const [calendarMenuOpen, setCalendarMenuOpen] = useState(false);
+  const [guestName, setGuestName] = useState("");
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -14,6 +15,13 @@ export default function Hero() {
   });
 
   useEffect(() => {
+    // Read ?guest=... from URL for personalized greeting
+    const searchParams = new URLSearchParams(window.location.search);
+    const guestParam = searchParams.get("guest") || searchParams.get("to") || searchParams.get("name");
+    if (guestParam) {
+      setGuestName(decodeURIComponent(guestParam));
+    }
+
     const target = new Date(weddingData.weddingDate).getTime();
     const calculateTime = () => {
       const now = new Date().getTime();
@@ -23,7 +31,7 @@ export default function Hero() {
       setTimeLeft({
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        minutes: Math.floor((difference % (1000 * 60)) / (1000 * 60)),
         seconds: Math.floor((difference % (1000 * 60)) / 1000),
       });
     };
@@ -33,7 +41,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative pt-24 pb-10 px-3 sm:px-6 bg-royal-maroon overflow-hidden">
+    <section className="relative pt-6 sm:pt-10 pb-8 px-3 sm:px-6 bg-royal-maroon overflow-hidden">
       <div className="max-w-4xl w-full mx-auto relative z-10 text-center">
         {/* Main Royal Gateway Card */}
         <div className="relative rounded-3xl p-5 sm:p-10 royal-card border-2 border-amber-400/60 shadow-2xl">
@@ -43,8 +51,18 @@ export default function Hero() {
           <div className="absolute bottom-2.5 left-3 text-amber-400/60 text-lg sm:text-2xl select-none font-serif">❖</div>
           <div className="absolute bottom-2.5 right-3 text-amber-400/60 text-lg sm:text-2xl select-none font-serif">❖</div>
 
+          {/* Personalized Guest Greeting (If ?guest= parameter is in URL) */}
+          {guestName && (
+            <div className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/60 shadow-md">
+              <span className="text-amber-400 font-bold">ॐ</span>
+              <span className="font-serif text-xs sm:text-sm text-amber-200">
+                सादर सप्रेम अभिवादन, <strong className="text-amber-300 font-bold underline decoration-amber-400/70">{guestName} जी</strong>! आप सपरिवार सादर आमंत्रित हैं।
+              </span>
+            </div>
+          )}
+
           {/* Sacred Vedic Header */}
-          <div className="mb-4">
+          <div className="mb-3">
             <span className="inline-block px-4 py-1 rounded-full border border-amber-400/60 bg-amber-950/70 text-amber-300 font-bold text-xs sm:text-sm tracking-widest font-serif shadow-sm">
               ॥ श्री गणेशाय नमः ॥
             </span>
@@ -56,7 +74,7 @@ export default function Hero() {
           {/* Subheading */}
           <div className="my-2">
             <span className="inline-block px-4 py-0.5 rounded-full bg-gradient-to-r from-amber-600/30 via-amber-400/20 to-amber-600/30 border-y border-amber-400/60 text-amber-300 text-[11px] sm:text-xs tracking-[0.2em] uppercase font-serif font-bold">
-              ॥ पावन शुभ विवाह निमंत्रण ॥
+              ॥ पावन शुभ विवाह निमंत्रण पत्र ॥
             </span>
           </div>
 
@@ -134,9 +152,9 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Compact Actions */}
+          {/* Action Buttons */}
           <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mt-6 pt-2">
-            {/* Calendar button */}
+            {/* Calendar dropdown */}
             <div className="relative">
               <button
                 onClick={() => setCalendarMenuOpen(!calendarMenuOpen)}
@@ -179,6 +197,17 @@ export default function Hero() {
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
               <span>पुष्प वर्षा (Petals)</span>
             </button>
+
+            {/* Generate Link modal button */}
+            {onOpenShareModal && (
+              <button
+                onClick={onOpenShareModal}
+                className="flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-full bg-amber-950/80 hover:bg-amber-900 border border-amber-400 text-amber-200 font-serif text-xs sm:text-sm font-semibold transition-all active:scale-95"
+              >
+                <Share2 className="w-3.5 h-3.5 text-amber-300" />
+                <span>अतिथि लिंक बनाएं</span>
+              </button>
+            )}
 
             {/* RSVP Jump */}
             <a
