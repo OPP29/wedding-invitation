@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Hero from "./components/Hero";
 import CoupleSection from "./components/CoupleSection";
 import EventsTimeline from "./components/EventsTimeline";
@@ -13,6 +13,12 @@ import { triggerTouchPetals } from "./utils/confetti";
 export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const containerRef = useRef(null);
+  const timerRef = useRef(null);
+  const scrollTimeoutRef = useRef(null);
+  const isAutoScrollingRef = useRef(false);
+
+  const AUTO_ADVANCE_DELAY = 12000; // 12 seconds per slide (in 10-15s range)
+  const TOTAL_SLIDES = 6;
 
   // Global touch/pointer petals effect on every tap
   useEffect(() => {
@@ -46,6 +52,91 @@ export default function App() {
       behavior: "smooth",
     });
   };
+
+  // Background Auto-Advance Timer (12s per slide, resets on manual scroll or back scroll)
+  const startAutoAdvanceTimer = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      // Do NOT auto-scroll away if user is actively filling out the RSVP form
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === "input" || activeTag === "textarea" || activeTag === "select") {
+        startAutoAdvanceTimer();
+        return;
+      }
+
+      // Do NOT auto-scroll if a modal or popup is open
+      if (isShareModalOpen) {
+        startAutoAdvanceTimer();
+        return;
+      }
+
+      const slideHeight = container.clientHeight;
+      if (!slideHeight) return;
+
+      const currentIndex = Math.round(container.scrollTop / slideHeight);
+      const nextIndex = (currentIndex + 1) % TOTAL_SLIDES;
+
+      isAutoScrollingRef.current = true;
+      container.scrollTo({
+        top: nextIndex * slideHeight,
+        behavior: "smooth",
+      });
+
+      // Reset auto-scroll flag after smooth transition settles
+      setTimeout(() => {
+        isAutoScrollingRef.current = false;
+        startAutoAdvanceTimer();
+      }, 1000);
+    }, AUTO_ADVANCE_DELAY);
+  }, [isShareModalOpen]);
+
+  // Set up invisible auto-advance listener and manual scroll reset
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Start auto timer initially
+    startAutoAdvanceTimer();
+
+    const handleScroll = () => {
+      // Ignore programmatic scrolls initiated by the timer
+      if (isAutoScrollingRef.current) return;
+
+      // If user scrolls manually (forward or back), reset and start countdown anew
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        startAutoAdvanceTimer();
+      }, 250);
+    };
+
+    const handleUserGesture = () => {
+      if (isAutoScrollingRef.current) return;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        startAutoAdvanceTimer();
+      }, 250);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    container.addEventListener("wheel", handleUserGesture, { passive: true });
+    container.addEventListener("touchstart", handleUserGesture, { passive: true });
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      container.removeEventListener("scroll", handleScroll);
+      container.removeEventListener("wheel", handleUserGesture);
+      container.removeEventListener("touchstart", handleUserGesture);
+    };
+  }, [startAutoAdvanceTimer]);
 
   return (
     <div className="relative h-screen h-[100dvh] w-full overflow-hidden bg-[#200007] text-[#fbf6ee] font-serif antialiased selection:bg-[#d4af37] selection:text-[#38010d]">
