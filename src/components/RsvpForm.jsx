@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Send, CheckCircle2, Heart, ArrowUp, Sparkles } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { triggerCelebration } from "../utils/confetti";
 import { playSacredBellChime } from "../utils/audioChime";
 
-export default function RsvpForm({ onScrollToTop }) {
+export default function RsvpForm({ onScrollToTop, isActive }) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    attendees: "2",
+    attendees: "सपरिवार",
     attendance: "attending",
     dietary: "शुद्ध शाकाहारी",
     notes: "",
@@ -17,6 +17,72 @@ export default function RsvpForm({ onScrollToTop }) {
   const [status, setStatus] = useState("idle");
   const [submittedData, setSubmittedData] = useState(null);
   const [wishes, setWishes] = useState(weddingData.initialWishes || []);
+
+  const blessingsContainerRef = useRef(null);
+  const isManualControlRef = useRef(false);
+  const animationFrameRef = useRef(null);
+  const [isManualScroll, setIsManualScroll] = useState(false);
+
+  // Auto-scrolling on Slide 6: Starts automatically, stops on user touch, and restarts when returning to Slide 6
+  useEffect(() => {
+    if (isActive) {
+      isManualControlRef.current = false;
+
+      let lastTime = performance.now();
+      const scrollSpeed = 24; // pixels per second
+
+      const autoScrollStep = (now) => {
+        if (isManualControlRef.current) return;
+
+        const container = blessingsContainerRef.current;
+        if (container) {
+          const delta = (now - lastTime) / 1000;
+          lastTime = now;
+
+          container.scrollTop += scrollSpeed * delta;
+
+          // Seamless loop when reaching bottom
+          if (container.scrollTop + container.clientHeight >= container.scrollHeight - 2) {
+            container.scrollTop = 0;
+          }
+        }
+
+        animationFrameRef.current = requestAnimationFrame(autoScrollStep);
+      };
+
+      const startTimer = setTimeout(() => {
+        setIsManualScroll(false);
+        if (!isManualControlRef.current) {
+          lastTime = performance.now();
+          animationFrameRef.current = requestAnimationFrame(autoScrollStep);
+        }
+      }, 500);
+
+      return () => {
+        clearTimeout(startTimer);
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+      };
+    } else {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    }
+  }, [isActive]);
+
+  // Touch anywhere inside box: Stop auto-scroll and switch to full manual scroll
+  const handleUserTakeControl = () => {
+    if (!isManualControlRef.current) {
+      isManualControlRef.current = true;
+      setIsManualScroll(true);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -157,31 +223,15 @@ export default function RsvpForm({ onScrollToTop }) {
                 </div>
               </div>
 
-              {/* Attendees & Blessing */}
-              <div className="grid grid-cols-3 gap-2.5">
-                <div className="col-span-1">
-                  <select
-                    value={formData.attendees}
-                    onChange={(e) => setFormData({ ...formData, attendees: e.target.value })}
-                    className="w-full px-3 py-2.5 rounded-xl bg-[#200007] border border-amber-500/35 text-amber-100 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400"
-                  >
-                    <option value="1">1 सदस्य</option>
-                    <option value="2">2 सदस्य</option>
-                    <option value="3">3 सदस्य</option>
-                    <option value="4">4 सदस्य</option>
-                    <option value="5+">5+ (सपरिवार)</option>
-                  </select>
-                </div>
-
-                <div className="col-span-2">
-                  <input
-                    type="text"
-                    value={formData.notes}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    placeholder="वर-वधू के लिए मंगलकामना संदेश..."
-                    className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400"
-                  />
-                </div>
+              {/* वर-वधू के लिए मंगलकामना संदेश (Increased Height & Full Width) */}
+              <div>
+                <textarea
+                  rows={3}
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  placeholder="वर-वधू के लिए पावन मंगलकामना एवं शुभाशीर्वाद संदेश..."
+                  className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400 resize-none shadow-inner"
+                />
               </div>
 
               {/* Submit Button with Larger Touch Target */}
@@ -207,12 +257,17 @@ export default function RsvpForm({ onScrollToTop }) {
               <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
             </div>
             <span className="text-[10px] sm:text-xs text-amber-400/80 font-normal normal-case flex items-center gap-1">
-              ↕️ स्क्रॉल करें
+              {isManualScroll ? "✋ मैनुअल स्क्रॉल सक्रिय" : "▶ स्वचालित स्क्रॉल (रोकने हेतु स्पर्श करें)"}
             </span>
           </div>
 
-          {/* Scrollable Container with Increased Height & Touch Protection */}
+          {/* Scrollable Container with Auto-Scroll & Touch-Interrupt to Manual */}
           <div
+            ref={blessingsContainerRef}
+            onTouchStart={handleUserTakeControl}
+            onPointerDown={handleUserTakeControl}
+            onMouseDown={handleUserTakeControl}
+            onWheel={handleUserTakeControl}
             className="overflow-y-auto max-h-52 sm:max-h-64 relative w-full space-y-2.5 pr-1.5 royal-scrollbar"
             style={{ overscrollBehaviorY: "contain", touchAction: "pan-y" }}
           >

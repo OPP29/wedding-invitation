@@ -213,7 +213,7 @@ export default function App() {
         <Gallery />
 
         {/* Slide 6: RSVP & Blessings & Auspicious Family Lineage (Fullscreen Borderless) */}
-        <RsvpForm onScrollToTop={() => scrollToSlide(0)} />
+        <RsvpForm onScrollToTop={() => scrollToSlide(0)} isActive={activeSlideIndex === 5} />
       </div>
 
       {/* WhatsApp Invite Link Generator Modal */}

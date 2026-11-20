@@ -229,22 +229,31 @@ export default function Hero() {
           </h2>
         </div>
 
-        {/* Couple Royal Names with Larger Typography */}
-        <div className="my-3 sm:my-4 space-y-2 sm:space-y-3">
-          <div>
-            <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium">
+        {/* Couple Royal Names with Illuminated Golden Lighting Borders */}
+        <div className="my-2.5 sm:my-3.5 space-y-2 sm:space-y-3">
+          {/* Bride Name Card */}
+          <div className="flex flex-col items-center">
+            <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium mb-1">
               सौ. कां. (वधू)
             </span>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight gold-gradient-text royal-name-glow mt-0.5">
-              Monika Pandit
-            </h1>
-            <p className="text-sm sm:text-base text-amber-300 font-medium">
+            <div className="relative inline-block px-5 sm:px-8 py-1.5 sm:py-2.5 rounded-2xl bg-gradient-to-r from-amber-950/75 via-[#38010d]/80 to-amber-950/75 border-2 border-amber-400 royal-name-border-glow">
+              {/* Corner Jewels */}
+              <span className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+              <span className="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+              <span className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight gold-gradient-text leading-tight">
+                Monika Pandit
+              </h1>
+            </div>
+            <p className="text-sm sm:text-base text-amber-300 font-medium mt-1">
               (प्यार से: <strong className="text-amber-200 text-base sm:text-lg">दिव्या</strong>)
             </p>
           </div>
 
           {/* Sacred knot with pulsing heart */}
-          <div className="flex items-center justify-center gap-3 py-1">
+          <div className="flex items-center justify-center gap-3 py-0.5">
             <div className="h-[1px] w-14 sm:w-28 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full border border-amber-400/70 bg-gradient-to-br from-amber-700 to-[#38010d] flex items-center justify-center shadow-lg">
               <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 fill-amber-300 animate-pulse" />
@@ -252,14 +261,23 @@ export default function Hero() {
             <div className="h-[1px] w-14 sm:w-28 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
           </div>
 
-          <div>
-            <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium">
+          {/* Groom Name Card */}
+          <div className="flex flex-col items-center">
+            <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium mb-1">
               चि. (वर)
             </span>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight gold-gradient-text royal-name-glow mt-0.5">
-              Ritesh Kumar
-            </h1>
-            <p className="text-sm sm:text-base text-amber-300 font-medium">
+            <div className="relative inline-block px-5 sm:px-8 py-1.5 sm:py-2.5 rounded-2xl bg-gradient-to-r from-amber-950/75 via-[#38010d]/80 to-amber-950/75 border-2 border-amber-400 royal-name-border-glow">
+              {/* Corner Jewels */}
+              <span className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+              <span className="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+              <span className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
+
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight gold-gradient-text leading-tight">
+                Ritesh Kumar
+              </h1>
+            </div>
+            <p className="text-sm sm:text-base text-amber-300 font-medium mt-1">
               (प्यार से: <strong className="text-amber-200 text-base sm:text-lg">चिंटू</strong>)
             </p>
           </div>
