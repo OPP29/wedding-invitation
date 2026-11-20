@@ -21,7 +21,6 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
   const blessingsContainerRef = useRef(null);
   const isManualControlRef = useRef(false);
   const animationFrameRef = useRef(null);
-  const [isManualScroll, setIsManualScroll] = useState(false);
 
   // Auto-scrolling on Slide 6: Starts automatically, stops on user touch, and restarts when returning to Slide 6
   useEffect(() => {
@@ -51,7 +50,6 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
       };
 
       const startTimer = setTimeout(() => {
-        setIsManualScroll(false);
         if (!isManualControlRef.current) {
           lastTime = performance.now();
           animationFrameRef.current = requestAnimationFrame(autoScrollStep);
@@ -76,7 +74,6 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
   const handleUserTakeControl = () => {
     if (!isManualControlRef.current) {
       isManualControlRef.current = true;
-      setIsManualScroll(true);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
@@ -251,14 +248,9 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
 
         {/* Auspicious Family Blessings Scrollable Box - Increased Height & Manual Scrolling */}
         <div className="w-full my-2.5 rounded-2xl bg-amber-950/65 border border-amber-400/40 p-3 sm:p-3.5 text-left relative shadow-lg">
-          <div className="flex items-center justify-between gap-1.5 mb-2 text-xs sm:text-sm text-amber-300 font-bold uppercase tracking-wider">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse flex-shrink-0" />
-              <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
-            </div>
-            <span className="text-[10px] sm:text-xs text-amber-400/80 font-normal normal-case flex items-center gap-1">
-              {isManualScroll ? "✋ मैनुअल स्क्रॉल सक्रिय" : "▶ स्वचालित स्क्रॉल (रोकने हेतु स्पर्श करें)"}
-            </span>
+          <div className="flex items-center gap-1.5 mb-2 text-xs sm:text-sm text-amber-300 font-bold uppercase tracking-wider">
+            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse flex-shrink-0" />
+            <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
           </div>
 
           {/* Scrollable Container with Auto-Scroll & Touch-Interrupt to Manual */}
