@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Camera, X } from "lucide-react";
+import { X } from "lucide-react";
 
 export default function Gallery() {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);

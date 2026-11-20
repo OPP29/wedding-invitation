@@ -1,6 +1,5 @@
 // Authentic Bronze Temple Bell Audio Player & Synthesizer Fallback
 let bellAudio = null;
-let audioContext = null;
 let hasChimedSuccessfully = false;
 let isUnlockArmed = false;
 

@@ -1,4 +1,4 @@
-import { MapPin, Navigation, Train, Plane, Phone, ExternalLink, CloudSun } from "lucide-react";
+import { MapPin, Navigation, Train, Plane, ExternalLink, CloudSun } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 
 export default function VenueSection() {

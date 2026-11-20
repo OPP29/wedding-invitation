@@ -76,7 +76,7 @@ export default function App() {
   };
 
   // Background Auto-Advance Timer (12s per slide, resets on manual scroll or back scroll)
-  const startAutoAdvanceTimer = useCallback(() => {
+  const startAutoAdvanceTimer = useCallback(function scheduleAutoAdvance() {
     if (timerRef.current) clearTimeout(timerRef.current);
 
     timerRef.current = setTimeout(() => {
@@ -86,13 +86,13 @@ export default function App() {
       // Do NOT auto-scroll away if user is actively filling out the RSVP form
       const activeTag = document.activeElement?.tagName?.toLowerCase();
       if (activeTag === "input" || activeTag === "textarea" || activeTag === "select") {
-        startAutoAdvanceTimer();
+        scheduleAutoAdvance();
         return;
       }
 
       // Do NOT auto-scroll if a modal or popup is open
       if (isShareModalOpen) {
-        startAutoAdvanceTimer();
+        scheduleAutoAdvance();
         return;
       }
 
@@ -111,7 +111,7 @@ export default function App() {
       // Reset auto-scroll flag after smooth transition settles
       setTimeout(() => {
         isAutoScrollingRef.current = false;
-        startAutoAdvanceTimer();
+        scheduleAutoAdvance();
       }, 1000);
     }, AUTO_ADVANCE_DELAY);
   }, [isShareModalOpen]);
