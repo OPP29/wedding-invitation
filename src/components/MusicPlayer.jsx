@@ -59,6 +59,12 @@ export default function MusicPlayer() {
 
     startAudio();
 
+    // Trigger music immediately on royal curtain opening event
+    const handlePlayMusic = () => {
+      startAudio();
+    };
+    window.addEventListener("wedding:play-music", handlePlayMusic);
+
     // If browser autoplay policy requires user gesture, start immediately on first interaction
     const handleGesture = () => {
       startAudio();
@@ -71,6 +77,7 @@ export default function MusicPlayer() {
 
     return () => {
       if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+      window.removeEventListener("wedding:play-music", handlePlayMusic);
       window.removeEventListener("click", handleGesture);
       window.removeEventListener("touchstart", handleGesture);
       window.removeEventListener("pointerdown", handleGesture);

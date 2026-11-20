@@ -208,11 +208,6 @@ export default function Hero() {
                 <circle cx="68" cy="66" r="3" fill="#D4AF37" />
               </svg>
             </div>
-
-            {/* Subtle Divine Sound Prompt */}
-            <span className="mt-1 inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/35 text-[11px] sm:text-xs text-amber-300 font-medium shadow-sm transition-transform group-hover:scale-105">
-              🔔 पावन मंदिर घंटा बजाएं (Tap to Ring)
-            </span>
           </button>
         </div>
 

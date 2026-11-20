@@ -8,11 +8,13 @@ import RsvpForm from "./components/RsvpForm";
 import PetalShower from "./components/PetalShower";
 import MusicPlayer from "./components/MusicPlayer";
 import InviteShareModal from "./components/InviteShareModal";
+import RoyalOpeningCurtain from "./components/RoyalOpeningCurtain";
 import { triggerTouchPetals } from "./utils/confetti";
 import { playSacredBellChime, isBellChimed } from "./utils/audioChime";
 
 export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const isCurtainOpenRef = useRef(false);
   const containerRef = useRef(null);
   const timerRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
@@ -90,8 +92,8 @@ export default function App() {
         return;
       }
 
-      // Do NOT auto-scroll if a modal or popup is open
-      if (isShareModalOpen) {
+      // Do NOT auto-scroll if opening curtain is still closed or modal is open
+      if (!isCurtainOpenRef.current || isShareModalOpen) {
         scheduleAutoAdvance();
         return;
       }
@@ -160,6 +162,11 @@ export default function App() {
     };
   }, [startAutoAdvanceTimer]);
 
+  const handleCurtainOpened = useCallback(() => {
+    isCurtainOpenRef.current = true;
+    startAutoAdvanceTimer();
+  }, [startAutoAdvanceTimer]);
+
   return (
     <div className="relative h-screen h-[100dvh] w-full overflow-hidden bg-[#200007] text-[#fbf6ee] font-serif antialiased selection:bg-[#d4af37] selection:text-[#38010d]">
       {/* Background Falling Petals (Always ON) */}
@@ -167,6 +174,9 @@ export default function App() {
 
       {/* Floating Audio Controller */}
       <MusicPlayer />
+
+      {/* Celestial Cloudy Royal Opening Curtain */}
+      <RoyalOpeningCurtain onOpened={handleCurtainOpened} />
 
       {/* Fullscreen Vertical Snap-Scroll Container */}
       <div ref={containerRef} className="snap-wrapper">
