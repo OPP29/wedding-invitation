@@ -12,26 +12,50 @@ export default function Gallery() {
       src: `${import.meta.env.BASE_URL}couple-photos/photo1.jpg`,
       title: "राजसी प्रेम का सूत्रपात",
       caption: "Two souls united by destiny, blessed by traditions",
+      position: "center",
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo2.jpg`,
       title: "वधु सौंदर्य व लालित्य",
       caption: "Adorned in royal crimson, ready for sacred vows",
+      position: "bottom", // Lower part visible
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo3.jpg`,
       title: "अनंत पथ पर साथ",
       caption: "Walking hand in hand toward eternity",
+      position: "center",
+      zoom: true, // Slightly make zoom
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo4.jpg`,
       title: "मुस्कुराते सुंदर पल",
       caption: "Laughter, devotion and eternal companionship",
+      position: "bottom", // Lower part visible
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo5.jpg`,
       title: "स्नेहमयी स्मृतियां",
       caption: "Cherished moments and eternal blessings",
+      position: "bottom", // Lower part visible
+    },
+    {
+      src: `${import.meta.env.BASE_URL}couple-photos/photo6.jpg`,
+      title: "शुभ बंधन व उमंग",
+      caption: "Celebrations of divine togetherness",
+      position: "bottom", // Lower part visible
+    },
+    {
+      src: `${import.meta.env.BASE_URL}couple-photos/photo7.jpg`,
+      title: "मंगलमय परिणय",
+      caption: "A sacred journey of love and togetherness",
+      position: "center",
+    },
+    {
+      src: `${import.meta.env.BASE_URL}couple-photos/photo8.jpg`,
+      title: "अमृतमयी संगम",
+      caption: "Bound together for seven lifetimes",
+      position: "center",
     },
   ];
 
@@ -84,31 +108,34 @@ export default function Gallery() {
     <div className="snap-section bg-royal-emerald font-serif text-center">
       <div className="max-w-2xl w-full my-auto px-1 flex flex-col items-center">
         {/* Header */}
-        <div className="mb-3">
-          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
+        <div className="mb-2 sm:mb-3">
+          <span className="inline-block px-4 sm:px-5 py-1 sm:py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
             शाही फोटो गैलरी
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold gold-gradient-text mt-0.5 sm:mt-1">
             स्नेहमयी स्मृतियां (Gallery)
           </h2>
         </div>
 
-        {/* 4 Photo Grid - Auto-fits cleanly to any screen */}
-        <div className="grid grid-cols-2 gap-2.5 sm:gap-4 w-full">
+        {/* 8 Photo Grid - 4x2 on Desktop, 2x4 on Mobile */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 w-full max-h-[66vh] sm:max-h-none overflow-y-auto sm:overflow-visible pr-0.5 sm:pr-0">
           {couplePhotos.map((photo, index) => (
             <div
               key={index}
               onClick={() => setSelectedPhotoIndex(index)}
-              className="group relative h-36 sm:h-52 rounded-2xl overflow-hidden cursor-pointer shadow-xl royal-card border-2 border-amber-400/50 hover:border-amber-300 transition-all duration-300"
+              className="group relative h-28 sm:h-36 md:h-44 rounded-2xl overflow-hidden cursor-pointer shadow-xl royal-card border-2 border-amber-400/50 hover:border-amber-300 transition-all duration-300"
             >
               <img
                 src={photo.src}
                 alt={photo.title}
                 loading="lazy"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                style={{ objectPosition: photo.position || "center" }}
+                className={`w-full h-full object-cover transition-transform duration-500 ${
+                  photo.zoom ? "scale-[1.18] group-hover:scale-[1.25]" : "group-hover:scale-105"
+                }`}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-2.5 sm:p-3 text-white">
-                <span className="text-xs sm:text-sm text-amber-200 font-bold truncate">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-2 text-white">
+                <span className="text-[11px] sm:text-xs text-amber-200 font-bold truncate">
                   {photo.title}
                 </span>
               </div>
@@ -116,7 +143,7 @@ export default function Gallery() {
           ))}
         </div>
 
-        <p className="text-xs text-amber-300/80 text-center mt-3 font-medium">
+        <p className="text-[11px] sm:text-xs text-amber-300/80 text-center mt-2 sm:mt-3 font-medium">
           * किसी भी चित्र पर स्पर्श करके बड़े रूप में देखें व स्वाइप करें (Tap & Swipe)
         </p>
       </div>

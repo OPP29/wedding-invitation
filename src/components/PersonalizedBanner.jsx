@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sparkles, Share2, Copy, Check } from "lucide-react";
+import { Share2, Copy, Check } from "lucide-react";
 
 export default function PersonalizedBanner({ onOpenShareModal }) {
   const [guestName, setGuestName] = useState("");

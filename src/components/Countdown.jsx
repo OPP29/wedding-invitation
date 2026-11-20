@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Clock, Heart } from "lucide-react";
+import { Clock } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 
 export default function Countdown() {

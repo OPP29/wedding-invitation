@@ -11,6 +11,7 @@ import InviteShareModal from "./components/InviteShareModal";
 import RoyalOpeningCurtain from "./components/RoyalOpeningCurtain";
 import { triggerTouchPetals } from "./utils/confetti";
 import { playSacredBellChime, isBellChimed } from "./utils/audioChime";
+import { requestScreenWakeLock, releaseScreenWakeLock } from "./utils/screenWakeLock";
 
 export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -25,12 +26,16 @@ export default function App() {
 
   // Ring real temple bell at page load & unlock on first gesture if browser restricted
   useEffect(() => {
-    // 1. Try to chime immediately at page load
+    // 1. Keep device screen awake while wedding invitation is active
+    requestScreenWakeLock();
+
+    // 2. Try to chime immediately at page load
     playSacredBellChime();
 
-    // 2. Fallback: on first user interaction, if browser restricted initial unmuted playback, ring immediately
+    // 3. Fallback: on first user interaction, if browser restricted initial unmuted playback, ring immediately
     const unlockEvents = ["pointerdown", "touchstart", "click", "keydown", "scroll"];
     const handleFirstUserGesture = () => {
+      requestScreenWakeLock();
       if (!isBellChimed()) {
         playSacredBellChime();
       }
@@ -42,6 +47,7 @@ export default function App() {
     // Handle delicate touch petals bloom
     let lastTriggerTime = 0;
     const handlePointerDown = (e) => {
+      requestScreenWakeLock();
       if (!isBellChimed()) {
         playSacredBellChime();
       }
@@ -64,6 +70,7 @@ export default function App() {
     return () => {
       unlockEvents.forEach((ev) => window.removeEventListener(ev, handleFirstUserGesture));
       window.removeEventListener("pointerdown", handlePointerDown);
+      releaseScreenWakeLock();
     };
   }, []);
 
