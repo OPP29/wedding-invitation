@@ -16,7 +16,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "वर-वधु (Couple)", href: "#couple" },
     { name: "कार्यक्रम एवं स्थल (Events)", href: "#events" },
-    { name: "चित्र वीथिका (Gallery)", href: "#gallery" },
+    { name: "शाही फोटो गैलरी (Gallery)", href: "#gallery" },
     { name: "उपस्थिति (RSVP)", href: "#rsvp" },
   ];
 

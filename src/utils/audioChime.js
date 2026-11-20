@@ -2,12 +2,16 @@
 let bellAudio = null;
 let audioContext = null;
 let hasChimedSuccessfully = false;
+let isUnlockArmed = false;
 
 function getBellAudio() {
   if (!bellAudio && typeof window !== "undefined") {
     bellAudio = new Audio(`${import.meta.env.BASE_URL}temple-bell.mp3`);
     bellAudio.preload = "auto";
     bellAudio.volume = 1.0;
+    bellAudio.addEventListener("playing", () => {
+      hasChimedSuccessfully = true;
+    });
   }
   return bellAudio;
 }
@@ -16,7 +20,26 @@ export function isBellChimed() {
   return hasChimedSuccessfully;
 }
 
-export function playSacredBellChime() {
+export function armFirstGestureUnlock(onChimedCallback) {
+  if (typeof window === "undefined" || isUnlockArmed) return;
+  isUnlockArmed = true;
+
+  const events = ["pointerdown", "touchstart", "click", "keydown", "scroll"];
+  const unlockAndPlay = () => {
+    if (!hasChimedSuccessfully) {
+      playSacredBellChime();
+      if (onChimedCallback) onChimedCallback();
+    }
+    events.forEach((ev) => window.removeEventListener(ev, unlockAndPlay, { capture: true }));
+    isUnlockArmed = false;
+  };
+
+  events.forEach((ev) => {
+    window.addEventListener(ev, unlockAndPlay, { capture: true, once: true, passive: true });
+  });
+}
+
+export function playSacredBellChime(onSuccess) {
   try {
     const audio = getBellAudio();
     if (audio) {
@@ -26,65 +49,20 @@ export function playSacredBellChime() {
         playPromise
           .then(() => {
             hasChimedSuccessfully = true;
+            if (onSuccess) onSuccess();
           })
           .catch((err) => {
             console.warn("Autoplay policy deferred audio until user interaction:", err.message);
-            // Attempt Web Audio API synthesizer
-            playSynthesizedBell();
+            hasChimedSuccessfully = false;
+            // Arm first touch/scroll gesture to ring the bell as soon as user touches screen
+            armFirstGestureUnlock(onSuccess);
           });
       }
       return audio;
     }
   } catch (err) {
-    console.warn("Real bell playback error, using synthesizer:", err);
-    playSynthesizedBell();
+    console.warn("Real bell playback error:", err);
+    hasChimedSuccessfully = false;
+    armFirstGestureUnlock(onSuccess);
   }
-}
-
-function playSynthesizedBell() {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    if (!audioContext) {
-      audioContext = new AudioContextClass();
-    }
-    if (audioContext.state === "suspended") {
-      audioContext.resume().then(() => {
-        hasChimedSuccessfully = true;
-        renderBellPartials(audioContext);
-      }).catch(() => {});
-      return;
-    }
-    hasChimedSuccessfully = true;
-    renderBellPartials(audioContext);
-  } catch (e) {
-    console.warn("Synthesizer error:", e);
-  }
-}
-
-function renderBellPartials(ctx) {
-  const now = ctx.currentTime;
-  const partials = [
-    { freq: 528, gain: 0.95, decay: 3.5 },
-    { freq: 440, gain: 0.65, decay: 3.2 },
-    { freq: 1056, gain: 0.75, decay: 2.6 },
-    { freq: 2420, gain: 0.40, decay: 0.9 },
-  ];
-
-  partials.forEach(({ freq, gain, decay }) => {
-    const osc = ctx.createOscillator();
-    const gainNode = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(freq, now);
-
-    gainNode.gain.setValueAtTime(0.001, now);
-    gainNode.gain.linearRampToValueAtTime(gain, now + 0.015);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + decay);
-
-    osc.connect(gainNode);
-    gainNode.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + decay + 0.1);
-  });
 }

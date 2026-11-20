@@ -199,21 +199,37 @@ export default function RsvpForm({ onScrollToTop }) {
           )}
         </div>
 
-        {/* Auspicious Family Blessings Vertical Ticker */}
-        <div className="w-full my-2 overflow-hidden rounded-xl bg-amber-950/50 border border-amber-400/30 py-2 px-3 text-left relative">
-          <div className="flex items-center gap-1.5 mb-1.5 text-[11px] sm:text-xs text-amber-300 font-bold uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse flex-shrink-0" />
+        {/* Auspicious Family Blessings Vertical Ticker - Enlarged & Clearly Formatted */}
+        <div className="w-full my-2.5 overflow-hidden rounded-2xl bg-amber-950/65 border border-amber-400/40 p-3 sm:p-3.5 text-left relative shadow-lg">
+          <div className="flex items-center gap-1.5 mb-2 text-xs sm:text-sm text-amber-300 font-bold uppercase tracking-wider">
+            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse flex-shrink-0" />
             <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
           </div>
-          <div className="overflow-hidden h-20 sm:h-24 relative w-full">
-            <div className="animate-vertical-ticker flex flex-col gap-2">
+
+          <div className="overflow-hidden h-32 sm:h-40 relative w-full">
+            <div className="animate-vertical-ticker flex flex-col gap-2.5">
               {wishes.concat(wishes).map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start gap-2 bg-amber-900/40 px-3 py-1.5 rounded-xl border border-amber-400/25 text-xs text-amber-200"
+                  className="w-full bg-[#1c0107]/90 p-2.5 sm:p-3 rounded-xl border border-amber-500/30 shadow-md text-left"
                 >
-                  <span className="text-amber-400 font-bold whitespace-nowrap">✨ {item.name}:</span>
-                  <span className="italic text-amber-100 leading-snug">"{item.message}"</span>
+                  {/* Sender & Relation Header */}
+                  <div className="flex items-center justify-between gap-2 mb-1.5 w-full">
+                    <span className="text-amber-300 font-bold text-xs sm:text-sm flex items-center gap-1.5 truncate">
+                      <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400 flex-shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </span>
+                    {item.relation && (
+                      <span className="text-[10px] sm:text-xs text-amber-200/90 bg-amber-900/60 border border-amber-400/30 px-2 py-0.5 rounded-full font-medium flex-shrink-0 whitespace-nowrap">
+                        {item.relation.split("(")[0].trim()}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Blessing Message - Clean Left Alignment & High Readability */}
+                  <p className="italic text-amber-100/95 text-xs sm:text-sm leading-relaxed pl-2.5 border-l-2 border-amber-400/60 font-serif">
+                    "{item.message}"
+                  </p>
                 </div>
               ))}
             </div>

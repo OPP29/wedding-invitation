@@ -35,7 +35,7 @@ export default function Gallery() {
         {/* Header */}
         <div className="mb-3">
           <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
-            राजसी छायाचित्र वीथिका
+            शाही फोटो गैलरी
           </span>
           <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
             स्नेहमयी स्मृतियां (Gallery)

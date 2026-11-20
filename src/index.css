@@ -140,7 +140,7 @@ html, body {
 }
 
 .animate-vertical-ticker {
-  animation: scrollUpVertical 28s linear infinite;
+  animation: scrollUpVertical 38s linear infinite;
 }
 
 .animate-vertical-ticker:hover,

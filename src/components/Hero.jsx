@@ -17,15 +17,30 @@ export default function Hero() {
   const [isBellRinging, setIsBellRinging] = useState(false);
   const ganeshButtonRef = useRef(null);
 
-  // Auto click top Ganesh icon once at 1st page load to automatically ring temple bell
+  // Auto ring temple bell & arm first gesture unlock if browser policy deferred audio
   useEffect(() => {
+    // 1. Programmatic trigger at 400ms
     const autoClickTimer = setTimeout(() => {
       if (ganeshButtonRef.current) {
         ganeshButtonRef.current.click();
       }
     }, 400);
 
-    return () => clearTimeout(autoClickTimer);
+    // 2. Browser autoplay fallback: ring with animation on first physical touch/scroll gesture
+    const handleFirstGesture = () => {
+      setIsBellRinging(true);
+      setTimeout(() => setIsBellRinging(false), 1200);
+      playSacredBellChime();
+    };
+
+    window.addEventListener("pointerdown", handleFirstGesture, { once: true, passive: true });
+    window.addEventListener("scroll", handleFirstGesture, { once: true, passive: true });
+
+    return () => {
+      clearTimeout(autoClickTimer);
+      window.removeEventListener("pointerdown", handleFirstGesture);
+      window.removeEventListener("scroll", handleFirstGesture);
+    };
   }, []);
 
   const handleGaneshClick = () => {
@@ -142,53 +157,62 @@ export default function Hero() {
           </div>
         )}
 
-        {/* Large Borderless Majestic Lord Ganesha Icon at Top Center */}
-        <div className="mb-2 flex items-center justify-center">
+        {/* Large Majestic Lord Ganesha Icon at Top Center */}
+        <div className="mb-2 flex flex-col items-center justify-center">
           <button
             ref={ganeshButtonRef}
             onClick={handleGaneshClick}
             type="button"
             title="पवित्र मंदिर घंटा ध्वनि एवं पुष्प वर्षा (Click to Ring Sacred Bell)"
-            className={`transition-all duration-500 cursor-pointer bg-transparent border-0 p-0 outline-none ${
-              isBellRinging
-                ? "scale-115 drop-shadow-[0_0_45px_rgba(255,215,0,1)] animate-pulse"
-                : "hover:scale-105 active:scale-95"
-            }`}
+            className="group flex flex-col items-center cursor-pointer bg-transparent border-0 p-0 outline-none transition-transform duration-300 active:scale-95"
           >
-            <svg
-              viewBox="0 0 100 100"
-              className="w-20 h-20 sm:w-26 sm:h-26 md:w-30 md:h-30 text-amber-300 drop-shadow-[0_4px_18px_rgba(212,175,55,0.75)]"
-              fill="currentColor"
+            <div
+              className={`transition-all duration-500 ${
+                isBellRinging
+                  ? "scale-115 drop-shadow-[0_0_55px_rgba(255,215,0,1)] animate-pulse"
+                  : "group-hover:scale-105"
+              }`}
             >
-              {/* Crown Mukut */}
-              <polygon points="50,6 40,22 60,22" fill="#FFF8DC" />
-              <circle cx="50" cy="4" r="3" fill="#F5D77F" />
-              <path d="M43 14 L57 14 L50 7 Z" fill="#D4AF37" />
+              <svg
+                viewBox="0 0 100 100"
+                className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 text-amber-300 drop-shadow-[0_6px_28px_rgba(212,175,55,0.85)]"
+                fill="currentColor"
+              >
+                {/* Crown Mukut */}
+                <polygon points="50,6 40,22 60,22" fill="#FFF8DC" />
+                <circle cx="50" cy="4" r="3" fill="#F5D77F" />
+                <path d="M43 14 L57 14 L50 7 Z" fill="#D4AF37" />
 
-              {/* Ears */}
-              <path
-                d="M30 28 C18 28, 16 48, 30 52 C32 46, 34 36, 36 30 Z"
-                fill="#dfb045"
-              />
-              <path
-                d="M70 28 C82 28, 84 48, 70 52 C68 46, 66 36, 64 30 Z"
-                fill="#dfb045"
-              />
+                {/* Ears */}
+                <path
+                  d="M30 28 C18 28, 16 48, 30 52 C32 46, 34 36, 36 30 Z"
+                  fill="#dfb045"
+                />
+                <path
+                  d="M70 28 C82 28, 84 48, 70 52 C68 46, 66 36, 64 30 Z"
+                  fill="#dfb045"
+                />
 
-              {/* Forehead, Face & Graceful Trunk */}
-              <path
-                d="M36 26 C36 26, 50 24, 64 26 C67 34, 66 44, 59 50 C54 54, 54 62, 58 72 C60 78, 58 84, 51 86 C44 88, 37 83, 39 77 C40 73, 44 74, 44 77 C44 80, 48 82, 51 81 C55 80, 55 75, 53 69 C49 61, 48 52, 53 46 C58 41, 59 34, 54 30 C47 30, 40 30, 36 26 Z"
-                fill="#f5d77f"
-              />
+                {/* Forehead, Face & Graceful Trunk */}
+                <path
+                  d="M36 26 C36 26, 50 24, 64 26 C67 34, 66 44, 59 50 C54 54, 54 62, 58 72 C60 78, 58 84, 51 86 C44 88, 37 83, 39 77 C40 73, 44 74, 44 77 C44 80, 48 82, 51 81 C55 80, 55 75, 53 69 C49 61, 48 52, 53 46 C58 41, 59 34, 54 30 C47 30, 40 30, 36 26 Z"
+                  fill="#f5d77f"
+                />
 
-              {/* Sacred Raktachandan Tilak */}
-              <path d="M48 20 L52 20 L52 28 L48 28 Z" fill="#e11d48" />
-              <circle cx="50" cy="31" r="2" fill="#e11d48" />
+                {/* Sacred Raktachandan Tilak */}
+                <path d="M48 20 L52 20 L52 28 L48 28 Z" fill="#e11d48" />
+                <circle cx="50" cy="31" r="2" fill="#e11d48" />
 
-              {/* Auspicious Modak on Palm */}
-              <circle cx="68" cy="66" r="5" fill="#FFF8DC" />
-              <circle cx="68" cy="66" r="3" fill="#D4AF37" />
-            </svg>
+                {/* Auspicious Modak on Palm */}
+                <circle cx="68" cy="66" r="5" fill="#FFF8DC" />
+                <circle cx="68" cy="66" r="3" fill="#D4AF37" />
+              </svg>
+            </div>
+
+            {/* Subtle Divine Sound Prompt */}
+            <span className="mt-1 inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/35 text-[11px] sm:text-xs text-amber-300 font-medium shadow-sm transition-transform group-hover:scale-105">
+              🔔 पावन मंदिर घंटा बजाएं (Tap to Ring)
+            </span>
           </button>
         </div>
 
