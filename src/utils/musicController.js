@@ -1,7 +1,9 @@
 // Global Background Music Controller (Singleton)
-// Ensures background music (Bin Tere Kya Jeena) is triggered directly within trusted user gestures
+// Ensures background music (Bin Tere Kya Jeena) plays only when tab is active
+// Automatically stops when tab is closed, minimized, switched, or app closed
 let musicAudio = null;
 let isPlaying = false;
+let wasPlayingBeforeHidden = false;
 const listeners = new Set();
 
 const TARGET_VOLUME = 0.5; // 50% volume requested
@@ -96,5 +98,35 @@ function notifyListeners() {
     } catch (e) {
       console.warn("Listener error:", e);
     }
+  });
+}
+
+// Automatically manage tab visibility, minimize, tab-switch, and close events
+if (typeof document !== "undefined") {
+  document.addEventListener("visibilitychange", () => {
+    const audio = getMusicAudio();
+    if (!audio) return;
+
+    if (document.hidden || document.visibilityState === "hidden") {
+      // Tab is inactive, minimized, or screen locked: stop audio immediately
+      if (isPlaying) {
+        wasPlayingBeforeHidden = true;
+        pauseBackgroundMusic();
+      }
+    } else if (document.visibilityState === "visible") {
+      // Tab is currently active: automatically resume if it was playing before
+      if (wasPlayingBeforeHidden) {
+        wasPlayingBeforeHidden = false;
+        playBackgroundMusic();
+      }
+    }
+  });
+
+  // When app/tab is closed or navigated away: stop immediately
+  window.addEventListener("pagehide", () => {
+    pauseBackgroundMusic();
+  });
+  window.addEventListener("beforeunload", () => {
+    pauseBackgroundMusic();
   });
 }

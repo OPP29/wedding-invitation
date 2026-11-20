@@ -135,8 +135,8 @@ function renderCardCanvas() {
 
   ctx.font = "24px serif";
   ctx.fillStyle = "#e6d6b8";
-  ctx.fillText("सुपुत्र: श्रीमती सुनैना देवी एवं श्री प्रदीप कुमार प्रसाद", 600, 1175);
-  ctx.fillText("भगिनी: Supriya Devi (बड़ी बहन) • भ्राता: Ritik Kumar (छोटा भाई)", 600, 1215);
+  ctx.fillText("सुपुत्र: श्रीमती सुनैना देवी एवं श्री प्रदीप कुमार पंडित", 600, 1175);
+  ctx.fillText("भगिनी: सुप्रिया देवी (बड़ी बहन) • भ्राता: रितिक कुमार (छोटा भाई)", 600, 1215);
 
   // Divider 2
   ctx.strokeStyle = "rgba(212, 175, 55, 0.5)";
