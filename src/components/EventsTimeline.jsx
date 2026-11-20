@@ -41,12 +41,12 @@ export default function EventsTimeline() {
                     <IconComponent className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] sm:text-xs uppercase font-bold text-amber-400 tracking-wider">
-                      {event.badge}
-                    </span>
                     <h3 className="text-base sm:text-lg font-bold text-amber-100 leading-snug">
                       {event.name}
                     </h3>
+                    <span className="text-[11px] sm:text-xs font-semibold text-amber-400 tracking-wider">
+                      {event.badge}
+                    </span>
                   </div>
                 </div>
 

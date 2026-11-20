@@ -49,11 +49,12 @@ export const weddingData = {
     state: "झारखण्ड",
     venueName: "सिदगोड़ा बारा फ्लैट क्लब हाउस",
     address: "नियर SDSM स्कूल, सिदगोड़ा, जमशेदपुर, झारखण्ड",
-    landmark: "नियर SDSM स्कूल, सिदगोड़ा",
+    landmark: "नियर SDSM स्कूल, सिदगोड़ा, जमशेदपुर",
     googleMapsUrl: "https://maps.app.goo.gl/Gg18Xamsf2QUWa6C8?g_st=aw",
     embedMapUrl: "https://maps.google.com/maps?q=Sidhgora+Bara+Flat+Club+House+SDSM+School+Jamshedpur&t=&z=15&ie=UTF8&iwloc=&output=embed",
-    nearestStation: "टाटानगर जंक्शन (TATA) - 7 किमी",
-    nearestAirport: "बिरसा मुंडा एयरपोर्ट, रांची (IXR) - ~130 किमी",
+    nearestStation: "टाटानगर जंक्शन (TATA) - ~8 किमी",
+    nearestAirport: "सोनारी एयरपोर्ट (IXW), जमशेदपुर - ~7 किमी",
+    nearestBusStand: "मानगो बस स्टैंड - ~2.5 किमी",
   },
 
   // Event schedule strictly from authentic wedding card

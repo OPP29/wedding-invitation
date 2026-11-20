@@ -129,6 +129,25 @@ html, body {
   animation-play-state: paused;
 }
 
+/* Auspicious Family Blessings Vertical Ticker */
+@keyframes scrollUpVertical {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+.animate-vertical-ticker {
+  animation: scrollUpVertical 28s linear infinite;
+}
+
+.animate-vertical-ticker:hover,
+.animate-vertical-ticker:active {
+  animation-play-state: paused;
+}
+
 /* Card styling for event cards and photos */
 .royal-card {
   background: linear-gradient(145deg, rgba(46, 2, 12, 0.94) 0%, rgba(26, 1, 7, 0.97) 100%);

@@ -70,7 +70,7 @@ export default function RsvpForm({ onScrollToTop }) {
 
   const getWhatsAppConfirmationUrl = () => {
     if (!submittedData) return "#";
-    const msg = `सादर प्रणाम पंडित परिवार! 🙏✨\n\nमैं *मोनिका एवं रितेश के शुभ विवाह* में अपनी उपस्थिति की पुष्टि करता हूँ:\n\n👤 *नाम:* ${submittedData.name}\n📞 *मोबाइल:* ${submittedData.phone}\n👥 *अतिथि संख्या:* ${submittedData.attendees}\n✨ *स्थिति:* ${submittedData.attendance === "attending" ? "सपरिवार सहर्ष पधारेंगे" : "असमर्थ हैं, दूर से असीम आशीर्वाद"}\n💌 *संदेश:* ${submittedData.notes || "वर-वधू को बहुत-बहुत बधाई एवं शुभाशीर्वाद!"}`;
+    const msg = `सादर प्रणाम पंडित परिवार! 🙏✨\n\nमैं *मोनिका एवं रितेश के शुभ विवाह* में अपनी मंगलकामना एवं शुभाशीर्वाद प्रेषित करता हूँ:\n\n👤 *नाम:* ${submittedData.name}\n📞 *मोबाइल:* ${submittedData.phone}\n👥 *अतिथि संख्या:* ${submittedData.attendees}\n💌 *मंगलकामना संदेश:* ${submittedData.notes || "वर-वधू को बहुत-बहुत बधाई एवं शुभाशीर्वाद!"}`;
     return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
   };
 
@@ -80,10 +80,10 @@ export default function RsvpForm({ onScrollToTop }) {
         {/* Header with Larger Text */}
         <div className="mb-2 sm:mb-3">
           <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
-            उपस्थिति पुष्टि एवं शुभाशीर्वाद
+            शुभाशीर्वाद
           </span>
           <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
-            अपनी उपस्थिति व मंगलकामना दें
+            अपनी मंगलकामना दें
           </h2>
         </div>
 
@@ -132,33 +132,6 @@ export default function RsvpForm({ onScrollToTop }) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-2.5 sm:space-y-3">
-              {/* Attendance toggle with larger text */}
-              <div className="grid grid-cols-2 gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, attendance: "attending" })}
-                  className={`py-2.5 px-3 rounded-full border text-xs sm:text-sm font-bold transition-all ${
-                    formData.attendance === "attending"
-                      ? "bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 border-amber-300 shadow-md"
-                      : "bg-amber-950/40 text-amber-200 border-amber-500/30"
-                  }`}
-                >
-                  🎉 सहर्ष पधारेंगे
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, attendance: "regret" })}
-                  className={`py-2.5 px-3 rounded-full border text-xs sm:text-sm font-bold transition-all ${
-                    formData.attendance === "regret"
-                      ? "bg-stone-800 text-amber-200 border-amber-400 shadow-md"
-                      : "bg-amber-950/40 text-amber-200 border-amber-500/30"
-                  }`}
-                >
-                  💐 दूर से शुभाशीर्वाद
-                </button>
-              </div>
-
               {/* Name & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
@@ -219,28 +192,28 @@ export default function RsvpForm({ onScrollToTop }) {
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-md transition-transform active:scale-98"
                 >
                   <Send className="w-4 h-4 text-stone-950" />
-                  <span>{status === "submitting" ? "पंजीकरण जारी है..." : "उपस्थिति व आशीर्वाद दर्ज करें"}</span>
+                  <span>{status === "submitting" ? "पंजीकरण जारी है..." : "आशीर्वाद दर्ज करें"}</span>
                 </button>
               </div>
             </form>
           )}
         </div>
 
-        {/* Auspicious Family Blessings Marquee (Ticker) */}
-        <div className="w-full my-2 overflow-hidden rounded-xl bg-amber-950/50 border border-amber-400/30 py-1.5 px-2 text-left relative">
-          <div className="flex items-center gap-1.5 mb-1 text-[11px] sm:text-xs text-amber-300 font-bold uppercase tracking-wider">
+        {/* Auspicious Family Blessings Vertical Ticker */}
+        <div className="w-full my-2 overflow-hidden rounded-xl bg-amber-950/50 border border-amber-400/30 py-2 px-3 text-left relative">
+          <div className="flex items-center gap-1.5 mb-1.5 text-[11px] sm:text-xs text-amber-300 font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse flex-shrink-0" />
             <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
           </div>
-          <div className="overflow-hidden w-full">
-            <div className="animate-marquee flex items-center gap-4 whitespace-nowrap">
+          <div className="overflow-hidden h-20 sm:h-24 relative w-full">
+            <div className="animate-vertical-ticker flex flex-col gap-2">
               {wishes.concat(wishes).map((item, idx) => (
                 <div
                   key={idx}
-                  className="inline-flex items-center gap-1.5 bg-amber-900/40 px-3 py-1 rounded-full border border-amber-400/25 text-xs text-amber-200 flex-shrink-0"
+                  className="flex items-start gap-2 bg-amber-900/40 px-3 py-1.5 rounded-xl border border-amber-400/25 text-xs text-amber-200"
                 >
-                  <span className="text-amber-400 font-bold">✨ {item.name}:</span>
-                  <span className="italic text-amber-100">"{item.message}"</span>
+                  <span className="text-amber-400 font-bold whitespace-nowrap">✨ {item.name}:</span>
+                  <span className="italic text-amber-100 leading-snug">"{item.message}"</span>
                 </div>
               ))}
             </div>
