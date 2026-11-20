@@ -18,9 +18,9 @@ export function createGoogleCalendarUrl({
 }
 
 export function downloadIcsFile({
-  title = "Wedding of Monika Pandit & Ritesh Ku. Pandit",
-  description = "Wedding ceremony & reception of Monika Pandit and Ritesh Ku. Pandit in Tatanagar, Jharkhand.",
-  location = "Tatanagar, Jharkhand",
+  title = "॥ शुभ विवाह ॥ मोनिका पंडित संग रितेश कुमार",
+  description = "श्री गणेशाय नमः! मोनिका पंडित (दिव्या) संग रितेश कुमार (चिंटू) का पावन शुभ विवाह समारोह। स्थल: सिदगोड़ा बारा फ्लैट क्लब हाउस, जमशेदपुर।",
+  location = "सिदगोड़ा बारा फ्लैट क्लब हाउस, नियर SDSM स्कूल, जमशेदपुर, झारखण्ड",
   startIso = "20261211T153000Z",
   endIso = "20261211T213000Z",
 }) {

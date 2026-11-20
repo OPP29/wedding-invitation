@@ -4,16 +4,16 @@ export default function PetalShower() {
   const [petals, setPetals] = useState([]);
 
   useEffect(() => {
-    // 38 rich petals continuously distributed across the entire screen
-    const newPetals = Array.from({ length: 38 }).map((_, i) => ({
+    // Elegant, subtle falling petals (reduced density for clean, non-distracting visual appeal)
+    const newPetals = Array.from({ length: 12 }).map((_, i) => ({
       id: i,
-      left: (i * 2.6 + Math.random() * 3) % 98, // Evenly distributed across 0-100% width
-      size: 14 + Math.random() * 20,
-      duration: 7 + Math.random() * 9,
-      delay: Math.random() * 7,
-      opacity: 0.4 + Math.random() * 0.45,
+      left: (i * 8.2 + Math.random() * 6) % 96, // Gracefully distributed across screen
+      size: 13 + Math.random() * 14,
+      duration: 9 + Math.random() * 8,
+      delay: Math.random() * 6,
+      opacity: 0.35 + Math.random() * 0.35,
       rotation: Math.random() * 360,
-      drift: -30 + Math.random() * 60,
+      drift: -20 + Math.random() * 40,
       type: i % 4, // 0: Marigold, 1: Crimson Rose, 2: Pink Rose, 3: Saffron Gold
     }));
     setPetals(newPetals);

@@ -141,8 +141,12 @@ html, body {
 /* Animated overlapping photo entrance */
 @keyframes glideLeft {
   0% {
-    transform: translateX(-40px) scale(0.9);
+    transform: translateX(-120px) scale(0.8);
     opacity: 0;
+  }
+  60% {
+    transform: translateX(8px) scale(1.03);
+    opacity: 0.95;
   }
   100% {
     transform: translateX(0) scale(1);
@@ -152,8 +156,12 @@ html, body {
 
 @keyframes glideRight {
   0% {
-    transform: translateX(40px) scale(0.9);
+    transform: translateX(120px) scale(0.8);
     opacity: 0;
+  }
+  60% {
+    transform: translateX(-8px) scale(1.03);
+    opacity: 0.95;
   }
   100% {
     transform: translateX(0) scale(1);
@@ -162,11 +170,11 @@ html, body {
 }
 
 .animate-glide-left {
-  animation: glideLeft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: glideLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .animate-glide-right {
-  animation: glideRight 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: glideRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Sound wave animation */

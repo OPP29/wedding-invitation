@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Calendar, Heart, Clock, Download, Send } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 import { createGoogleCalendarUrl } from "../utils/calendar";
@@ -14,6 +14,26 @@ export default function Hero() {
     minutes: 0,
     seconds: 0,
   });
+  const [isBellRinging, setIsBellRinging] = useState(false);
+  const ganeshButtonRef = useRef(null);
+
+  // Auto click top Ganesh icon once at 1st page load to automatically ring temple bell
+  useEffect(() => {
+    const autoClickTimer = setTimeout(() => {
+      if (ganeshButtonRef.current) {
+        ganeshButtonRef.current.click();
+      }
+    }, 400);
+
+    return () => clearTimeout(autoClickTimer);
+  }, []);
+
+  const handleGaneshClick = () => {
+    setIsBellRinging(true);
+    setTimeout(() => setIsBellRinging(false), 1200);
+    playSacredBellChime();
+    triggerTouchPetals(window.innerWidth / 2, 130);
+  };
 
   useEffect(() => {
     // Smart Multi-Format Guest URL Scanner:
@@ -125,13 +145,15 @@ export default function Hero() {
         {/* Large Borderless Auspicious Ganesh Icon at Top Center */}
         <div className="mb-2 flex items-center justify-center">
           <button
-            onClick={() => {
-              playSacredBellChime();
-              triggerTouchPetals(window.innerWidth / 2, 130);
-            }}
+            ref={ganeshButtonRef}
+            onClick={handleGaneshClick}
             type="button"
             title="पवित्र मंदिर घंटा ध्वनि एवं पुष्प वर्षा"
-            className="transition-transform active:scale-95 hover:scale-105 cursor-pointer bg-transparent border-0 p-0 outline-none"
+            className={`transition-all duration-500 cursor-pointer bg-transparent border-0 p-0 outline-none ${
+              isBellRinging
+                ? "scale-115 drop-shadow-[0_0_28px_rgba(255,215,0,0.95)] animate-pulse"
+                : "hover:scale-105 active:scale-95"
+            }`}
           >
             <svg
               viewBox="0 0 100 100"

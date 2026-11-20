@@ -45,8 +45,8 @@ export default function App() {
       ringBellOnce();
 
       const now = Date.now();
-      // Throttle by 120ms to keep 60fps smooth scrolling
-      if (now - lastTriggerTime < 120) return;
+      // Throttle touch petals so scrolling does not spawn excess petals
+      if (now - lastTriggerTime < 500) return;
       lastTriggerTime = now;
 
       // Avoid triggering when interacting with form input fields

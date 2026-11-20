@@ -36,54 +36,24 @@ export function triggerCelebration() {
   fire(0.1, { spread: 140, startVelocity: 55 });
 }
 
-// Grand screen-wide touch petals shower
+// Subtle, gentle touch petals bloom (light & graceful)
 export function triggerTouchPetals(clientX, clientY) {
   if (typeof window === "undefined") return;
 
   const x = clientX ? clientX / window.innerWidth : 0.5;
   const y = clientY ? clientY / window.innerHeight : 0.5;
 
-  // 1. High-velocity 360-degree burst from touch location (distributes across the center/local area)
+  // Gentle, minimal petal bloom at touch point
   confetti({
-    particleCount: 35,
-    startVelocity: 30,
-    spread: 360,
-    ticks: 65,
+    particleCount: 7,
+    startVelocity: 14,
+    spread: 100,
+    ticks: 45,
     origin: { x, y },
     colors: royalPetalColors,
     shapes: ["circle"],
-    scalar: 1.1,
-    drift: 0.2,
-    gravity: 0.7,
-    disableForReducedMotion: true,
-  });
-
-  // 2. Wide dispersion from left & right to distribute across the entire screen
-  confetti({
-    particleCount: 18,
-    angle: 60,
-    spread: 75,
-    startVelocity: 38,
-    ticks: 75,
-    origin: { x: 0.05, y: Math.max(0.2, Math.min(y, 0.8)) },
-    colors: royalPetalColors,
-    shapes: ["circle"],
-    scalar: 1.15,
-    gravity: 0.65,
-    disableForReducedMotion: true,
-  });
-
-  confetti({
-    particleCount: 18,
-    angle: 120,
-    spread: 75,
-    startVelocity: 38,
-    ticks: 75,
-    origin: { x: 0.95, y: Math.max(0.2, Math.min(y, 0.8)) },
-    colors: royalPetalColors,
-    shapes: ["circle"],
-    scalar: 1.15,
-    gravity: 0.65,
+    scalar: 0.85,
+    gravity: 0.75,
     disableForReducedMotion: true,
   });
 }
