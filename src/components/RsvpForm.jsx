@@ -259,7 +259,7 @@ export default function RsvpForm({ onScrollToTop }) {
             ओम प्रकाश पंडित (बड़े भाई), अमनदीप पंडित (छोटे भाई), दीपिका पंडित (छोटी बहन)
           </p>
           <p className="text-amber-400 font-bold text-xs sm:text-sm mt-0.5">
-            समस्त पंडित परिवार (वधू पक्ष) • जमशेदपुर, झारखण्ड
+            समस्त पंडित परिवार (वधू पक्ष) • साहिबगंज, मुजफ्फरपुर (बिहार)
           </p>
         </div>
 

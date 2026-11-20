@@ -33,7 +33,7 @@ export default function InviteShareModal({ isOpen, onClose }) {
 दर्शनाभिलाषी:
 श्रीमती रेखा पंडित एवं श्री शंभू पंडित
 ओम प्रकाश पंडित (बड़े भाई), अमनदीप पंडित (छोटे भाई), दीपिका पंडित (छोटी बहन)
-समस्त पंडित परिवार (वधू पक्ष) • जमशेदपुर, झारखण्ड`;
+समस्त पंडित परिवार (वधू पक्ष) • साहिबगंज, मुजफ्फरपुर (बिहार)`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(inviteUrl);

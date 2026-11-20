@@ -11,7 +11,7 @@ export const weddingData = {
       about: "A graceful soul filled with warmth, virtues, and endless joy, blessed by her beloved parents and siblings.",
       father: "श्री शंभू पंडित",
       mother: "श्रीमती रेखा पंडित",
-      nativeAddress: "ग्राम + पोस्ट : लोदिया रजवाड़ा, थाना : साहिबगंज, जिला : मुजफ्फरपुर, बिहार, पिनकोड - 843125",
+      nativeAddress: "ग्राम:लोदिया, रजवाड़ा, साहिबगंज, मुजफ्फरपुर (बिहार)",
       family: {
         father: "श्री शंभू पंडित",
         mother: "श्रीमती रेखा पंडित",
@@ -28,6 +28,7 @@ export const weddingData = {
       about: "An honorable gentleman of noble character and immense love, cherished by his family and ready for the sacred union.",
       father: "श्री प्रदीप कुमार प्रसाद",
       mother: "श्रीमती सुनैना देवी",
+      nativeAddress: "टेल्को, जमशेदपुर, झारखण्ड",
       family: {
         father: "श्री प्रदीप कुमार प्रसाद",
         mother: "श्रीमती सुनैना देवी",

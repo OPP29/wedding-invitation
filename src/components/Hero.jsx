@@ -151,88 +151,162 @@ export default function Hero() {
             title="पवित्र मंदिर घंटा ध्वनि एवं पुष्प वर्षा (Click to Ring Sacred Bell)"
             className={`transition-all duration-500 cursor-pointer bg-transparent border-0 p-0 outline-none ${
               isBellRinging
-                ? "scale-115 drop-shadow-[0_0_35px_rgba(255,215,0,0.95)] animate-pulse"
+                ? "scale-115 drop-shadow-[0_0_45px_rgba(255,215,0,1)] animate-pulse"
                 : "hover:scale-105 active:scale-95"
             }`}
           >
             <svg
-              viewBox="0 0 160 160"
-              className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 drop-shadow-[0_4px_22px_rgba(212,175,55,0.85)]"
+              viewBox="0 0 200 200"
+              className="w-32 h-32 sm:w-44 sm:h-44 md:w-48 md:h-48 drop-shadow-[0_4px_30px_rgba(212,175,55,0.9)]"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
               <defs>
-                <linearGradient id="gGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient id="ganeshShine" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#FFFDF0" />
-                  <stop offset="25%" stopColor="#FDE047" />
-                  <stop offset="60%" stopColor="#D4AF37" />
-                  <stop offset="90%" stopColor="#B45309" />
-                  <stop offset="100%" stopColor="#F5D77F" />
+                  <stop offset="20%" stopColor="#FDE047" />
+                  <stop offset="50%" stopColor="#EAB308" />
+                  <stop offset="75%" stopColor="#D4AF37" />
+                  <stop offset="100%" stopColor="#92400E" />
                 </linearGradient>
-                <linearGradient id="gCrown" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#D4AF37" />
-                  <stop offset="50%" stopColor="#FFF9E6" />
-                  <stop offset="100%" stopColor="#AA771C" />
+                <linearGradient id="ganeshGlowLine" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FFFDE0" />
+                  <stop offset="50%" stopColor="#F5D77F" />
+                  <stop offset="100%" stopColor="#B45309" />
                 </linearGradient>
-                <linearGradient id="gRed" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#F43F5E" />
-                  <stop offset="100%" stopColor="#9F1239" />
-                </linearGradient>
-                <radialGradient id="gHalo" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#FFE082" stopOpacity="0.45" />
-                  <stop offset="70%" stopColor="#D4AF37" stopOpacity="0.15" />
+                <radialGradient id="divineAura" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#FDE047" stopOpacity="0.35" />
+                  <stop offset="60%" stopColor="#D4AF37" stopOpacity="0.12" />
                   <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
                 </radialGradient>
+                <linearGradient id="kumkumRed" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#FF3366" />
+                  <stop offset="100%" stopColor="#B91C1C" />
+                </linearGradient>
               </defs>
 
-              {/* Radiant Auspicious Aura Ring */}
-              <circle cx="80" cy="80" r="74" fill="url(#gHalo)" />
-              <circle cx="80" cy="80" r="72" stroke="url(#gGold)" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.6" />
+              {/* Auspicious Radiant Halo / Prabhavali */}
+              <circle cx="100" cy="100" r="94" fill="url(#divineAura)" />
+              <circle cx="100" cy="100" r="92" stroke="url(#ganeshShine)" strokeWidth="1.8" strokeDasharray="4 4" opacity="0.65" />
+              <circle cx="100" cy="100" r="88" stroke="#D4AF37" strokeWidth="0.8" opacity="0.4" />
 
-              {/* Royal Crown / Mukut Pinnacle */}
-              <path d="M80 14 L84 22 L90 23 L85 28 L86 35 L80 31 L74 35 L75 28 L70 23 L76 22 Z" fill="url(#gCrown)" />
-              <path d="M60 36 C70 30 90 30 100 36 L96 48 C86 44 74 44 64 48 Z" fill="url(#gGold)" stroke="#D4AF37" strokeWidth="1" />
-              <circle cx="80" cy="42" r="3" fill="#FFF9E6" />
+              {/* Auspicious Outer Prabhavali Lotus Petals */}
+              {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+                <circle
+                  key={deg}
+                  cx={100 + 92 * Math.cos((deg * Math.PI) / 180)}
+                  cy={100 + 92 * Math.sin((deg * Math.PI) / 180)}
+                  r="2.5"
+                  fill="#FDE047"
+                  opacity="0.85"
+                />
+              ))}
 
-              {/* Left Ear (कर्ण) */}
-              <path d="M60 48 C44 46 26 56 24 76 C22 92 38 104 53 100 C56 90 58 76 60 62 Z" fill="url(#gGold)" />
-              <path d="M54 58 C42 60 33 68 32 80 C31 88 39 94 48 92" stroke="#78350F" strokeWidth="1.5" fill="none" opacity="0.65" />
-
-              {/* Right Ear (कर्ण) */}
-              <path d="M100 48 C116 46 134 56 136 76 C138 92 122 104 107 100 C104 90 102 76 100 62 Z" fill="url(#gGold)" />
-              <path d="M106 58 C118 60 127 68 128 80 C129 88 121 94 112 92" stroke="#78350F" strokeWidth="1.5" fill="none" opacity="0.65" />
-
-              {/* Forehead & Face (मस्तक) */}
-              <path d="M62 48 C72 46 88 46 98 48 C100 62 98 76 94 86 C88 80 72 80 66 86 C62 76 60 62 62 48 Z" fill="url(#gGold)" />
-
-              {/* Sacred Raktachandan Tilak & Trishul Line */}
-              <path d="M78 48 L82 48 L82 64 L78 64 Z" fill="url(#gRed)" />
-              <circle cx="80" cy="68" r="3" fill="url(#gRed)" />
-              <path d="M71 52 C77 55 83 55 89 52" stroke="#FFFDF0" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-              <path d="M72 56 C77 58 83 58 88 56" stroke="#FFFDF0" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-
-              {/* Divine Expressive Eyes */}
-              <ellipse cx="69" cy="68" rx="2.5" ry="3.5" fill="#4A0210" />
-              <ellipse cx="91" cy="68" rx="2.5" ry="3.5" fill="#4A0210" />
-              <circle cx="69.5" cy="67" r="1" fill="#FFFDF0" />
-              <circle cx="91.5" cy="67" r="1" fill="#FFFDF0" />
-
-              {/* Sacred Tusk (एकदन्त) */}
-              <path d="M67 86 L62 97 L69 93 Z" fill="#FFFDF0" stroke="#D4AF37" strokeWidth="1" />
-
-              {/* Majestic Curved Trunk (वक्रतुण्ड) */}
+              {/* Royal Mukut Pinnacle (कलगी / मुकुट शिखर) */}
               <path
-                d="M72 80 C72 96 70 110 82 124 C90 132 102 134 110 128 C117 122 118 110 110 104 C102 98 90 105 95 114 C96 117 99 119 102 117 C104 115 103 111 99 110 C95 109 93 113 95 116 C97 119 103 119 105 115 C107 109 104 105 99 103 C90 99 82 108 82 116 C82 123 87 127 92 127 C99 127 104 121 104 115 C104 106 94 99 89 94 C82 88 82 80 82 80 Z"
-                fill="url(#gGold)"
+                d="M100 18 C102 24 105 28 108 30 C104 31 100 35 100 42 C100 35 96 31 92 30 C95 28 98 24 100 18 Z"
+                fill="url(#ganeshShine)"
+              />
+              <circle cx="100" cy="15" r="3" fill="#FFFDF0" />
+
+              {/* Crown Base & Tiered Layers */}
+              <path
+                d="M74 46 C86 38 114 38 126 46 L122 56 C112 50 88 50 78 56 Z"
+                fill="url(#ganeshShine)"
+                stroke="#AA771C"
+                strokeWidth="0.8"
+              />
+              <path
+                d="M82 56 C90 52 110 52 118 56 L115 63 C108 60 92 60 85 63 Z"
+                fill="url(#ganeshGlowLine)"
+              />
+              <circle cx="100" cy="51" r="3.2" fill="#FFFDF0" />
+
+              {/* Traditional Left Ear (विशाल कर्ण) */}
+              <path
+                d="M74 54 C54 50 32 64 30 88 C28 108 46 122 66 116 C70 104 74 86 76 68 Z"
+                fill="url(#ganeshShine)"
+              />
+              <path
+                d="M66 68 C52 70 42 80 40 94 C39 104 48 110 58 108"
+                stroke="#78350F"
+                strokeWidth="2"
+                strokeLinecap="round"
+                fill="none"
+                opacity="0.6"
               />
 
-              {/* Auspicious Golden Modak / Laddu (मोदक) */}
-              <circle cx="110" cy="112" r="6" fill="#F59E0B" stroke="#FFFDF0" strokeWidth="1.2" />
-              <circle cx="108" cy="110" r="2" fill="#FFFDF0" />
+              {/* Traditional Right Ear (कर्ण) */}
+              <path
+                d="M126 54 C146 50 168 64 170 88 C172 108 154 122 134 116 C130 104 126 86 124 68 Z"
+                fill="url(#ganeshShine)"
+              />
+              <path
+                d="M134 68 C148 70 158 80 160 94 C161 104 152 110 142 108"
+                stroke="#78350F"
+                strokeWidth="2"
+                strokeLinecap="round"
+                fill="none"
+                opacity="0.6"
+              />
 
-              {/* Sacred Lotus Peeth Base (पद्मासन) */}
-              <path d="M46 136 C58 128 72 134 80 142 C88 134 102 128 114 136 C104 144 92 146 80 146 C68 146 56 144 46 136 Z" fill="url(#gGold)" opacity="0.95" />
-              <path d="M58 140 C70 136 80 138 80 142 C80 138 90 136 102 140" stroke="#FFFDF0" strokeWidth="1" fill="none" opacity="0.7" />
+              {/* Sacred Forehead & Temporal Bones (कुंभस्थल) */}
+              <path
+                d="M76 56 C90 52 110 52 124 56 C128 72 126 90 120 104 C112 96 88 96 80 104 C74 90 72 72 76 56 Z"
+                fill="url(#ganeshShine)"
+              />
+
+              {/* Sacred Chandan Tripundra & Raktachandan Tilak */}
+              <path
+                d="M86 64 C94 67 106 67 114 64"
+                stroke="#FFFDF0"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M88 70 C95 72 105 72 112 70"
+                stroke="#FFFDF0"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+              />
+              <path
+                d="M97 58 L103 58 L103 78 L97 78 Z"
+                fill="url(#kumkumRed)"
+              />
+              <circle cx="100" cy="83" r="3.5" fill="url(#kumkumRed)" />
+              <circle cx="100" cy="83" r="1.5" fill="#FFFDF0" />
+
+              {/* Single Tusk (एकदन्त) on Left */}
+              <path
+                d="M82 104 L76 118 L84 114 Z"
+                fill="#FFFDF0"
+                stroke="#D4AF37"
+                strokeWidth="1"
+              />
+
+              {/* Flowing Traditional Vakratunda Trunk (वक्रतुण्ड सूंड) */}
+              <path
+                d="M90 96 C90 114 88 132 102 148 C112 158 128 160 138 152 C146 144 148 130 138 122 C128 114 112 124 118 135 C120 139 124 141 128 139 C130 136 129 131 124 130 C120 129 117 134 119 138 C122 142 129 142 132 137 C135 130 131 124 124 122 C113 117 103 128 103 138 C103 146 109 151 116 151 C124 151 131 144 131 136 C131 125 119 116 112 110 C104 103 104 96 104 96 Z"
+                fill="url(#ganeshShine)"
+              />
+
+              {/* Sacred Golden Modak / Laddu (मोदक) held at trunk curve */}
+              <circle cx="140" cy="138" r="7.5" fill="#F59E0B" stroke="#FFFDF0" strokeWidth="1.5" />
+              <circle cx="138" cy="136" r="2.5" fill="#FFFDF0" />
+
+              {/* Auspicious Lotus Base (पद्मासन) */}
+              <path
+                d="M58 166 C74 158 92 164 100 172 C108 164 126 158 142 166 C130 176 116 178 100 178 C84 178 70 176 58 166 Z"
+                fill="url(#ganeshShine)"
+                opacity="0.95"
+              />
+              <path
+                d="M74 171 C88 166 100 168 100 172 C100 168 112 166 126 171"
+                stroke="#FFFDF0"
+                strokeWidth="1.5"
+                fill="none"
+                opacity="0.8"
+              />
             </svg>
           </button>
         </div>
@@ -324,19 +398,19 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* 2 Royal Action Buttons: Calendar & WhatsApp Share */}
+        {/* 2 Royal Action Buttons: Calendar & WhatsApp Share (Matching Emerald Royale Theme) */}
         <div className="mt-2.5 sm:mt-3 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-lg mx-auto">
           <button
             onClick={handleOpenGoogleCalendar}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95 border border-emerald-400/40"
           >
-            <Calendar className="w-4 h-4 text-stone-950 flex-shrink-0" />
+            <Calendar className="w-4 h-4 text-white flex-shrink-0" />
             <span>तिथि सुरक्षित करें</span>
           </button>
 
           <button
             onClick={handleDirectWhatsAppShare}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95 border border-emerald-400/40"
           >
             <Send className="w-4 h-4 text-white flex-shrink-0" />
             <span>WhatsApp पर भेजें</span>

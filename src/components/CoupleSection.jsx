@@ -12,9 +12,11 @@ export default function CoupleSection() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+        } else {
+          setIsVisible(false);
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.25 }
     );
 
     if (sectionRef.current) {
@@ -37,10 +39,15 @@ export default function CoupleSection() {
           </h2>
         </div>
 
-        {/* Bigger Circular Portraits with Animated Left & Right Entrances */}
+        {/* Bigger Circular Portraits with Animated Left & Right Entrances (re-animates on every entry) */}
         <div className="relative flex items-center justify-center my-4 sm:my-5">
           {/* Bride Photo - Animated Glide from Left */}
-          <div className={`relative z-10 -mr-4 sm:-mr-6 group ${isVisible ? "animate-glide-left" : "opacity-0"}`}>
+          <div
+            key={`bride-${isVisible}`}
+            className={`relative z-10 -mr-4 sm:-mr-6 group ${
+              isVisible ? "animate-glide-left" : "opacity-0 -translate-x-24"
+            }`}
+          >
             <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full overflow-hidden border-4 sm:border-[5px] border-amber-400 ring-2 sm:ring-4 ring-amber-500/50 shadow-[0_0_35px_rgba(212,175,55,0.6)]">
               <img
                 src={bride.photo}
@@ -54,12 +61,22 @@ export default function CoupleSection() {
           </div>
 
           {/* Central Union Knot */}
-          <div className={`relative z-30 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-amber-600 to-[#38010d] border border-amber-300 flex items-center justify-center shadow-lg -mx-2 transition-all duration-700 delay-300 ${isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"}`}>
+          <div
+            key={`knot-${isVisible}`}
+            className={`relative z-30 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-amber-600 to-[#38010d] border border-amber-300 flex items-center justify-center shadow-lg -mx-2 transition-all duration-700 delay-300 ${
+              isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"
+            }`}
+          >
             <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 fill-amber-300 animate-pulse" />
           </div>
 
           {/* Groom Photo - Animated Glide from Right */}
-          <div className={`relative z-20 -ml-4 sm:-ml-6 group ${isVisible ? "animate-glide-right" : "opacity-0"}`}>
+          <div
+            key={`groom-${isVisible}`}
+            className={`relative z-20 -ml-4 sm:-ml-6 group ${
+              isVisible ? "animate-glide-right" : "opacity-0 translate-x-24"
+            }`}
+          >
             <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full overflow-hidden border-4 sm:border-[5px] border-amber-400 ring-2 sm:ring-4 ring-amber-500/50 shadow-[0_0_35px_rgba(212,175,55,0.6)]">
               <img
                 src={groom.photo}
@@ -115,7 +132,7 @@ export default function CoupleSection() {
                 <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0 mt-1" />
                 <div className="text-[11px] sm:text-xs text-amber-200/90 leading-tight">
                   <span className="text-amber-300 font-bold">मूल निवास:</span>{" "}
-                  <span>ग्राम+पोस्ट: लोदिया रजवाड़ा, साहिबगंज, मुजफ्फरपुर (बिहार)</span>
+                  <span>ग्राम:लोदिया, रजवाड़ा, साहिबगंज, मुजफ्फरपुर (बिहार)</span>
                 </div>
               </div>
             </div>
@@ -145,7 +162,7 @@ export default function CoupleSection() {
                 <Heart className="w-4 h-4 text-rose-400 flex-shrink-0 mt-1" />
                 <div>
                   <span className="text-amber-300 font-bold">भगिनी:</span>{" "}
-                  <span className="font-medium">Supriya Devi (बड़ी बहन)</span>
+                  <span className="font-medium">सुप्रिया देवी (बड़ी बहन)</span>
                 </div>
               </div>
 
@@ -153,7 +170,15 @@ export default function CoupleSection() {
                 <Sparkles className="w-4 h-4 text-amber-400 flex-shrink-0 mt-1" />
                 <div>
                   <span className="text-amber-300 font-bold">भ्राता:</span>{" "}
-                  <span className="font-medium">Ritik Kumar (छोटा भाई)</span>
+                  <span className="font-medium">रितिक कुमार (छोटा भाई)</span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2 pt-1 border-t border-amber-500/20">
+                <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0 mt-1" />
+                <div className="text-[11px] sm:text-xs text-amber-200/90 leading-tight">
+                  <span className="text-amber-300 font-bold">मूल निवास:</span>{" "}
+                  <span>टेल्को, जमशेदपुर, झारखण्ड</span>
                 </div>
               </div>
             </div>
@@ -162,7 +187,7 @@ export default function CoupleSection() {
 
         {/* Traditional Lineage Footer */}
         <div className="mt-3 text-center text-xs sm:text-sm text-amber-300/90 font-medium">
-          समस्त पंडित परिवार (वधू पक्ष) • जमशेदपुर, झारखण्ड
+          समस्त पंडित परिवार (वधू पक्ष) • साहिबगंज, मुजफ्फरपुर (बिहार)
         </div>
       </div>
     </div>
