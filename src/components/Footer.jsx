@@ -26,15 +26,15 @@ export default function Footer() {
 
         {/* Family Lineage */}
         <div className="bg-amber-950/40 p-3.5 rounded-xl border border-amber-500/20 text-xs text-amber-200/90 max-w-xl mx-auto leading-relaxed">
-          <p className="font-bold text-amber-300">॥ दर्शनाभिलाषी एवं स्वागताकांक्षी ॥</p>
-          <p className="mt-1">
-            श्री शंभू पंडित एवं श्रीमती रेखा पंडित | श्री प्रदीप कु. पंडित एवं श्रीमती सुनैना देवी
+          <p className="font-bold text-amber-300">॥ दर्शनाभिलाषी ॥</p>
+          <p className="mt-1 font-medium">
+            श्रीमती रेखा पंडित एवं श्री शंभू पंडित
           </p>
           <p className="text-[11px] text-amber-300/80 mt-1">
-            ओम प्रकाश (बड़ा भाई), अमनदीप (छोटा भाई), सुप्रिया (बड़ी बहन), रितिक (छोटा भाई), दीपिका (छोटी बहन)
+            ओम प्रकाश पंडित (बड़े भाई), अमनदीप पंडित (छोटे भाई), दीपिका पंडित (छोटी बहन)
           </p>
           <p className="text-[11px] text-amber-400 font-bold mt-1">
-            समस्त पंडित परिवार • टाटानगर, झारखण्ड
+            समस्त पंडित परिवार (वधू पक्ष) • जमशेदपुर, झारखण्ड
           </p>
         </div>
 

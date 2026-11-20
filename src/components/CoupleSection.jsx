@@ -79,7 +79,7 @@ export default function CoupleSection() {
                 <Heart className="w-4 h-4 text-rose-400 flex-shrink-0 mt-1" />
                 <div>
                   <span className="text-amber-300 font-bold">भ्रातागण:</span>{" "}
-                  <span className="font-medium">Om Prakash (बड़ा भाई), Amandeep (छोटा भाई)</span>
+                  <span className="font-medium">ओम प्रकाश पंडित (बड़े भाई), अमनदीप पंडित (छोटे भाई)</span>
                 </div>
               </div>
 
@@ -87,7 +87,7 @@ export default function CoupleSection() {
                 <Sparkles className="w-4 h-4 text-amber-400 flex-shrink-0 mt-1" />
                 <div>
                   <span className="text-amber-300 font-bold">भगिनी:</span>{" "}
-                  <span className="font-medium">Dipika Pandit (छोटी बहन)</span>
+                  <span className="font-medium">दीपिका पंडित (छोटी बहन)</span>
                 </div>
               </div>
 

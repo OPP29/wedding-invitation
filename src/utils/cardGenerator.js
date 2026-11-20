@@ -174,13 +174,17 @@ function renderCardCanvas() {
   ctx.lineTo(950, 1595);
   ctx.stroke();
 
-  ctx.font = "italic 23px serif";
+  ctx.font = "italic 22px serif";
   ctx.fillStyle = "#f5d77f";
-  ctx.fillText("मंगलम् भगवान विष्णुः मंगलम् गरुडध्वजः। मंगलम् पुण्डरीकाक्षः मंगलाय तनो हरिः॥", 600, 1640);
+  ctx.fillText("मंगलम् भगवान विष्णुः मंगलम् गरुडध्वजः। मंगलम् पुण्डरीकाक्षः मंगलाय तनो हरिः॥", 600, 1635);
 
-  ctx.font = "bold 28px serif";
+  ctx.font = "bold 23px serif";
   ctx.fillStyle = "#fff8dc";
-  ctx.fillText("दर्शनाभिलाषी: समस्त पंडित परिवार (वधू पक्ष)", 600, 1695);
+  ctx.fillText("दर्शनाभिलाषी: श्रीमती रेखा पंडित एवं श्री शम्भू पंडित", 600, 1675);
+
+  ctx.font = "bold 20px serif";
+  ctx.fillStyle = "#dfb045";
+  ctx.fillText("ओम प्रकाश पंडित, अमनदीप पंडित, दीपिका पंडित • समस्त पंडित परिवार (वधू पक्ष)", 600, 1710);
 
   return canvas;
 }
