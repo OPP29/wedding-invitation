@@ -7,55 +7,71 @@ export default function Gallery() {
   const touchEndXRef = useRef(0);
 
   // Photos loaded directly from /couple-photos/ folder
+  // Each thumbnail is framed with precision to spotlight the couple's faces prominently
   const couplePhotos = [
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo1.jpg`,
       title: "राजसी प्रेम का सूत्रपात",
       caption: "Two souls united by destiny, blessed by traditions",
-      position: "center",
+      position: "64% 38%",
+      origin: "64% 38%",
+      scale: 1.55,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo2.jpg`,
       title: "वधु सौंदर्य व लालित्य",
       caption: "Adorned in royal crimson, ready for sacred vows",
-      position: "bottom", // Lower part visible
+      position: "48% 85%",
+      origin: "48% 70%",
+      scale: 1.5,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo3.jpg`,
       title: "अनंत पथ पर साथ",
       caption: "Walking hand in hand toward eternity",
-      position: "center",
-      zoom: true, // Slightly make zoom
+      position: "56% 62%",
+      origin: "56% 62%",
+      scale: 1.6,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo4.jpg`,
       title: "मुस्कुराते सुंदर पल",
       caption: "Laughter, devotion and eternal companionship",
-      position: "bottom", // Lower part visible
+      position: "55% 75%",
+      origin: "55% 62%",
+      scale: 1.5,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo5.jpg`,
       title: "स्नेहमयी स्मृतियां",
       caption: "Cherished moments and eternal blessings",
-      position: "bottom", // Lower part visible
+      position: "41% 82%",
+      origin: "41% 69%",
+      scale: 1.6,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo6.jpg`,
       title: "शुभ बंधन व उमंग",
       caption: "Celebrations of divine togetherness",
-      position: "bottom", // Lower part visible
+      position: "48% 75%",
+      origin: "48% 63%",
+      scale: 1.55,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo7.jpg`,
       title: "मंगलमय परिणय",
       caption: "A sacred journey of love and togetherness",
-      position: "center",
+      position: "64% 54%",
+      origin: "64% 54%",
+      scale: 1.5,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo8.jpg`,
       title: "अमृतमयी संगम",
       caption: "Bound together for seven lifetimes",
-      position: "center",
+      position: "56% 54%",
+      origin: "56% 54%",
+      scale: 1.65,
     },
   ];
 
@@ -125,16 +141,27 @@ export default function Gallery() {
               onClick={() => setSelectedPhotoIndex(index)}
               className="group relative h-28 sm:h-36 md:h-44 rounded-2xl overflow-hidden cursor-pointer shadow-xl royal-card border-2 border-amber-400/50 hover:border-amber-300 transition-all duration-300"
             >
-              <img
-                src={photo.src}
-                alt={photo.title}
-                loading="lazy"
-                style={{ objectPosition: photo.position || "center" }}
-                className={`w-full h-full object-cover transition-transform duration-500 ${
-                  photo.zoom ? "scale-[1.18] group-hover:scale-[1.25]" : "group-hover:scale-105"
-                }`}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent flex items-end p-2 text-white">
+              <div
+                className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
+                style={{
+                  transformOrigin: photo.origin || "center",
+                }}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.title}
+                  loading="lazy"
+                  style={{
+                    objectPosition: photo.position || "center",
+                    transform: `scale(${photo.scale || 1.3})`,
+                    transformOrigin: photo.origin || photo.position || "center",
+                  }}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Bottom Subtle Title Gradient (leaves upper 75% unshaded so couple faces are bright & clear) */}
+              <div className="absolute bottom-0 inset-x-0 h-10 sm:h-12 bg-gradient-to-t from-black/90 via-black/45 to-transparent flex items-end px-2 py-1.5 text-white pointer-events-none">
                 <span className="text-[11px] sm:text-xs text-amber-200 font-bold truncate">
                   {photo.title}
                 </span>
