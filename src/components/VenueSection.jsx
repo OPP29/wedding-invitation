@@ -9,7 +9,7 @@ export default function VenueSection() {
       icon: Train,
       title: "रेलवे स्टेशन (Train)",
       primary: "टाटानगर जंक्शन (TATA)",
-      detail: "दूरी: 4 किमी (10 मिनट)",
+      detail: "दूरी: ~7 किमी",
       iconColor: "text-amber-400",
     },
     {
@@ -20,10 +20,10 @@ export default function VenueSection() {
       iconColor: "text-sky-400",
     },
     {
-      icon: Phone,
-      title: "अतिथि सहायता (Helpline)",
-      primary: location.helplinePhone,
-      detail: "पंडित परिवार समन्वय सेवा",
+      icon: MapPin,
+      title: "प्रमुख स्थल (Landmark)",
+      primary: "नियर SDSM स्कूल",
+      detail: "सिदगोड़ा, जमशेदपुर",
       iconColor: "text-emerald-400",
     },
   ];
@@ -37,7 +37,7 @@ export default function VenueSection() {
             विवाह स्थल एवं मार्ग निर्देश
           </span>
           <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
-            टाटानगर (झारखण्ड)
+            जमशेदपुर (झारखण्ड)
           </h2>
         </div>
 

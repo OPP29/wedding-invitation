@@ -1,9 +1,9 @@
 // Calendar utilities for Monika & Ritesh's Wedding
 
 export function createGoogleCalendarUrl({
-  title = "Wedding of Monika & Ritesh",
-  description = "Join us to celebrate the wedding ceremony of Monika Pandit & Ritesh Ku. Pandit.",
-  location = "Tatanagar, Jharkhand",
+  title = "॥ शुभ विवाह ॥ मोनिका एवं रितेश (Monika & Ritesh Wedding)",
+  description = "श्री गणेशाय नमः! मोनिका पंडित (दिव्या) संग रितेश कुमार (चिंटू) का पावन शुभ विवाह। स्थल: सिदगोड़ा बारा फ्लैट क्लब हाउस, नियर SDSM स्कूल, जमशेदपुर।",
+  location = "सिदगोड़ा बारा फ्लैट क्लब हाउस, नियर SDSM स्कूल, जमशेदपुर, झारखण्ड",
   startDate = "20261211T153000Z", // 9:00 PM IST = 15:30 UTC
   endDate = "20261211T213000Z",   // 3:00 AM IST next day
 }) {

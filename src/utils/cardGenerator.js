@@ -127,7 +127,7 @@ function renderCardCanvas() {
 
   ctx.font = "bold 64px serif";
   ctx.fillStyle = "#fff8dc";
-  ctx.fillText("Ritesh Ku. Pandit", 600, 1060);
+  ctx.fillText("Ritesh Kumar", 600, 1060);
 
   ctx.font = "bold 32px serif";
   ctx.fillStyle = "#f5d77f";
@@ -135,7 +135,7 @@ function renderCardCanvas() {
 
   ctx.font = "24px serif";
   ctx.fillStyle = "#e6d6b8";
-  ctx.fillText("सुपुत्र: श्रीमती सुनैना देवी एवं श्री प्रदीप कु. पंडित", 600, 1175);
+  ctx.fillText("सुपुत्र: श्रीमती सुनैना देवी एवं श्री प्रदीप कुमार प्रसाद", 600, 1175);
   ctx.fillText("भगिनी: Supriya Devi (बड़ी बहन) • भ्राता: Ritik Kumar (छोटा भाई)", 600, 1215);
 
   // Divider 2
@@ -156,16 +156,16 @@ function renderCardCanvas() {
 
   ctx.font = "bold 28px serif";
   ctx.fillStyle = "#f5d77f";
-  ctx.fillText("शुभ लग्न मुहूर्त: रात्रि 9:00 बजे के बाद", 600, 1430);
+  ctx.fillText("शुभ लग्न मुहूर्त: रात्रि 9:00 बजे से", 600, 1430);
 
-  // 8. Venue & City
+  // 8. Venue & City (Sidhgora Bara Flat Club House)
   ctx.font = "26px serif";
   ctx.fillStyle = "#f3e8c9";
-  ctx.fillText("स्थल: Royal Heritage Palace & Banquets, Bistupur", 600, 1495);
+  ctx.fillText("स्थल: सिदगोड़ा बारा फ्लैट क्लब हाउस, नियर SDSM स्कूल", 600, 1495);
 
   ctx.font = "bold 32px serif";
   ctx.fillStyle = "#dfb045";
-  ctx.fillText("टाटानगर (जमशेदपुर), झारखण्ड - 831001", 600, 1545);
+  ctx.fillText("जमशेदपुर, झारखण्ड", 600, 1545);
 
   // 9. Lineage & Auspicious Closing
   ctx.strokeStyle = "rgba(212, 175, 55, 0.4)";
@@ -180,7 +180,7 @@ function renderCardCanvas() {
 
   ctx.font = "bold 28px serif";
   ctx.fillStyle = "#fff8dc";
-  ctx.fillText("दर्शनाभिलाषी: समस्त पंडित परिवार", 600, 1695);
+  ctx.fillText("दर्शनाभिलाषी: समस्त पंडित परिवार (वधू पक्ष)", 600, 1695);
 
   return canvas;
 }

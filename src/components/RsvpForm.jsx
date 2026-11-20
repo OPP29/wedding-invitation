@@ -71,7 +71,7 @@ export default function RsvpForm({ onScrollToTop }) {
   const getWhatsAppConfirmationUrl = () => {
     if (!submittedData) return "#";
     const msg = `सादर प्रणाम पंडित परिवार! 🙏✨\n\nमैं *मोनिका एवं रितेश के शुभ विवाह* में अपनी उपस्थिति की पुष्टि करता हूँ:\n\n👤 *नाम:* ${submittedData.name}\n📞 *मोबाइल:* ${submittedData.phone}\n👥 *अतिथि संख्या:* ${submittedData.attendees}\n✨ *स्थिति:* ${submittedData.attendance === "attending" ? "सपरिवार सहर्ष पधारेंगे" : "असमर्थ हैं, दूर से असीम आशीर्वाद"}\n💌 *संदेश:* ${submittedData.notes || "वर-वधू को बहुत-बहुत बधाई एवं शुभाशीर्वाद!"}`;
-    return `https://api.whatsapp.com/send?phone=919876543210&text=${encodeURIComponent(msg)}`;
+    return `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
   };
 
   return (
@@ -253,13 +253,19 @@ export default function RsvpForm({ onScrollToTop }) {
             मंगलम् भगवान विष्णुः मंगलम् गरुडध्वजः। मंगलम् पुण्डरीकाक्षः मंगलाय तनो हरिः॥
           </p>
           <p className="text-amber-100 font-medium">
-            <strong>दर्शनाभिलाषी:</strong> श्री शंभू पंडित & श्रीमती रेखा पंडित | श्री प्रदीप कु. पंडित & श्रीमती सुनैना देवी
+            <strong>दर्शनाभिलाषी:</strong> श्री शंभू पंडित & श्रीमती रेखा पंडित | श्री प्रदीप कुमार प्रसाद & श्रीमती सुनैना देवी
           </p>
           <p className="text-xs text-amber-300/90 font-medium">
             ओम प्रकाश (बड़ा भाई), अमनदीप (छोटा भाई), सुप्रिया (बड़ी बहन), रितिक (छोटा भाई), दीपिका (छोटी बहन)
           </p>
+          <p className="text-[11px] sm:text-xs text-amber-200/80">
+            कृष्ण बिहारी प्रसाद, रास बिहारी प्रसाद, तुलसी प्रसाद, राजकुमार प्रसाद, राजनारायण प्रसाद, रोशन, कौशल, रतन, आशीष, गोलू, हर्षित, आशिक
+          </p>
+          <p className="text-rose-300 font-semibold text-xs">
+            ❤️ "मेले मामा की शादी में जलूल-जलूल आना : आशिका, अमन एवं आकांक्षा"
+          </p>
           <p className="text-amber-400 font-bold text-xs sm:text-sm mt-0.5">
-            समस्त पंडित परिवार • टाटानगर, झारखण्ड
+            समस्त पंडित परिवार (वधू पक्ष) • जमशेदपुर, झारखण्ड
           </p>
         </div>
 

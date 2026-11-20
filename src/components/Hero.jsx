@@ -105,7 +105,7 @@ export default function Hero() {
   const handleDirectWhatsAppShare = async () => {
     const shareUrl = window.location.href.split("#")[0].split("?")[0];
     // Compact, poetic caption crafted for WhatsApp Status (< 300 chars, < 8 lines)
-    const compactCaption = `॥ श्री गणेशाय नमः ॥ 🌸\nमोनिका (दिव्या) संग रितेश (चिंटू)\nपावन शुभ विवाह निमंत्रण\n📅 11 दिसम्बर 2026 • 📍 टाटानगर\n👉 डिजिटल निमंत्रण देखें:\n${shareUrl}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
+    const compactCaption = `॥ श्री गणेशाय नमः ॥ 🌸\nमोनिका (दिव्या) संग रितेश (चिंटू)\nपावन शुभ विवाह निमंत्रण\n📅 11 दिसम्बर 2026 • 📍 जमशेदपुर\n👉 डिजिटल निमंत्रण देखें:\n${shareUrl}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
     await shareWeddingCardOnWhatsApp(compactCaption);
   };
 
@@ -215,7 +215,7 @@ export default function Hero() {
               चि. (वर)
             </span>
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight gold-gradient-text mt-0.5">
-              Ritesh Ku. Pandit
+              Ritesh Kumar
             </h1>
             <p className="text-sm sm:text-base text-amber-300 font-medium">
               (प्यार से: <strong className="text-amber-200 text-base sm:text-lg">चिंटू</strong>)

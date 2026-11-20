@@ -69,11 +69,11 @@ export default function EventsTimeline() {
           })}
         </div>
 
-        {/* Unified Common Venue Notice (Since venue is same for all) */}
+        {/* Unified Common Venue Notice */}
         <div className="mt-3.5 w-full p-2.5 rounded-xl bg-amber-950/60 border border-amber-400/30 flex items-center justify-center gap-2 text-xs sm:text-sm text-amber-200">
           <MapPin className="w-4 h-4 text-rose-400 flex-shrink-0" />
           <span>
-            <strong>सभी मांगलिक स्थल:</strong> टाटानगर, झारखण्ड • <em>(विस्तृत मार्ग निर्देश हेतु नीचे स्वाइप करें)</em>
+            <strong>मुख्य पावन विवाह स्थल:</strong> सिदगोड़ा बारा फ्लैट क्लब हाउस, जमशेदपुर
           </span>
         </div>
       </div>

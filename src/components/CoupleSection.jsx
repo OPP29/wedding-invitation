@@ -1,4 +1,4 @@
-import { Heart, Users, Sparkles } from "lucide-react";
+import { Heart, Users, Sparkles, MapPin } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 
 export default function CoupleSection() {
@@ -90,6 +90,14 @@ export default function CoupleSection() {
                   <span className="font-medium">Dipika Pandit (छोटी बहन)</span>
                 </div>
               </div>
+
+              <div className="flex items-start gap-2 pt-1 border-t border-amber-500/20">
+                <MapPin className="w-4 h-4 text-amber-400 flex-shrink-0 mt-1" />
+                <div className="text-[11px] sm:text-xs text-amber-200/90 leading-tight">
+                  <span className="text-amber-300 font-bold">मूल निवास:</span>{" "}
+                  <span>ग्राम+पोस्ट: लोदिया रजवाड़ा, साहिबगंज, मुजफ्फरपुर (बिहार)</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -134,7 +142,7 @@ export default function CoupleSection() {
 
         {/* Traditional Lineage Footer */}
         <div className="mt-3 text-center text-xs sm:text-sm text-amber-300/90 font-medium">
-          समस्त पंडित परिवार • टाटानगर, झारखण्ड
+          समस्त पंडित परिवार (वधू पक्ष) • जमशेदपुर, झारखण्ड
         </div>
       </div>
     </div>
