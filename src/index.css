@@ -108,6 +108,44 @@ html, body {
   filter: drop-shadow(0 2px 14px rgba(212, 175, 55, 0.5));
 }
 
+/* Sacred Royal Golden Halo / Lighting Effect for Bride & Groom Names */
+@keyframes royalAuraGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(245, 215, 127, 0.5)) drop-shadow(0 0 22px rgba(212, 175, 55, 0.35));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(255, 248, 220, 0.85)) drop-shadow(0 0 32px rgba(212, 175, 55, 0.65));
+  }
+}
+
+.royal-name-glow {
+  animation: royalAuraGlow 4s ease-in-out infinite;
+}
+
+/* Custom Royal Gold Scrollbar for scrollable inner panels */
+.royal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.45) rgba(32, 0, 7, 0.3);
+}
+
+.royal-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.royal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(32, 0, 7, 0.3);
+  border-radius: 8px;
+}
+
+.royal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.45);
+  border-radius: 8px;
+}
+
+.royal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 215, 127, 0.8);
+}
+
 /* Continuous Auspicious Marquee Ticker */
 @keyframes marqueeScroll {
   0% {

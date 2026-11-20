@@ -199,40 +199,47 @@ export default function RsvpForm({ onScrollToTop }) {
           )}
         </div>
 
-        {/* Auspicious Family Blessings Vertical Ticker - Enlarged & Clearly Formatted */}
-        <div className="w-full my-2.5 overflow-hidden rounded-2xl bg-amber-950/65 border border-amber-400/40 p-3 sm:p-3.5 text-left relative shadow-lg">
-          <div className="flex items-center gap-1.5 mb-2 text-xs sm:text-sm text-amber-300 font-bold uppercase tracking-wider">
-            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse flex-shrink-0" />
-            <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
+        {/* Auspicious Family Blessings Scrollable Box - Increased Height & Manual Scrolling */}
+        <div className="w-full my-2.5 rounded-2xl bg-amber-950/65 border border-amber-400/40 p-3 sm:p-3.5 text-left relative shadow-lg">
+          <div className="flex items-center justify-between gap-1.5 mb-2 text-xs sm:text-sm text-amber-300 font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse flex-shrink-0" />
+              <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
+            </div>
+            <span className="text-[10px] sm:text-xs text-amber-400/80 font-normal normal-case flex items-center gap-1">
+              ↕️ स्क्रॉल करें
+            </span>
           </div>
 
-          <div className="overflow-hidden h-32 sm:h-40 relative w-full">
-            <div className="animate-vertical-ticker flex flex-col gap-2.5">
-              {wishes.concat(wishes).map((item, idx) => (
-                <div
-                  key={idx}
-                  className="w-full bg-[#1c0107]/90 p-2.5 sm:p-3 rounded-xl border border-amber-500/30 shadow-md text-left"
-                >
-                  {/* Sender & Relation Header */}
-                  <div className="flex items-center justify-between gap-2 mb-1.5 w-full">
-                    <span className="text-amber-300 font-bold text-xs sm:text-sm flex items-center gap-1.5 truncate">
-                      <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400 flex-shrink-0" />
-                      <span className="truncate">{item.name}</span>
+          {/* Scrollable Container with Increased Height & Touch Protection */}
+          <div
+            className="overflow-y-auto max-h-52 sm:max-h-64 relative w-full space-y-2.5 pr-1.5 royal-scrollbar"
+            style={{ overscrollBehaviorY: "contain", touchAction: "pan-y" }}
+          >
+            {wishes.map((item, idx) => (
+              <div
+                key={item.id || idx}
+                className="w-full bg-[#1c0107]/90 p-2.5 sm:p-3 rounded-xl border border-amber-500/30 shadow-md text-left transition-colors hover:border-amber-400/50"
+              >
+                {/* Sender & Relation Header */}
+                <div className="flex items-center justify-between gap-2 mb-1.5 w-full">
+                  <span className="text-amber-300 font-bold text-xs sm:text-sm flex items-center gap-1.5 truncate">
+                    <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400 flex-shrink-0" />
+                    <span className="truncate">{item.name}</span>
+                  </span>
+                  {item.relation && (
+                    <span className="text-[10px] sm:text-xs text-amber-200/90 bg-amber-900/60 border border-amber-400/30 px-2 py-0.5 rounded-full font-medium flex-shrink-0 whitespace-nowrap">
+                      {item.relation.split("(")[0].trim()}
                     </span>
-                    {item.relation && (
-                      <span className="text-[10px] sm:text-xs text-amber-200/90 bg-amber-900/60 border border-amber-400/30 px-2 py-0.5 rounded-full font-medium flex-shrink-0 whitespace-nowrap">
-                        {item.relation.split("(")[0].trim()}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Blessing Message - Clean Left Alignment & High Readability */}
-                  <p className="italic text-amber-100/95 text-xs sm:text-sm leading-relaxed pl-2.5 border-l-2 border-amber-400/60 font-serif">
-                    "{item.message}"
-                  </p>
+                  )}
                 </div>
-              ))}
-            </div>
+
+                {/* Blessing Message - Clean Left Alignment & High Readability */}
+                <p className="italic text-amber-100/95 text-xs sm:text-sm leading-relaxed pl-2.5 border-l-2 border-amber-400/60 font-serif">
+                  "{item.message}"
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 

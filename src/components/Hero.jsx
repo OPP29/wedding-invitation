@@ -140,8 +140,8 @@ export default function Hero() {
   const handleDirectWhatsAppShare = async () => {
     // Official custom short link (redirects directly to the wedding card)
     const shortLink = "https://tinyurl.com/monika-ritesh-wedding";
-    // Formatted WhatsApp invitation message
-    const compactCaption = `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nमोनिका (दिव्या) \nसंग \nरितेश (चिंटू)\n\nपावन शुभ विवाह निमंत्रण\n📅 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n👉 निमंत्रण देखें:- ${shortLink}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
+    // Formatted WhatsApp invitation message (using neutral 🗓️ to avoid phone font 'FEB 24' graphic)
+    const compactCaption = `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nमोनिका (दिव्या) \nसंग \nरितेश (चिंटू)\n\nपावन शुभ विवाह निमंत्रण\n🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n👉 निमंत्रण देखें:- ${shortLink}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
     await shareWeddingCardOnWhatsApp(compactCaption);
   };
 
@@ -235,7 +235,7 @@ export default function Hero() {
             <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium">
               सौ. कां. (वधू)
             </span>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight gold-gradient-text mt-0.5">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight gold-gradient-text royal-name-glow mt-0.5">
               Monika Pandit
             </h1>
             <p className="text-sm sm:text-base text-amber-300 font-medium">
@@ -256,7 +256,7 @@ export default function Hero() {
             <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium">
               चि. (वर)
             </span>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight gold-gradient-text mt-0.5">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight gold-gradient-text royal-name-glow mt-0.5">
               Ritesh Kumar
             </h1>
             <p className="text-sm sm:text-base text-amber-300 font-medium">
