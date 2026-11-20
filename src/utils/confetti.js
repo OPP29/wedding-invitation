@@ -36,23 +36,23 @@ export function triggerCelebration() {
   fire(0.1, { spread: 140, startVelocity: 55 });
 }
 
-// Subtle, gentle touch petals bloom (light & graceful)
+// Delicate mini-bloom of 12 petals at touch point
 export function triggerTouchPetals(clientX, clientY) {
   if (typeof window === "undefined") return;
 
   const x = clientX ? clientX / window.innerWidth : 0.5;
   const y = clientY ? clientY / window.innerHeight : 0.5;
 
-  // Gentle, minimal petal bloom at touch point
+  // Delicate mini-bloom of exactly 12 petals
   confetti({
-    particleCount: 7,
-    startVelocity: 14,
-    spread: 100,
+    particleCount: 12,
+    startVelocity: 16,
+    spread: 110,
     ticks: 45,
     origin: { x, y },
     colors: royalPetalColors,
     shapes: ["circle"],
-    scalar: 0.85,
+    scalar: 0.9,
     gravity: 0.75,
     disableForReducedMotion: true,
   });

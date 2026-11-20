@@ -9,7 +9,7 @@ import PetalShower from "./components/PetalShower";
 import MusicPlayer from "./components/MusicPlayer";
 import InviteShareModal from "./components/InviteShareModal";
 import { triggerTouchPetals } from "./utils/confetti";
-import { playSacredBellChime } from "./utils/audioChime";
+import { playSacredBellChime, isBellChimed } from "./utils/audioChime";
 
 export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -21,28 +21,28 @@ export default function App() {
   const AUTO_ADVANCE_DELAY = 12000; // 12 seconds per slide (in 10-15s range)
   const TOTAL_SLIDES = 6;
 
-  // Ring real temple bell right at page load & handle touch petal blooms
+  // Ring real temple bell at page load & unlock on first gesture if browser restricted
   useEffect(() => {
-    let hasPlayedChime = false;
+    // 1. Try to chime immediately at page load
+    playSacredBellChime();
 
-    const ringBellOnce = () => {
-      if (!hasPlayedChime) {
-        hasPlayedChime = true;
+    // 2. Fallback: on first user interaction, if browser restricted initial unmuted playback, ring immediately
+    const unlockEvents = ["pointerdown", "touchstart", "click", "keydown", "scroll"];
+    const handleFirstUserGesture = () => {
+      if (!isBellChimed()) {
         playSacredBellChime();
       }
+      unlockEvents.forEach((ev) => window.removeEventListener(ev, handleFirstUserGesture));
     };
 
-    // 1. Ring immediately at the very beginning of page load
-    ringBellOnce();
+    unlockEvents.forEach((ev) => window.addEventListener(ev, handleFirstUserGesture, { passive: true }));
 
-    // 2. Also register on first user gesture in case browser blocked initial autoplay
-    window.addEventListener("pointerdown", ringBellOnce, { once: true });
-    window.addEventListener("touchstart", ringBellOnce, { once: true });
-    window.addEventListener("click", ringBellOnce, { once: true });
-
+    // Handle delicate touch petals bloom
     let lastTriggerTime = 0;
     const handlePointerDown = (e) => {
-      ringBellOnce();
+      if (!isBellChimed()) {
+        playSacredBellChime();
+      }
 
       const now = Date.now();
       // Throttle touch petals so scrolling does not spawn excess petals
@@ -60,9 +60,7 @@ export default function App() {
 
     window.addEventListener("pointerdown", handlePointerDown, { passive: true });
     return () => {
-      window.removeEventListener("pointerdown", ringBellOnce);
-      window.removeEventListener("touchstart", ringBellOnce);
-      window.removeEventListener("click", ringBellOnce);
+      unlockEvents.forEach((ev) => window.removeEventListener(ev, handleFirstUserGesture));
       window.removeEventListener("pointerdown", handlePointerDown);
     };
   }, []);
