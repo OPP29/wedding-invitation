@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { playSacredBellChime } from "../utils/audioChime";
+import { playBackgroundMusic } from "../utils/musicController";
 import { triggerCelebration } from "../utils/confetti";
 
 export default function RoyalOpeningCurtain({ onOpened }) {
@@ -8,16 +9,16 @@ export default function RoyalOpeningCurtain({ onOpened }) {
   const [isDismissed, setIsDismissed] = useState(false);
 
   const handleOpenCurtain = (e) => {
-    e.stopPropagation();
+    if (e && e.stopPropagation) e.stopPropagation();
     if (isOpen) return;
 
     setIsOpen(true);
 
-    // 1. Play sacred temple bell chime within real user touch gesture
+    // 1. Play sacred temple bell chime directly within trusted user touch gesture
     playSacredBellChime();
 
-    // 2. Dispatch custom event to trigger background music with default ON
-    window.dispatchEvent(new CustomEvent("wedding:play-music"));
+    // 2. Start background music (Bin Tere Kya Jeena) directly within trusted user touch gesture
+    playBackgroundMusic();
 
     // 3. Auspicious celebratory flower petal shower
     triggerCelebration();
@@ -34,7 +35,6 @@ export default function RoyalOpeningCurtain({ onOpened }) {
   return (
     <div
       onClick={handleOpenCurtain}
-      onTouchStart={handleOpenCurtain}
       className={`fixed inset-0 z-50 overflow-hidden flex items-center justify-center font-serif text-center select-none cursor-pointer bg-[#140004] ${
         isOpen ? "pointer-events-none" : ""
       }`}

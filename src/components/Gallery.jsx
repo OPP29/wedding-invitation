@@ -7,27 +7,31 @@ export default function Gallery() {
   const touchEndXRef = useRef(0);
 
   // Photos loaded directly from /couple-photos/ folder
-  // Users can drop/replace photos in public/couple-photos/ and they auto-adjust to screen!
   const couplePhotos = [
     {
-      src: "./couple-photos/photo1.jpg",
+      src: `${import.meta.env.BASE_URL}couple-photos/photo1.jpg`,
       title: "राजसी प्रेम का सूत्रपात",
       caption: "Two souls united by destiny, blessed by traditions",
     },
     {
-      src: "./couple-photos/photo2.jpg",
+      src: `${import.meta.env.BASE_URL}couple-photos/photo2.jpg`,
       title: "वधु सौंदर्य व लालित्य",
       caption: "Adorned in royal crimson, ready for sacred vows",
     },
     {
-      src: "./couple-photos/photo3.jpg",
+      src: `${import.meta.env.BASE_URL}couple-photos/photo3.jpg`,
       title: "अनंत पथ पर साथ",
       caption: "Walking hand in hand toward eternity",
     },
     {
-      src: "./couple-photos/photo4.jpg",
+      src: `${import.meta.env.BASE_URL}couple-photos/photo4.jpg`,
       title: "मुस्कुराते सुंदर पल",
       caption: "Laughter, devotion and eternal companionship",
+    },
+    {
+      src: `${import.meta.env.BASE_URL}couple-photos/photo5.jpg`,
+      title: "स्नेहमयी स्मृतियां",
+      caption: "Cherished moments and eternal blessings",
     },
   ];
 
