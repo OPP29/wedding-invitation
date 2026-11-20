@@ -2,21 +2,39 @@ import { useState, useEffect, useRef } from "react";
 import { Heart, Users, Sparkles, MapPin } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 
-export default function CoupleSection() {
+export default function CoupleSection({ isActive }) {
   const { bride, groom } = weddingData.couple;
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Trigger bride & groom face photo animation after 2nd slide has loaded into view
   useEffect(() => {
+    let timer;
+    if (isActive) {
+      // 400ms delay allows the slide scroll transition to settle, then glides photos in
+      timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 400);
+    } else if (typeof isActive !== "undefined") {
+      setIsVisible(false);
+    }
+
+    return () => clearTimeout(timer);
+  }, [isActive]);
+
+  // Fallback: IntersectionObserver if rendered independently
+  useEffect(() => {
+    if (typeof isActive !== "undefined") return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+          setTimeout(() => setIsVisible(true), 400);
+        } else if (!entry.isIntersecting) {
           setIsVisible(false);
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.5 }
     );
 
     if (sectionRef.current) {
@@ -24,7 +42,7 @@ export default function CoupleSection() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isActive]);
 
   return (
     <div ref={sectionRef} className="snap-section bg-royal-maroon font-serif text-center">

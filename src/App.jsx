@@ -15,13 +15,14 @@ import { requestScreenWakeLock, releaseScreenWakeLock } from "./utils/screenWake
 
 export default function App() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const isCurtainOpenRef = useRef(false);
   const containerRef = useRef(null);
   const timerRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
   const isAutoScrollingRef = useRef(false);
 
-  const AUTO_ADVANCE_DELAY = 12000; // 12 seconds per slide (in 10-15s range)
+  const AUTO_ADVANCE_DELAY = 20000; // 20 seconds per slide for relaxed reading
   const TOTAL_SLIDES = 6;
 
   // Ring real temple bell at page load & unlock on first gesture if browser restricted
@@ -134,6 +135,15 @@ export default function App() {
     startAutoAdvanceTimer();
 
     const handleScroll = () => {
+      const container = containerRef.current;
+      if (container) {
+        const slideHeight = container.clientHeight;
+        if (slideHeight) {
+          const index = Math.round(container.scrollTop / slideHeight);
+          setActiveSlideIndex(index);
+        }
+      }
+
       // Ignore programmatic scrolls initiated by the timer
       if (isAutoScrollingRef.current) return;
 
@@ -191,7 +201,7 @@ export default function App() {
         <Hero onOpenShareModal={() => setIsShareModalOpen(true)} />
 
         {/* Slide 2: Couple & Family Lineage (Fullscreen Borderless) */}
-        <CoupleSection />
+        <CoupleSection isActive={activeSlideIndex === 1} />
 
         {/* Slide 3: Celebration Itinerary */}
         <EventsTimeline />

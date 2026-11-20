@@ -138,9 +138,10 @@ export default function Hero() {
   };
 
   const handleDirectWhatsAppShare = async () => {
-    const shareUrl = window.location.href.split("#")[0].split("?")[0];
-    // Compact, poetic caption crafted for WhatsApp Status (< 300 chars, < 8 lines)
-    const compactCaption = `॥ श्री गणेशाय नमः ॥ 🌸\nमोनिका (दिव्या) संग रितेश (चिंटू)\nपावन शुभ विवाह निमंत्रण\n📅 11 दिसम्बर 2026 • 📍 जमशेदपुर\n👉 डिजिटल निमंत्रण देखें:\n${shareUrl}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
+    // Official custom short link (redirects directly to the wedding card)
+    const shortLink = "https://tinyurl.com/monika-ritesh-wedding";
+    // Formatted WhatsApp invitation message
+    const compactCaption = `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nमोनिका (दिव्या) \nसंग \nरितेश (चिंटू)\n\nपावन शुभ विवाह निमंत्रण\n📅 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n👉 निमंत्रण देखें:- ${shortLink}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
     await shareWeddingCardOnWhatsApp(compactCaption);
   };
 
