@@ -1,4 +1,4 @@
-import { MapPin, Navigation, Train, Plane, ExternalLink, CloudSun } from "lucide-react";
+import { MapPin, Navigation, Train, Plane, Phone, ExternalLink, CloudSun } from "lucide-react";
 import { weddingData } from "../data/weddingData";
 
 export default function VenueSection() {
@@ -99,17 +99,25 @@ export default function VenueSection() {
             <span>दिसम्बर की सुहावनी शीतकालीन शाम 9:00 बजे (~16°C)</span>
           </div>
 
-          {/* 1-Tap Google Maps Directions Button */}
-          <div className="pt-0.5">
+          {/* 1-Tap Google Maps Directions & Contact Assistance Buttons */}
+          <div className="pt-0.5 flex flex-wrap items-center justify-center gap-2.5">
             <a
               href={location.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 py-2.5 px-6 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
+              className="inline-flex items-center justify-center gap-2 py-2 px-5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
             >
               <Navigation className="w-4 h-4 text-stone-950" />
-              <span>Google Maps ऐप में मार्ग देखें (Directions)</span>
+              <span>Google Maps मार्ग देखें</span>
               <ExternalLink className="w-3.5 h-3.5 text-stone-950" />
+            </a>
+
+            <a
+              href="tel:+917008479984"
+              className="inline-flex items-center justify-center gap-2 py-2 px-5 rounded-full bg-emerald-700/95 hover:bg-emerald-600 border border-emerald-400/60 text-emerald-100 text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95"
+            >
+              <Phone className="w-4 h-4 text-emerald-300" />
+              <span>मार्गदर्शन सहायता (Call): 7008479984</span>
             </a>
           </div>
         </div>

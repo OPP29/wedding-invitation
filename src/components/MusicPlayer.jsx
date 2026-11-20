@@ -6,24 +6,50 @@ export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showHint, setShowHint] = useState(true);
   const audioRef = useRef(null);
+  const fadeIntervalRef = useRef(null);
+
+  const TARGET_VOLUME = 0.5;
+  const FADE_DURATION_MS = 1500; // 1.5-second volume ramp
+  const FADE_STEPS = 15;
+
+  const fadeInVolume = (audio) => {
+    if (!audio) return;
+    if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
+
+    audio.volume = 0.05;
+    const stepTime = FADE_DURATION_MS / FADE_STEPS;
+    const volumeStep = (TARGET_VOLUME - 0.05) / FADE_STEPS;
+
+    fadeIntervalRef.current = setInterval(() => {
+      if (!audio) {
+        clearInterval(fadeIntervalRef.current);
+        return;
+      }
+      if (audio.volume + volumeStep < TARGET_VOLUME) {
+        audio.volume = Math.min(TARGET_VOLUME, audio.volume + volumeStep);
+      } else {
+        audio.volume = TARGET_VOLUME;
+        clearInterval(fadeIntervalRef.current);
+      }
+    }, stepTime);
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    // 50% volume level as requested
-    audio.volume = 0.5;
+    audio.volume = 0.05;
 
-    // Attempt to make it audible by default immediately on page load
+    // Attempt to make it audible by default immediately on page load with 1.5s volume ramp
     const startAudio = () => {
       if (!audio) return;
-      audio.volume = 0.5;
       const playPromise = audio.play();
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
             setIsPlaying(true);
             setShowHint(false);
+            fadeInVolume(audio);
           })
           .catch((err) => {
             console.log("Audio autoplay waiting for user interaction:", err);
@@ -44,6 +70,7 @@ export default function MusicPlayer() {
     window.addEventListener("scroll", handleGesture, { once: true });
 
     return () => {
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
       window.removeEventListener("click", handleGesture);
       window.removeEventListener("touchstart", handleGesture);
       window.removeEventListener("pointerdown", handleGesture);
@@ -54,15 +81,16 @@ export default function MusicPlayer() {
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
+      if (fadeIntervalRef.current) clearInterval(fadeIntervalRef.current);
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.volume = 0.5;
       audioRef.current
         .play()
         .then(() => {
           setIsPlaying(true);
           setShowHint(false);
+          fadeInVolume(audioRef.current);
         })
         .catch((err) => console.log("Audio play error:", err));
     }
