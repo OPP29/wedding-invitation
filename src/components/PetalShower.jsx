@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function PetalShower() {
-  const [petals, setPetals] = useState([]);
-
-  useEffect(() => {
+  const [petals] = useState(() =>
     // Exactly 20 continuous falling petals gracefully distributed across screen
-    const newPetals = Array.from({ length: 20 }).map((_, i) => ({
+    Array.from({ length: 20 }).map((_, i) => ({
       id: i,
       left: (i * 4.9 + Math.random() * 4) % 96, // Gracefully distributed across 0-96% width
       size: 13 + Math.random() * 15,
@@ -15,9 +13,8 @@ export default function PetalShower() {
       rotation: Math.random() * 360,
       drift: -25 + Math.random() * 50,
       type: i % 4, // 0: Marigold, 1: Crimson Rose, 2: Pink Rose, 3: Saffron Gold
-    }));
-    setPetals(newPetals);
-  }, []);
+    }))
+  );
 
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden z-20">

@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "public/Guest list.txt"
+      - "*.md"
   workflow_dispatch:
 
 permissions:

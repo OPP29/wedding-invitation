@@ -103,40 +103,32 @@ function renderCardCanvas() {
 
   ctx.font = "bold 64px serif";
   ctx.fillStyle = "#fff8dc";
-  ctx.fillText("Monika Pandit", 600, 655);
-
-  ctx.font = "bold 32px serif";
-  ctx.fillStyle = "#f5d77f";
-  ctx.fillText("(प्यार से: दिव्या)", 600, 720);
+  ctx.fillText("Monika Pandit", 600, 665);
 
   ctx.font = "24px serif";
   ctx.fillStyle = "#e6d6b8";
-  ctx.fillText("सुपुत्री: श्रीमती रेखा पंडित एवं श्री शम्भू पंडित", 600, 770);
-  ctx.fillText("भ्रातागण: Om Prakash Pandit (बड़ा भाई), Amandeep Pandit (छोटा भाई)", 600, 810);
-  ctx.fillText("भगिनी: Dipika Pandit (छोटी बहन)", 600, 845);
+  ctx.fillText("सुपुत्री: श्रीमती रेखा पंडित एवं श्री शम्भू पंडित", 600, 745);
+  ctx.fillText("भ्रातागण: Om Prakash Pandit (बड़ा भाई), Amandeep Pandit (छोटा भाई)", 600, 785);
+  ctx.fillText("भगिनी: Dipika Pandit (छोटी बहन)", 600, 820);
 
   // Sacred Union Knot Symbol
   ctx.fillStyle = "#dfb045";
   ctx.font = "bold 36px serif";
-  ctx.fillText("⚜  संग (Wed)  ⚜", 600, 915);
+  ctx.fillText("⚜  संग (Wed)  ⚜", 600, 895);
 
   // 6. Groom Details
   ctx.font = "bold 26px serif";
   ctx.fillStyle = "#dfb045";
-  ctx.fillText("॥ चि. (वर) ॥", 600, 985);
+  ctx.fillText("॥ चि. (वर) ॥", 600, 970);
 
   ctx.font = "bold 64px serif";
   ctx.fillStyle = "#fff8dc";
-  ctx.fillText("Ritesh Kumar", 600, 1060);
-
-  ctx.font = "bold 32px serif";
-  ctx.fillStyle = "#f5d77f";
-  ctx.fillText("(प्यार से: चिंटू)", 600, 1125);
+  ctx.fillText("Ritesh Kumar", 600, 1055);
 
   ctx.font = "24px serif";
   ctx.fillStyle = "#e6d6b8";
-  ctx.fillText("सुपुत्र: श्रीमती सुनैना देवी एवं श्री प्रदीप कुमार पंडित", 600, 1175);
-  ctx.fillText("भगिनी: सुप्रिया देवी (बड़ी बहन) • भ्राता: रितिक कुमार (छोटा भाई)", 600, 1215);
+  ctx.fillText("सुपुत्र: श्रीमती सुनैना देवी एवं श्री प्रदीप कुमार पंडित", 600, 1140);
+  ctx.fillText("भगिनी: सुप्रिया देवी (बड़ी बहन) • भ्राता: रितिक कुमार (छोटा भाई)", 600, 1180);
 
   // Divider 2
   ctx.strokeStyle = "rgba(212, 175, 55, 0.5)";

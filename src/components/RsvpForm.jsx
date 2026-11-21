@@ -142,10 +142,10 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
       <div className="max-w-xl w-full my-auto px-2 flex flex-col items-center">
         {/* Header with Larger Text */}
         <div className="mb-2 sm:mb-3">
-          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
+          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold tracking-wider mb-1 font-['Mukta',sans-serif]">
             शुभाशीर्वाद
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
+          <h2 className="text-2xl sm:text-4xl font-extrabold gold-gradient-text font-['Mukta',sans-serif] mt-0.5">
             अपनी मंगलकामना दें
           </h2>
         </div>
