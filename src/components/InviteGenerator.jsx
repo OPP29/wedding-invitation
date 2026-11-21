@@ -32,8 +32,8 @@ export default function InviteGenerator() {
     setTimeout(() => setToastNotice(""), 4500);
   };
 
-  // Export all saved names and links to a .txt file (Hidden utility)
-  const exportToTextFile = (listToExport = history) => {
+  // Export all saved names and links to a .txt file (Hidden utility: Guest list.txt)
+  const exportToTextFile = async (listToExport = history) => {
     if (!listToExport || listToExport.length === 0) {
       alert("सुरक्षित करने हेतु कोई अतिथि नाम उपलब्ध नहीं है।");
       return;
@@ -41,10 +41,11 @@ export default function InviteGenerator() {
 
     const header =
       `========================================================================\n` +
-      `मोनिका (दिव्या) संग रितेश (चिंटू) - व्यक्तिगत निमंत्रण अतिथि सूची\n` +
+      `🌸॥ श्री गणेशाय नमः ॥ 🌸\n` +
+      `मोनिका (दिव्या) संग रितेश (चिंटू) - व्यक्तिगत निमंत्रण अतिथि सूची (Guest list.txt)\n` +
       `शुभ विवाह: 11 दिसम्बर 2026 • जमशेदपुर (झारखण्ड)\n` +
       `कुल निमंत्रित अतिथि: ${listToExport.length}\n` +
-      `फाइल दिनांक: ${new Date().toLocaleString("hi-IN")}\n` +
+      `अंतिम अपडेट: ${new Date().toLocaleString("hi-IN")}\n` +
       `========================================================================\n\n`;
 
     const body = listToExport
@@ -62,7 +63,7 @@ export default function InviteGenerator() {
     const downloadUrl = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = downloadUrl;
-    a.download = `Wedding_Guest_List_${Date.now()}.txt`;
+    a.download = "Guest list.txt";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
