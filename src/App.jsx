@@ -185,7 +185,7 @@ export default function App() {
   }, [startAutoAdvanceTimer]);
 
   return (
-    <div className="relative h-screen h-[100dvh] w-full max-w-[100vw] overflow-hidden bg-[#200007] text-[#fbf6ee] font-serif antialiased selection:bg-[#d4af37] selection:text-[#38010d]">
+    <div className="relative h-screen h-[100dvh] w-full overflow-hidden bg-[#200007] text-[#fbf6ee] font-serif antialiased selection:bg-[#d4af37] selection:text-[#38010d]">
       {/* Background Falling Petals (Always ON) */}
       <PetalShower />
 

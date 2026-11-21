@@ -34,15 +34,10 @@
 /* Prevent mobile browser rubber-banding and blank bottom gaps */
 html, body {
   height: 100%;
-  width: 100%;
-  max-width: 100vw;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  overflow-x: hidden;
   background-color: #200007;
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
 }
 
 /* Vertical Fullscreen Snap Scroll Container */
@@ -50,8 +45,6 @@ html, body {
   height: 100vh;
   height: 100dvh;
   width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
@@ -71,8 +64,6 @@ html, body {
   min-height: 100dvh;
   max-height: 100dvh;
   width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   display: flex;
@@ -81,7 +72,7 @@ html, body {
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: env(safe-area-inset-top, 0.75rem) 0.75rem env(safe-area-inset-bottom, 0.75rem) 0.75rem;
+  padding: env(safe-area-inset-top, 1rem) 1rem env(safe-area-inset-bottom, 1rem) 1rem;
   box-sizing: border-box;
 }
 

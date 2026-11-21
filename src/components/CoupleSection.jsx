@@ -48,32 +48,32 @@ export default function CoupleSection({ isActive }) {
     <div ref={sectionRef} className="snap-section bg-royal-maroon font-serif text-center">
       <div className="max-w-3xl w-full my-auto px-2 flex flex-col items-center">
         {/* Header */}
-        <div className="mb-1.5 sm:mb-2.5">
-          <span className="inline-block px-4 sm:px-5 py-1 sm:py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-wider mb-0.5">
+        <div className="mb-2 sm:mb-3">
+          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
             वर-वधू एवं कुल परिचय
           </span>
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold gold-gradient-text mt-0.5 sm:mt-1">
+          <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
             पवित्र पारिवारिक संबंध
           </h2>
         </div>
 
-        {/* Bigger Circular Portraits with Animated Left & Right Entrances */}
-        <div className="relative flex items-center justify-center my-2.5 sm:my-4">
+        {/* Bigger Circular Portraits with Animated Left & Right Entrances (re-animates on every entry) */}
+        <div className="relative flex items-center justify-center my-4 sm:my-5">
           {/* Bride Photo - Animated Glide from Left */}
           <div
             key={`bride-${isVisible}`}
-            className={`relative z-10 -mr-3 sm:-mr-5 group ${
+            className={`relative z-10 -mr-4 sm:-mr-6 group ${
               isVisible ? "animate-glide-left" : "opacity-0 -translate-x-24"
             }`}
           >
-            <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden border-3 sm:border-4 border-amber-400 ring-2 sm:ring-4 ring-amber-500/50 shadow-[0_0_30px_rgba(212,175,55,0.6)]">
+            <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full overflow-hidden border-4 sm:border-[5px] border-amber-400 ring-2 sm:ring-4 ring-amber-500/50 shadow-[0_0_35px_rgba(212,175,55,0.6)]">
               <img
                 src={bride.photo}
                 alt={bride.fullName}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 sm:px-3.5 sm:py-1 rounded-full bg-rose-950/95 border-2 border-amber-400 text-amber-200 text-[11px] sm:text-xs font-bold whitespace-nowrap shadow-xl">
+            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-rose-950/95 border-2 border-amber-400 text-amber-200 text-xs sm:text-sm font-bold whitespace-nowrap shadow-xl">
               मोनिका (वधू)
             </span>
           </div>
@@ -81,35 +81,35 @@ export default function CoupleSection({ isActive }) {
           {/* Central Union Knot */}
           <div
             key={`knot-${isVisible}`}
-            className={`relative z-30 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-amber-600 to-[#38010d] border border-amber-300 flex items-center justify-center shadow-lg -mx-2 transition-all duration-700 delay-300 ${
+            className={`relative z-30 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-amber-600 to-[#38010d] border border-amber-300 flex items-center justify-center shadow-lg -mx-2 transition-all duration-700 delay-300 ${
               isVisible ? "scale-100 opacity-100" : "scale-50 opacity-0"
             }`}
           >
-            <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 fill-amber-300 animate-pulse" />
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 fill-amber-300 animate-pulse" />
           </div>
 
           {/* Groom Photo - Animated Glide from Right */}
           <div
             key={`groom-${isVisible}`}
-            className={`relative z-20 -ml-3 sm:-ml-5 group ${
+            className={`relative z-20 -ml-4 sm:-ml-6 group ${
               isVisible ? "animate-glide-right" : "opacity-0 translate-x-24"
             }`}
           >
-            <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden border-3 sm:border-4 border-amber-400 ring-2 sm:ring-4 ring-amber-500/50 shadow-[0_0_30px_rgba(212,175,55,0.6)]">
+            <div className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full overflow-hidden border-4 sm:border-[5px] border-amber-400 ring-2 sm:ring-4 ring-amber-500/50 shadow-[0_0_35px_rgba(212,175,55,0.6)]">
               <img
                 src={groom.photo}
                 alt={groom.fullName}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <span className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 sm:px-3.5 sm:py-1 rounded-full bg-emerald-950/95 border-2 border-amber-400 text-amber-200 text-[11px] sm:text-xs font-bold whitespace-nowrap shadow-xl">
+            <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-emerald-950/95 border-2 border-amber-400 text-amber-200 text-xs sm:text-sm font-bold whitespace-nowrap shadow-xl">
               रितेश (वर)
             </span>
           </div>
         </div>
 
-        {/* Family Details Columns: Guaranteed single-column vertical stack on mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-4 w-full text-left mt-2 sm:mt-3">
+        {/* Side-by-Side Left & Right Family Columns with Larger Text */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 w-full text-left mt-3">
           {/* Left Column: Bride (वधू पक्ष) */}
           <div className="bg-amber-950/35 p-3.5 sm:p-4 rounded-2xl border border-amber-500/25 space-y-2">
             <div className="border-b border-amber-500/20 pb-1.5">

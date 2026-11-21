@@ -21,7 +21,6 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
   const blessingsContainerRef = useRef(null);
   const isManualControlRef = useRef(false);
   const animationFrameRef = useRef(null);
-  const [isManualScroll, setIsManualScroll] = useState(false);
 
   // Auto-scrolling on Slide 6: Starts automatically, stops on user touch, and restarts when returning to Slide 6
   useEffect(() => {
@@ -51,7 +50,6 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
       };
 
       const startTimer = setTimeout(() => {
-        setIsManualScroll(false);
         if (!isManualControlRef.current) {
           lastTime = performance.now();
           animationFrameRef.current = requestAnimationFrame(autoScrollStep);
@@ -76,7 +74,6 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
   const handleUserTakeControl = () => {
     if (!isManualControlRef.current) {
       isManualControlRef.current = true;
-      setIsManualScroll(true);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
@@ -145,10 +142,10 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
       <div className="max-w-xl w-full my-auto px-2 flex flex-col items-center">
         {/* Header with Larger Text */}
         <div className="mb-2 sm:mb-3">
-          <span className="inline-block px-4 sm:px-5 py-1 sm:py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
+          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
             शुभाशीर्वाद
           </span>
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold gold-gradient-text mt-0.5 sm:mt-1">
+          <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
             अपनी मंगलकामना दें
           </h2>
         </div>
@@ -207,7 +204,7 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="आपका शुभ नाम (Full Name) *"
-                    className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
 
@@ -218,7 +215,7 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="मोबाइल / WhatsApp नंबर *"
-                    className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400"
+                    className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400"
                   />
                 </div>
               </div>
@@ -230,7 +227,7 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   placeholder="वर-वधू के लिए पावन मंगलकामना एवं शुभाशीर्वाद संदेश..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-base sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400 resize-none shadow-inner"
+                  className="w-full px-4 py-2.5 rounded-xl bg-amber-950/60 border border-amber-500/35 text-amber-100 placeholder-amber-400/50 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-amber-400 resize-none shadow-inner"
                 />
               </div>
 
@@ -251,14 +248,9 @@ export default function RsvpForm({ onScrollToTop, isActive }) {
 
         {/* Auspicious Family Blessings Scrollable Box - Increased Height & Manual Scrolling */}
         <div className="w-full my-2.5 rounded-2xl bg-amber-950/65 border border-amber-400/40 p-3 sm:p-3.5 text-left relative shadow-lg">
-          <div className="flex items-center justify-between gap-1.5 mb-2 text-xs sm:text-sm text-amber-300 font-bold uppercase tracking-wider">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse flex-shrink-0" />
-              <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
-            </div>
-            <span className="text-[10px] sm:text-xs text-amber-400/80 font-normal normal-case flex items-center gap-1">
-              {isManualScroll ? "✋ मैनुअल स्क्रॉल सक्रिय" : "▶ स्वचालित स्क्रॉल (रोकने हेतु स्पर्श करें)"}
-            </span>
+          <div className="flex items-center gap-1.5 mb-2 text-xs sm:text-sm text-amber-300 font-bold uppercase tracking-wider">
+            <Sparkles className="w-4 h-4 text-amber-400 animate-pulse flex-shrink-0" />
+            <span>परिवार एवं अतिथियों के पावन शुभाशीर्वाद (Live Blessings):</span>
           </div>
 
           {/* Scrollable Container with Auto-Scroll & Touch-Interrupt to Manual */}
