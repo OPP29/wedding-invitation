@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import {
   Sparkles,
   Send,
-  Copy,
   Check,
-  ArrowLeft,
-  Share2
+  ArrowLeft
 } from "lucide-react";
 
 export default function InviteGenerator() {
@@ -20,8 +18,6 @@ export default function InviteGenerator() {
       return [];
     }
   });
-  const [copiedLink, setCopiedLink] = useState(false);
-  const [copiedMsg, setCopiedMsg] = useState(false);
   const [toastNotice, setToastNotice] = useState("");
 
   const showToast = (msg) => {
@@ -498,28 +494,6 @@ export default function InviteGenerator() {
     window.open(waUrl, "_blank");
   };
 
-  // Share text-only to WhatsApp
-  const handleShareWhatsAppTextOnly = (msg) => {
-    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-    window.open(waUrl, "_blank");
-  };
-
-  // Copy single link
-  const handleCopyLink = (url) => {
-    navigator.clipboard.writeText(url);
-    setCopiedLink(true);
-    showToast("निमंत्रण लिंक कॉपी हो गई!");
-    setTimeout(() => setCopiedLink(false), 2200);
-  };
-
-  // Copy full WhatsApp message
-  const handleCopyMessage = (msg) => {
-    navigator.clipboard.writeText(msg);
-    setCopiedMsg(true);
-    showToast("WhatsApp आमंत्रण संदेश कॉपी हो गया!");
-    setTimeout(() => setCopiedMsg(false), 2200);
-  };
-
   return (
     <div className="min-h-screen bg-[#200007] text-[#fbf6ee] font-serif p-4 sm:p-8 flex flex-col items-center">
       {/* Toast Notification */}
@@ -584,89 +558,30 @@ export default function InviteGenerator() {
             </button>
           </form>
 
-          {/* Generated Result Display */}
+          {/* Generated Result Display: ONLY निमंत्रण तैयार है!, Date, and WhatsApp share button */}
           {generatedResult && (
-            <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-amber-950/60 border border-amber-400/60 space-y-5 animate-fadeIn">
+            <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-amber-950/60 border border-amber-400/60 space-y-4 animate-fadeIn">
               <div className="flex items-center justify-between border-b border-amber-500/30 pb-2">
                 <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-emerald-400" />
+                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                   <span className="text-sm sm:text-base font-bold text-emerald-300">
                     {generatedResult.name} जी का निमंत्रण तैयार है!
                   </span>
                 </div>
-                <span className="text-xs text-amber-300/70 font-mono">
+                <span className="text-xs text-amber-300/70 font-mono flex-shrink-0">
                   {generatedResult.timestamp}
                 </span>
               </div>
 
               {/* Primary Action: WhatsApp Share with Image & Highlighted Link */}
-              <div className="pt-1 space-y-3">
+              <div className="pt-1">
                 <button
                   onClick={() => handleShareWhatsAppWithImage(generatedResult)}
-                  className="w-full flex items-center justify-center gap-2.5 py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform active:scale-[0.98]"
+                  className="w-full flex items-center justify-center gap-2.5 py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform active:scale-[0.98] cursor-pointer"
                 >
                   <Send className="w-5 h-5 text-white" />
                   <span>WhatsApp पर भेजें (शेयर करें)</span>
                 </button>
-
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    onClick={() => handleCopyLink(generatedResult.shortUrl)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 text-xs font-semibold transition-colors"
-                  >
-                    {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-amber-300" />}
-                    <span>{copiedLink ? "लिंक कॉपी हुआ!" : "लिंक कॉपी करें"}</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleShareWhatsAppTextOnly(generatedResult.message)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-amber-500/30 hover:bg-amber-950/40 text-amber-300 text-xs font-semibold transition-colors"
-                  >
-                    <Share2 className="w-3.5 h-3.5 text-amber-400" />
-                    <span>केवल टेक्स्ट शेयर</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Generated Short Link Field */}
-              <div className="pt-2 border-t border-amber-500/20">
-                <label className="block text-[11px] uppercase tracking-wider text-amber-300/80 mb-1 font-semibold">
-                  तैयार निमंत्रण लिंक (Personalized URL):
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    readOnly
-                    value={generatedResult.shortUrl}
-                    className="w-full px-3.5 py-2 rounded-xl bg-black/60 border border-amber-500/40 text-amber-200 font-mono text-xs select-all"
-                  />
-                  <button
-                    onClick={() => handleCopyLink(generatedResult.shortUrl)}
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 text-xs font-bold whitespace-nowrap transition-colors"
-                  >
-                    {copiedLink ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedLink ? "कॉपी हुआ!" : "कॉपी"}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* WhatsApp Message Preview & Copy */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-[11px] uppercase tracking-wider text-amber-300/80 font-semibold">
-                    WhatsApp आमंत्रण संदेश:
-                  </label>
-                  <button
-                    onClick={() => handleCopyMessage(generatedResult.message)}
-                    className="text-[11px] text-amber-300 hover:text-amber-100 underline font-semibold flex items-center gap-1"
-                  >
-                    {copiedMsg ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                    <span>{copiedMsg ? "संदेश कॉपी हुआ!" : "संदेश कॉपी करें"}</span>
-                  </button>
-                </div>
-                <div className="p-3 rounded-xl bg-black/40 border border-amber-500/20 text-xs sm:text-sm text-amber-100 whitespace-pre-line leading-relaxed font-serif">
-                  {generatedResult.message}
-                </div>
               </div>
             </div>
           )}
