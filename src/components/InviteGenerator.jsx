@@ -1,13 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Sparkles,
   Send,
   Copy,
   Check,
-  Download,
-  Trash2,
-  Search,
-  FileText,
   ArrowLeft,
   Share2
 } from "lucide-react";
@@ -26,11 +22,90 @@ export default function InviteGenerator() {
   });
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedMsg, setCopiedMsg] = useState(false);
-  const [copiedHistoryId, setCopiedHistoryId] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [autoDownload, setAutoDownload] = useState(false);
 
-  // Save updated history to localStorage
+  // Export all saved names and links to a .txt file (Hidden utility)
+  const exportToTextFile = (listToExport = history) => {
+    if (!listToExport || listToExport.length === 0) {
+      alert("सुरक्षित करने हेतु कोई अतिथि नाम उपलब्ध नहीं है।");
+      return;
+    }
+
+    const header =
+      `========================================================================\n` +
+      `मोनिका (दिव्या) संग रितेश (चिंटू) - व्यक्तिगत निमंत्रण अतिथि सूची\n` +
+      `शुभ विवाह: 11 दिसम्बर 2026 • जमशेदपुर (झारखण्ड)\n` +
+      `कुल निमंत्रित अतिथि: ${listToExport.length}\n` +
+      `फाइल दिनांक: ${new Date().toLocaleString("hi-IN")}\n` +
+      `========================================================================\n\n`;
+
+    const body = listToExport
+      .map(
+        (inv, idx) =>
+          `[${idx + 1}] अतिथि / परिवार का नाम: ${inv.name}\n` +
+          `    👉 निमंत्रण लिंक: ${inv.shortUrl || inv.fullUrl}\n` +
+          `    🕒 निर्मित समय: ${inv.timestamp}\n` +
+          `    --------------------------------------------------------------------`
+      )
+      .join("\n\n");
+
+    const fullContent = header + body;
+    const blob = new Blob([fullContent], { type: "text/plain;charset=utf-8" });
+    const downloadUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = `Wedding_Guest_List_${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(downloadUrl);
+  };
+
+  // Hidden Export Triggers:
+  // 1. Visit URL with ?export=txt or ?download=txt
+  // 2. Press Ctrl + Shift + D (or Cmd + Shift + D)
+  // 3. In console: window.downloadGuestListTxt()
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("export") === "txt" || params.get("download") === "txt") {
+      try {
+        const stored = localStorage.getItem("monika_ritesh_generated_invites");
+        const list = stored ? JSON.parse(stored) : [];
+        if (list.length > 0) {
+          exportToTextFile(list);
+        }
+      } catch {
+        // Ignored
+      }
+    }
+
+    window.downloadGuestListTxt = () => {
+      try {
+        const stored = localStorage.getItem("monika_ritesh_generated_invites");
+        const list = stored ? JSON.parse(stored) : [];
+        exportToTextFile(list);
+      } catch {
+        // Ignored
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "D" || e.key === "d")) {
+        e.preventDefault();
+        try {
+          const stored = localStorage.getItem("monika_ritesh_generated_invites");
+          const list = stored ? JSON.parse(stored) : [];
+          exportToTextFile(list);
+        } catch {
+          // Ignored
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Save updated history hiddenly to localStorage
   const saveHistory = (newHistory) => {
     setHistory(newHistory);
     try {
@@ -44,7 +119,6 @@ export default function InviteGenerator() {
   const getBaseWeddingUrl = () => {
     const origin = window.location.origin;
     let pathname = window.location.pathname;
-    // Remove invite.html or invite subpath to get main wedding card URL
     pathname = pathname.replace(/\/invite\.html.*$/, "/").replace(/\/invite\/?.*$/, "/");
     if (!pathname.endsWith("/")) {
       pathname += "/";
@@ -69,7 +143,7 @@ export default function InviteGenerator() {
     const fullUrl = `${baseUrl}?guest=${encodeURIComponent(trimmed)}`;
     let finalUrl = fullUrl;
 
-    // Attempt to generate a short link via open CORS shortener (spoo.me)
+    // Attempt to generate short link via open CORS shortener (spoo.me)
     try {
       const res = await fetch("https://spoo.me", {
         method: "POST",
@@ -87,7 +161,6 @@ export default function InviteGenerator() {
         }
       }
     } catch {
-      // Graceful fallback to direct personalized URL
       finalUrl = fullUrl;
     }
 
@@ -111,73 +184,6 @@ export default function InviteGenerator() {
     saveHistory(updatedHistory);
     setGeneratedResult(newRecord);
     setIsGenerating(false);
-
-    // If auto-download toggle is ON, automatically trigger text file download
-    if (autoDownload) {
-      exportToTextFile(updatedHistory);
-    }
-  };
-
-  // Download all names and links stored in a clean .txt file
-  const exportToTextFile = (listToExport = history) => {
-    if (!listToExport || listToExport.length === 0) {
-      alert("सुरक्षित करने हेतु कोई अतिथि नाम उपलब्ध नहीं है। कृपया पहले निमंत्रण लिंक बनाएं।");
-      return;
-    }
-
-    const header = `========================================================================\n` +
-      `🌸॥ श्री गणेशाय नमः ॥ 🌸\n` +
-      `मोनिका (दिव्या) संग रितेश (चिंटू) - व्यक्तिगत निमंत्रण अतिथि सूची\n` +
-      `शुभ विवाह: 11 दिसम्बर 2026 • जमशेदपुर (झारखण्ड)\n` +
-      `कुल निमंत्रित अतिथि: ${listToExport.length}\n` +
-      `फाइल डाउनलोड दिनांक: ${new Date().toLocaleString("hi-IN")}\n` +
-      `========================================================================\n\n`;
-
-    const body = listToExport
-      .map(
-        (inv, idx) =>
-          `[${idx + 1}] अतिथि / परिवार का नाम: ${inv.name}\n` +
-          `    👉 निमंत्रण लिंक: ${inv.shortUrl || inv.fullUrl}\n` +
-          `    🕒 निर्मित समय: ${inv.timestamp}\n` +
-          `    --------------------------------------------------------------------`
-      )
-      .join("\n\n");
-
-    const fullContent = header + body;
-    const blob = new Blob([fullContent], { type: "text/plain;charset=utf-8" });
-    const downloadUrl = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = `Monika_Ritesh_Wedding_Guest_List_${Date.now()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(downloadUrl);
-  };
-
-  // Download as CSV (Excel compatible)
-  const exportToCsvFile = (listToExport = history) => {
-    if (!listToExport || listToExport.length === 0) return;
-
-    const headers = ["क्रम", "अतिथि का नाम", "निमंत्रण लिंक", "निर्मित समय"];
-    const rows = listToExport.map((inv, idx) => [
-      idx + 1,
-      `"${inv.name.replace(/"/g, '""')}"`,
-      `"${inv.shortUrl || inv.fullUrl}"`,
-      `"${inv.timestamp}"`,
-    ]);
-
-    const csvContent =
-      "\uFEFF" + [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
-    const downloadUrl = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = `Monika_Ritesh_Wedding_Guest_List_${Date.now()}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(downloadUrl);
   };
 
   // Copy single link
@@ -200,32 +206,10 @@ export default function InviteGenerator() {
     window.open(waUrl, "_blank");
   };
 
-  // Delete single entry from history
-  const handleDeleteEntry = (id) => {
-    const filtered = history.filter((item) => item.id !== id);
-    saveHistory(filtered);
-    if (generatedResult?.id === id) {
-      setGeneratedResult(null);
-    }
-  };
-
-  // Clear all history
-  const handleClearAll = () => {
-    if (window.confirm("क्या आप सुरक्षित की गई संपूर्ण अतिथि सूची हटाना चाहते हैं?")) {
-      saveHistory([]);
-      setGeneratedResult(null);
-    }
-  };
-
-  // Filter history based on search
-  const filteredHistory = history.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
     <div className="min-h-screen bg-[#200007] text-[#fbf6ee] font-serif p-4 sm:p-8 flex flex-col items-center">
       {/* Top Navigation */}
-      <div className="w-full max-w-3xl flex items-center justify-between mb-6 pb-3 border-b border-amber-500/30">
+      <div className="w-full max-w-2xl flex items-center justify-between mb-6 pb-3 border-b border-amber-500/30">
         <a
           href={getBaseWeddingUrl()}
           className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-semibold transition-colors"
@@ -240,18 +224,14 @@ export default function InviteGenerator() {
         </div>
       </div>
 
-      <div className="w-full max-w-3xl space-y-6">
+      <div className="w-full max-w-2xl space-y-6">
         {/* Main Royal Header */}
         <div className="text-center space-y-2">
-          <span className="inline-block px-5 py-1 rounded-full bg-amber-500/20 border border-amber-400/60 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-widest">
-            ॥ श्री गणेशाय नमः ॥
-          </span>
           <h1 className="text-2xl sm:text-4xl font-extrabold gold-gradient-text tracking-wide">
             व्यक्तिगत निमंत्रण लिंक निर्माता
           </h1>
           <p className="text-xs sm:text-sm text-amber-200/80 max-w-xl mx-auto">
             विशिष्ट सगे-संबंधियों व मित्रों के नाम से विशेष लिंक तैयार करें, सीधे WhatsApp पर भेजें
-            तथा सभी अतिथियों के नाम को <strong className="text-amber-300">टेक्स्ट फाइल (.txt)</strong> में सुरक्षित रखें।
           </p>
         </div>
 
@@ -272,23 +252,6 @@ export default function InviteGenerator() {
               />
             </div>
 
-            {/* Auto-Download Toggle */}
-            <div className="flex items-center justify-between text-xs text-amber-200/80 pt-1">
-              <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={autoDownload}
-                  onChange={(e) => setAutoDownload(e.target.checked)}
-                  className="w-4 h-4 rounded text-amber-500 focus:ring-amber-400"
-                />
-                <span>लिंक बनते ही स्वतः टेक्स्ट फाइल (.txt) डाउनलोड करें</span>
-              </label>
-
-              <span className="text-[11px] text-amber-400/60 hidden sm:inline">
-                * सभी नाम नीचे भी सुरक्षित रहेंगे
-              </span>
-            </div>
-
             {/* Generate Button */}
             <button
               type="submit"
@@ -296,7 +259,7 @@ export default function InviteGenerator() {
               className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-bold text-sm sm:text-base shadow-[0_0_25px_rgba(212,175,55,0.4)] transition-all hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50"
             >
               <Sparkles className="w-5 h-5 text-stone-950 animate-pulse" />
-              <span>{isGenerating ? "शॉर्ट लिंक तैयार हो रहा है..." : "लिंक बनाएं (Generate Short Link)"}</span>
+              <span>{isGenerating ? "लिंक तैयार हो रहा है..." : "लिंक बनाएं (Generate Link)"}</span>
             </button>
           </form>
 
@@ -318,7 +281,7 @@ export default function InviteGenerator() {
               {/* Generated Short Link Field */}
               <div>
                 <label className="block text-[11px] uppercase tracking-wider text-amber-300/80 mb-1 font-semibold">
-                  तैयार शॉर्ट लिंक (Personalized Short URL):
+                  तैयार निमंत्रण लिंक (Personalized URL):
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -365,142 +328,6 @@ export default function InviteGenerator() {
                   <span>{copiedMsg ? "संदेश कॉपी हुआ!" : "संदेश कॉपी करें"}</span>
                 </button>
               </div>
-            </div>
-          )}
-        </div>
-
-        {/* Saved Guests Management & Text File Export */}
-        <div className="p-5 sm:p-7 rounded-3xl bg-[#1b0007] border border-amber-500/40 shadow-xl space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/30 pb-3">
-            <div>
-              <h2 className="text-lg sm:text-xl font-bold gold-gradient-text flex items-center gap-2">
-                <FileText className="w-5 h-5 text-amber-400" />
-                <span>सुरक्षित अतिथि सूची (Saved Guest List)</span>
-              </h2>
-              <p className="text-xs text-amber-300/70 mt-0.5">
-                कुल तैयार निमंत्रण: <strong>{history.length}</strong>
-              </p>
-            </div>
-
-            {/* Export Buttons */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => exportToTextFile()}
-                disabled={history.length === 0}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white text-xs font-bold shadow transition-transform active:scale-95 disabled:opacity-40"
-              >
-                <Download className="w-4 h-4" />
-                <span>टेक्स्ट फाइल (.txt) डाउनलोड करें</span>
-              </button>
-
-              <button
-                onClick={() => exportToCsvFile()}
-                disabled={history.length === 0}
-                className="hidden sm:flex items-center gap-1 px-3 py-2 rounded-xl border border-amber-500/40 hover:bg-amber-950/40 text-amber-300 text-xs font-medium transition-colors disabled:opacity-40"
-              >
-                <span>Excel (.csv)</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          {history.length > 0 && (
-            <div className="relative">
-              <Search className="w-4 h-4 text-amber-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="अतिथि का नाम खोजें..."
-                className="w-full pl-10 pr-4 py-2 rounded-xl bg-black/40 border border-amber-500/30 text-xs sm:text-sm text-amber-200 placeholder-amber-400/40 focus:outline-none focus:border-amber-400"
-              />
-            </div>
-          )}
-
-          {/* List of Saved Invitations */}
-          {history.length === 0 ? (
-            <div className="text-center py-8 text-amber-300/60 text-xs sm:text-sm space-y-1">
-              <p>अभी तक कोई निमंत्रण लिंक नहीं बनाया गया है।</p>
-              <p className="text-[11px] text-amber-400/40">
-                ऊपर नाम दर्ज करके 'Generate' पर क्लिक करें; सभी नाम यहाँ स्वतः सुरक्षित होते रहेंगे।
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2.5 max-h-96 overflow-y-auto pr-1 royal-scrollbar">
-              {filteredHistory.map((item, idx) => (
-                <div
-                  key={item.id}
-                  className="p-3 sm:p-3.5 rounded-xl bg-black/40 border border-amber-500/25 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:border-amber-400/50 transition-colors"
-                >
-                  <div className="space-y-0.5 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">
-                        #{history.length - idx}
-                      </span>
-                      <span className="text-sm sm:text-base font-bold text-amber-100 truncate">
-                        {item.name}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-amber-300/70 font-mono truncate">
-                      <span className="truncate">{item.shortUrl || item.fullUrl}</span>
-                      <span>•</span>
-                      <span className="text-[11px] text-amber-400/50 whitespace-nowrap">
-                        {item.timestamp}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Item Actions */}
-                  <div className="flex items-center gap-2 self-end sm:self-center flex-shrink-0">
-                    <button
-                      onClick={() => handleShareWhatsApp(item.message)}
-                      title="WhatsApp पर भेजें"
-                      className="p-2 rounded-lg bg-emerald-600/80 hover:bg-emerald-600 text-white text-xs transition-colors"
-                    >
-                      <Send className="w-3.5 h-3.5" />
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        handleCopyLink(item.shortUrl || item.fullUrl);
-                        setCopiedHistoryId(item.id);
-                        setTimeout(() => setCopiedHistoryId(null), 1800);
-                      }}
-                      title="लिंक कॉपी करें"
-                      className="p-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/40 border border-amber-400/40 text-amber-200 text-xs transition-colors"
-                    >
-                      {copiedHistoryId === item.id ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      ) : (
-                        <Copy className="w-3.5 h-3.5" />
-                      )}
-                    </button>
-
-                    <button
-                      onClick={() => handleDeleteEntry(item.id)}
-                      title="सूची से हटाएं"
-                      className="p-2 rounded-lg hover:bg-rose-950/60 text-rose-400/70 hover:text-rose-300 text-xs transition-colors"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Clear All Footer */}
-          {history.length > 0 && (
-            <div className="pt-2 flex items-center justify-between border-t border-amber-500/20 text-xs">
-              <span className="text-amber-400/60 text-[11px]">
-                * यह सूची आपके इसी ब्राउज़र / फोन में हमेशा सुरक्षित रहेगी
-              </span>
-              <button
-                onClick={handleClearAll}
-                className="text-rose-400/80 hover:text-rose-300 text-[11px] underline transition-colors"
-              >
-                संपूर्ण सूची साफ करें
-              </button>
             </div>
           )}
         </div>
