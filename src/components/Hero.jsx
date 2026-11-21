@@ -159,7 +159,7 @@ export default function Hero() {
         )}
 
         {/* Large Majestic Lord Ganesha Icon at Top Center */}
-        <div className="mb-2 flex flex-col items-center justify-center">
+        <div className="mb-1 sm:mb-2 flex flex-col items-center justify-center">
           <button
             ref={ganeshButtonRef}
             onClick={handleGaneshClick}
@@ -176,7 +176,7 @@ export default function Hero() {
             >
               <svg
                 viewBox="0 0 100 100"
-                className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 text-amber-300 drop-shadow-[0_6px_28px_rgba(212,175,55,0.85)]"
+                className="w-20 h-20 sm:w-32 sm:h-32 md:w-36 md:h-36 text-amber-300 drop-shadow-[0_6px_28px_rgba(212,175,55,0.85)]"
                 fill="currentColor"
               >
                 {/* Crown Mukut */}
@@ -213,91 +213,91 @@ export default function Hero() {
         </div>
 
         {/* Sacred Vedic Header */}
-        <div className="mb-2">
-          <span className="inline-block px-6 py-1.5 rounded-full bg-gradient-to-r from-amber-950/90 via-amber-900/80 to-amber-950/90 border border-amber-400/60 text-amber-300 font-bold text-base sm:text-xl tracking-widest shadow-md">
+        <div className="mb-1 sm:mb-2 text-center">
+          <span className="inline-block px-4 sm:px-6 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-amber-950/90 via-amber-900/80 to-amber-950/90 border border-amber-400/60 text-amber-300 font-bold text-sm sm:text-lg tracking-wider shadow-md">
             ॥ श्री गणेशाय नमः ॥
           </span>
-          <p className="italic text-amber-100 text-sm sm:text-base tracking-wide mt-2 font-medium">
+          <p className="italic text-amber-100 text-xs sm:text-sm tracking-normal mt-1 sm:mt-1.5 font-medium px-2 leading-relaxed">
             वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥
           </p>
         </div>
 
-        {/* Subheading - Grand Prominent Banner */}
-        <div className="my-2">
-          <h2 className="text-xl sm:text-3xl md:text-4xl font-extrabold tracking-[0.15em] sm:tracking-[0.25em] gold-gradient-text uppercase">
+        {/* Subheading - Grand Prominent Banner (No width blowout) */}
+        <div className="my-1 sm:my-2 text-center">
+          <h2 className="text-xl sm:text-3xl md:text-4xl font-extrabold tracking-normal sm:tracking-wider gold-gradient-text uppercase leading-tight">
             ॥ पावन शुभ विवाह निमंत्रण ॥
           </h2>
         </div>
 
         {/* Couple Royal Names with Illuminated Golden Lighting Borders */}
-        <div className="my-2.5 sm:my-3.5 space-y-2 sm:space-y-3">
+        <div className="my-1.5 sm:my-3 space-y-1.5 sm:space-y-2.5 w-full">
           {/* Bride Name Card */}
           <div className="flex flex-col items-center">
-            <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium mb-1">
+            <span className="text-[11px] sm:text-xs uppercase tracking-widest text-amber-400 font-bold mb-0.5">
               सौ. कां. (वधू)
             </span>
-            <div className="relative inline-block px-5 sm:px-8 py-1.5 sm:py-2.5 rounded-2xl bg-gradient-to-r from-amber-950/75 via-[#38010d]/80 to-amber-950/75 border-2 border-amber-400 royal-name-border-glow">
+            <div className="relative inline-block px-4 sm:px-8 py-1 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-950/75 via-[#38010d]/80 to-amber-950/75 border-2 border-amber-400 royal-name-border-glow max-w-[92vw]">
               {/* Corner Jewels */}
               <span className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
               <span className="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
               <span className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
 
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight gold-gradient-text leading-tight">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight gold-gradient-text leading-tight">
                 Monika Pandit
               </h1>
             </div>
-            <p className="text-sm sm:text-base text-amber-300 font-medium mt-1">
-              (प्यार से: <strong className="text-amber-200 text-base sm:text-lg">दिव्या</strong>)
+            <p className="text-xs sm:text-sm text-amber-300 font-medium mt-0.5">
+              (प्यार से: <strong className="text-amber-200 text-sm sm:text-base font-bold">दिव्या</strong>)
             </p>
           </div>
 
           {/* Sacred knot with pulsing heart */}
-          <div className="flex items-center justify-center gap-3 py-0.5">
-            <div className="h-[1px] w-14 sm:w-28 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full border border-amber-400/70 bg-gradient-to-br from-amber-700 to-[#38010d] flex items-center justify-center shadow-lg">
-              <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-amber-300 fill-amber-300 animate-pulse" />
+          <div className="flex items-center justify-center gap-2.5 py-0.5">
+            <div className="h-[1px] w-12 sm:w-24 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+            <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full border border-amber-400/70 bg-gradient-to-br from-amber-700 to-[#38010d] flex items-center justify-center shadow-lg">
+              <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 fill-amber-300 animate-pulse" />
             </div>
-            <div className="h-[1px] w-14 sm:w-28 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
+            <div className="h-[1px] w-12 sm:w-24 bg-gradient-to-r from-transparent via-amber-400 to-transparent" />
           </div>
 
           {/* Groom Name Card */}
           <div className="flex flex-col items-center">
-            <span className="text-xs sm:text-sm uppercase tracking-widest text-amber-400 font-medium mb-1">
+            <span className="text-[11px] sm:text-xs uppercase tracking-widest text-amber-400 font-bold mb-0.5">
               चि. (वर)
             </span>
-            <div className="relative inline-block px-5 sm:px-8 py-1.5 sm:py-2.5 rounded-2xl bg-gradient-to-r from-amber-950/75 via-[#38010d]/80 to-amber-950/75 border-2 border-amber-400 royal-name-border-glow">
+            <div className="relative inline-block px-4 sm:px-8 py-1 sm:py-2 rounded-xl sm:rounded-2xl bg-gradient-to-r from-amber-950/75 via-[#38010d]/80 to-amber-950/75 border-2 border-amber-400 royal-name-border-glow max-w-[92vw]">
               {/* Corner Jewels */}
               <span className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
               <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
               <span className="absolute -bottom-1 -left-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
               <span className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#ffd700]" />
 
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight gold-gradient-text leading-tight">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight gold-gradient-text leading-tight">
                 Ritesh Kumar
               </h1>
             </div>
-            <p className="text-sm sm:text-base text-amber-300 font-medium mt-1">
-              (प्यार से: <strong className="text-amber-200 text-base sm:text-lg">चिंटू</strong>)
+            <p className="text-xs sm:text-sm text-amber-300 font-medium mt-0.5">
+              (प्यार से: <strong className="text-amber-200 text-sm sm:text-base font-bold">चिंटू</strong>)
             </p>
           </div>
         </div>
 
-        {/* Date Centered (Location removed from Slide 1 as requested) */}
-        <div className="my-2">
-          <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-amber-950/80 border border-amber-400/40 text-amber-200 text-sm sm:text-base font-semibold shadow-md">
-            <Calendar className="w-4 h-4 text-amber-400 flex-shrink-0" />
-            <span>शुक्रवार, 11 दिसम्बर 2026 (रात्रि 9:00 बजे से)</span>
+        {/* Date Centered */}
+        <div className="my-1.5 sm:my-2 text-center">
+          <div className="inline-flex items-center gap-1.5 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full bg-amber-950/80 border border-amber-400/40 text-amber-200 text-xs sm:text-sm font-semibold shadow-md max-w-[92vw]">
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 flex-shrink-0" />
+            <span className="font-bold">शुक्रवार, 11 दिसम्बर 2026 (रात्रि 9:00 बजे से)</span>
           </div>
         </div>
 
         {/* Countdown - Header changed to "लग्न मुहूर्त (Countdown)" */}
-        <div className="w-full my-2">
-          <div className="inline-flex items-center gap-1.5 text-sm sm:text-base text-amber-400 font-bold uppercase tracking-wider mb-1.5">
-            <Clock className="w-4 h-4 text-amber-400" />
+        <div className="w-full my-1.5 sm:my-2">
+          <div className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-amber-400 font-bold uppercase tracking-wider mb-1">
+            <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <span>लग्न मुहूर्त (Countdown)</span>
           </div>
-          <div className="grid grid-cols-4 gap-2 max-w-xs sm:max-w-sm mx-auto">
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-2 max-w-xs sm:max-w-sm mx-auto">
             {[
               { label: "दिन", val: timeLeft.days },
               { label: "घंटे", val: timeLeft.hours },
@@ -306,32 +306,32 @@ export default function Hero() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="p-2 sm:p-2.5 rounded-2xl bg-amber-950/60 border border-amber-400/40 text-center shadow-inner"
+                className="p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-amber-950/60 border border-amber-400/40 text-center shadow-inner"
               >
-                <div className="text-xl sm:text-3xl font-bold gold-gradient-text leading-tight">
+                <div className="text-lg sm:text-2xl font-bold gold-gradient-text leading-tight">
                   {String(item.val).padStart(2, "0")}
                 </div>
-                <div className="text-[11px] sm:text-xs text-amber-300 font-semibold mt-0.5">{item.label}</div>
+                <div className="text-[10px] sm:text-xs text-amber-300 font-semibold mt-0.5">{item.label}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* 2 Royal Action Buttons: Calendar & WhatsApp Share (Matching Emerald Royale Theme) */}
-        <div className="mt-2.5 sm:mt-3 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 max-w-lg mx-auto">
+        {/* 2 Royal Action Buttons: Calendar & WhatsApp Share */}
+        <div className="mt-2 sm:mt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3 max-w-lg mx-auto">
           <button
             onClick={handleOpenGoogleCalendar}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95 border border-emerald-400/40"
+            className="flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95 border border-emerald-400/40"
           >
-            <Calendar className="w-4 h-4 text-white flex-shrink-0" />
+            <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white flex-shrink-0" />
             <span>तिथि सुरक्षित करें</span>
           </button>
 
           <button
             onClick={handleDirectWhatsAppShare}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95 border border-emerald-400/40"
+            className="flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-xs sm:text-sm font-bold shadow-lg transition-transform active:scale-95 border border-emerald-400/40"
           >
-            <Send className="w-4 h-4 text-white flex-shrink-0" />
+            <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white flex-shrink-0" />
             <span>WhatsApp पर भेजें</span>
           </button>
         </div>

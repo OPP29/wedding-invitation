@@ -13,17 +13,17 @@ export default function EventsTimeline() {
     <div className="snap-section bg-royal-emerald font-serif">
       <div className="max-w-2xl w-full my-auto px-1 text-center flex flex-col items-center">
         {/* Header */}
-        <div className="mb-3">
-          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
+        <div className="mb-2 sm:mb-3">
+          <span className="inline-block px-4 sm:px-5 py-1 sm:py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1">
             मांगलिक उत्सव कार्यक्रम
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold gold-gradient-text mt-0.5 sm:mt-1">
             विवाह उत्सव एवं मुहूर्त
           </h2>
         </div>
 
-        {/* 4 Events Grid with Larger Text & No Repetitive Calendar/Location Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3.5 text-left w-full">
+        {/* 4 Events Grid with Larger Text & Clean Mobile Stacking */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5 text-left w-full">
           {weddingData.events.map((event) => {
             const IconComponent = iconMap[event.icon] || Sparkles;
 
