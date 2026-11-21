@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles } from "lucide-react";
 import { playSacredBellChime } from "../utils/audioChime";
 import { playBackgroundMusic } from "../utils/musicController";
@@ -7,6 +7,65 @@ import { triggerCelebration } from "../utils/confetti";
 export default function RoyalOpeningCurtain({ onOpened }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
+  const [guestName, setGuestName] = useState("");
+
+  useEffect(() => {
+    const parseGuest = () => {
+      try {
+        const href = window.location.href;
+        const search = window.location.search;
+        const hash = window.location.hash;
+
+        // A. Standard URLSearchParams (?guest=... or ?to=... or ?name=...)
+        if (search) {
+          const params = new URLSearchParams(search);
+          const val = params.get("guest") || params.get("to") || params.get("name") || params.get("n");
+          if (val && val.trim()) {
+            setGuestName(val.trim());
+            return;
+          }
+          // Direct query string without key: e.g. ?Sharma%20Family
+          const rawQuery = search.replace(/^\?/, "").trim();
+          if (rawQuery && !rawQuery.includes("=") && rawQuery.length < 50) {
+            setGuestName(decodeURIComponent(rawQuery.replace(/\+/g, " ")).trim());
+            return;
+          }
+        }
+
+        // B. Hash string (#guest=... or direct #Sharma Family)
+        if (hash) {
+          const cleanHash = hash.replace(/^#/, "").trim();
+          if (/^guest=/i.test(cleanHash)) {
+            const rawVal = cleanHash.replace(/^guest=/i, "").trim();
+            setGuestName(decodeURIComponent(rawVal.replace(/\+/g, " ")).trim());
+            return;
+          }
+          if (cleanHash && !cleanHash.includes("=") && cleanHash.length < 50) {
+            setGuestName(decodeURIComponent(cleanHash.replace(/\+/g, " ")).trim());
+            return;
+          }
+        }
+
+        // C. Full URL match for guest=... anywhere
+        const match = href.match(/guest=([^&#?]+)/i);
+        if (match && match[1]) {
+          const decoded = decodeURIComponent(match[1].replace(/\+/g, " "));
+          setGuestName(decoded.replace(/\/+$/, "").trim());
+          return;
+        }
+      } catch (err) {
+        console.log("Guest parse error on curtain:", err);
+      }
+    };
+
+    parseGuest();
+    window.addEventListener("hashchange", parseGuest);
+    window.addEventListener("popstate", parseGuest);
+    return () => {
+      window.removeEventListener("hashchange", parseGuest);
+      window.removeEventListener("popstate", parseGuest);
+    };
+  }, []);
 
   const handleOpenCurtain = (e) => {
     if (e && e.stopPropagation) e.stopPropagation();
@@ -115,12 +174,29 @@ export default function RoyalOpeningCurtain({ onOpened }) {
         </div>
       </div>
 
-      {/* CENTER ELEMENT: ONLY "Touch to Open" — Zero information visible, pure mystery */}
+      {/* CENTER ELEMENT: "Touch to Open" + Optional Guest Greeting */}
       <div
-        className={`relative z-30 transition-all duration-700 ease-out flex flex-col items-center ${
+        className={`relative z-30 transition-all duration-700 ease-out flex flex-col items-center px-4 ${
           isOpen ? "scale-125 opacity-0 pointer-events-none" : "scale-100 opacity-100"
         }`}
       >
+        {/* Personalized Guest Welcome Plaque on Touch-to-Open Screen */}
+        {guestName && (
+          <div className="mb-4 sm:mb-6 px-6 py-2.5 sm:px-8 sm:py-3.5 rounded-3xl bg-black/65 border border-amber-400/60 shadow-[0_0_35px_rgba(212,175,55,0.4)] backdrop-blur-md max-w-[92vw] animate-fadeIn text-center">
+            <p className="text-[11px] sm:text-xs text-amber-300/90 font-serif tracking-widest flex items-center justify-center gap-1.5">
+              <span>🌸</span>
+              <span>॥ सादर सप्रेम निमंत्रण ॥</span>
+              <span>🌸</span>
+            </p>
+            <p className="text-lg sm:text-2xl font-bold text-amber-200 font-['Mukta',sans-serif] mt-0.5">
+              {guestName} जी
+            </p>
+            <p className="text-[11px] sm:text-xs text-amber-200/70 font-['Mukta',sans-serif] mt-0.5">
+              आप सपरिवार सादर आमंत्रित हैं
+            </p>
+          </div>
+        )}
+
         <button
           onClick={handleOpenCurtain}
           className="group relative px-8 py-3.5 sm:px-10 sm:py-4 rounded-full bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-bold text-sm sm:text-base tracking-[0.2em] uppercase shadow-[0_0_40px_rgba(212,175,55,0.85)] border border-amber-200 active:scale-95 transition-all duration-300 animate-pulse flex items-center gap-3 cursor-pointer"
