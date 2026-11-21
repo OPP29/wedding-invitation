@@ -38,6 +38,32 @@ html, body {
   padding: 0;
   overflow: hidden;
   background-color: #200007;
+  touch-action: manipulation; /* Prevents accidental double-tap zoom glitches */
+  -webkit-touch-callout: none; /* Prevents long-press image/link popups on mobile */
+  -webkit-user-select: none; /* Prevents accidental text selection while swiping */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection inside form inputs and textareas */
+input, textarea, select, [contenteditable="true"] {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  touch-action: auto !important;
+}
+
+/* Prevent image dragging on desktop and long-press callouts */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
 }
 
 /* Vertical Fullscreen Snap Scroll Container */
@@ -50,6 +76,7 @@ html, body {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain; /* Prevents browser pull-to-refresh jitter and gaps */
+  touch-action: manipulation;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE / Edge */
 }

@@ -22,6 +22,18 @@
   </head>
   <body class="bg-[#1a0208] text-[#fbf6ee] antialiased selection:bg-[#d4af37] selection:text-[#38010d] min-h-screen">
     <div id="root"></div>
+    <script>
+      // Disable right-click context menu
+      document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+      // Prevent image dragging ghost effect
+      document.addEventListener("dragstart", function (e) {
+        if (e.target && e.target.tagName === "IMG") {
+          e.preventDefault();
+        }
+      });
+    </script>
     <script type="module" src="/src/invite.jsx"></script>
   </body>
 </html>
