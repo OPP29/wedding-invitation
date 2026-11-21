@@ -4,20 +4,24 @@ import {
   Send,
   Check,
   ArrowLeft,
-  Key
+  Key,
+  Plus,
+  X
 } from "lucide-react";
 
 export default function InviteGenerator() {
+  const getStoredGitHubToken = () => {
+    try {
+      return localStorage.getItem("wedding_gh_pat") || (import.meta.env && import.meta.env.VITE_GITHUB_TOKEN) || "";
+    } catch {
+      return "";
+    }
+  };
+
   const [guestName, setGuestName] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedResult, setGeneratedResult] = useState(null);
-  const [hasGitHubToken, setHasGitHubToken] = useState(() => {
-    try {
-      return Boolean(localStorage.getItem("wedding_gh_pat") || (import.meta.env && import.meta.env.VITE_GITHUB_TOKEN));
-    } catch {
-      return false;
-    }
-  });
+  const [hasGitHubToken, setHasGitHubToken] = useState(() => Boolean(getStoredGitHubToken()));
   const [history, setHistory] = useState(() => {
     try {
       const stored = localStorage.getItem("monika_ritesh_generated_invites");
@@ -31,6 +35,24 @@ export default function InviteGenerator() {
   const showToast = (msg) => {
     setToastNotice(msg);
     setTimeout(() => setToastNotice(""), 4500);
+  };
+
+  // Track if current name in text input is already generated
+  const isAlreadyGenerated = Boolean(
+    generatedResult &&
+    generatedResult.name &&
+    guestName.trim() &&
+    generatedResult.name.trim().toLowerCase() === guestName.trim().toLowerCase()
+  );
+
+  // Reset to easily create the next invite
+  const handleNextGuest = () => {
+    setGuestName("");
+    setGeneratedResult(null);
+    const inputEl = document.getElementById("guest-name-input");
+    if (inputEl) {
+      inputEl.focus();
+    }
   };
 
   // Export all saved names and links to a .txt file (Manual utility: Guest list.txt)
@@ -412,9 +434,36 @@ export default function InviteGenerator() {
 
   // Generate Personalized Link & Short Link + Image Card
   const handleGenerate = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const trimmed = guestName.trim();
     if (!trimmed) return;
+
+    // Strict Requirement: GitHub Sync Token is mandatory to generate the link
+    let token = getStoredGitHubToken();
+    if (!token) {
+      const userInput = window.prompt(
+        "⚠️ GitHub Sync टोकन अनिवार्य है!\n\nनिमंत्रण लिंक बनाने और 'Guest list.txt' को ऑटो-अपडेट करने के लिए अपना GitHub Personal Access Token (PAT) दर्ज करें:\n(यह सुरक्षित रूप से केवल आपके डिवाइस में रहेगा)",
+        ""
+      );
+      if (userInput && userInput.trim()) {
+        token = userInput.trim();
+        try {
+          localStorage.setItem("wedding_gh_pat", token);
+        } catch {
+          // Ignored
+        }
+        setHasGitHubToken(true);
+        showToast("✓ GitHub टोकन सुरक्षित रूप से सहेजा गया!");
+      } else {
+        showToast("⚠️ GitHub Sync टोकन के बिना निमंत्रण लिंक नहीं बनाया जा सकता।");
+        return; // Abort link generation completely
+      }
+    }
+
+    // Prevent duplicate re-generation for the same name if already generated
+    if (generatedResult && generatedResult.name.trim().toLowerCase() === trimmed.toLowerCase()) {
+      return;
+    }
 
     setIsGenerating(true);
 
@@ -501,7 +550,7 @@ export default function InviteGenerator() {
   const updateGitHubGuestList = async (card, retryCount = 0) => {
     if (!card || !card.name) return false;
 
-    let token = localStorage.getItem("wedding_gh_pat") || (import.meta.env && import.meta.env.VITE_GITHUB_TOKEN);
+    let token = getStoredGitHubToken();
     if (!token) {
       const userInput = window.prompt(
         "GitHub पर 'Guest list.txt' सीधे अपडेट करने हेतु अपना GitHub Personal Access Token दर्ज करें:\n(यह सुरक्षित रूप से केवल आपके ब्राउज़र में रहेगा)",
@@ -509,7 +558,11 @@ export default function InviteGenerator() {
       );
       if (userInput && userInput.trim()) {
         token = userInput.trim();
-        localStorage.setItem("wedding_gh_pat", token);
+        try {
+          localStorage.setItem("wedding_gh_pat", token);
+        } catch {
+          // Ignored
+        }
         setHasGitHubToken(true);
       } else {
         return false;
@@ -607,7 +660,7 @@ export default function InviteGenerator() {
 
   // Configure / Change GitHub Token
   const handleConfigureGitHubToken = () => {
-    const current = localStorage.getItem("wedding_gh_pat") || "";
+    const current = getStoredGitHubToken();
     const promptMsg = current
       ? "GitHub Token वर्तमान में सेट है। बदलने हेतु नया टोकन दर्ज करें, या हटाने हेतु खाली छोड़ें:"
       : "GitHub पर Guest list.txt सीधे ऑटो-अपडेट करने के लिए अपना GitHub Personal Access Token दर्ज करें:\n(यह सुरक्षित रूप से केवल आपके ब्राउज़र के localStorage में रहेगा)";
@@ -615,11 +668,19 @@ export default function InviteGenerator() {
     if (res !== null) {
       const trimmed = res.trim();
       if (trimmed) {
-        localStorage.setItem("wedding_gh_pat", trimmed);
+        try {
+          localStorage.setItem("wedding_gh_pat", trimmed);
+        } catch {
+          // Ignored
+        }
         setHasGitHubToken(true);
         showToast("✓ GitHub टोकन सफलतापूर्वक सहेजा गया!");
       } else {
-        localStorage.removeItem("wedding_gh_pat");
+        try {
+          localStorage.removeItem("wedding_gh_pat");
+        } catch {
+          // Ignored
+        }
         setHasGitHubToken(false);
         showToast("GitHub टोकन हटा दिया गया।");
       }
@@ -692,10 +753,14 @@ export default function InviteGenerator() {
             type="button"
             onClick={handleConfigureGitHubToken}
             title="GitHub Sync Token (Guest list.txt)"
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/40 text-[11px] sm:text-xs text-amber-300 font-medium transition-colors cursor-pointer"
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[11px] sm:text-xs font-semibold transition-all cursor-pointer ${
+              hasGitHubToken
+                ? "bg-emerald-500/15 hover:bg-emerald-500/25 border-emerald-400/50 text-emerald-300"
+                : "bg-amber-500/20 hover:bg-amber-500/30 border-amber-400/60 text-amber-300 animate-pulse"
+            }`}
           >
             <Key className="w-3.5 h-3.5 text-amber-400" />
-            <span>{hasGitHubToken ? "GitHub Sync: सक्रिय ✓" : "GitHub Sync सेट करें"}</span>
+            <span>{hasGitHubToken ? "GitHub Sync: सक्रिय ✓" : "GitHub Sync टोकन दर्ज करें ⚠️"}</span>
           </button>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -717,33 +782,94 @@ export default function InviteGenerator() {
 
         {/* Generator Card */}
         <div className="p-5 sm:p-7 rounded-3xl bg-gradient-to-b from-[#2a010c] to-[#1c0007] border-2 border-amber-400/70 shadow-2xl space-y-5">
+          {/* GitHub Sync Status Warning Banner if not configured */}
+          {!hasGitHubToken && (
+            <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-400/40 flex items-center justify-between gap-3 text-xs sm:text-sm text-amber-200">
+              <div className="flex items-center gap-2.5">
+                <Key className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <span>लिंक बनाने और Guest list.txt सिंक करने हेतु GitHub टोकन अनिवार्य है।</span>
+              </div>
+              <button
+                type="button"
+                onClick={handleConfigureGitHubToken}
+                className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs flex-shrink-0 transition-colors cursor-pointer"
+              >
+                टोकन दर्ज करें
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleGenerate} className="space-y-4">
             <div>
-              <label className="block text-xs sm:text-sm font-semibold text-amber-300 mb-2">
+              <label htmlFor="guest-name-input" className="block text-xs sm:text-sm font-semibold text-amber-300 mb-2">
                 अतिथि / परिवार का नाम (Enter Inviter / Guest Name) *
               </label>
-              <input
-                type="text"
-                required
-                value={guestName}
-                onChange={(e) => setGuestName(e.target.value)}
-                placeholder="उदा. शर्मा परिवार, आदरणीय चाचा जी, राजेश भैया, अमित जी..."
-                className="w-full px-4 py-3.5 rounded-2xl bg-black/50 border-2 border-amber-500/40 text-amber-100 placeholder-amber-400/40 text-sm sm:text-base focus:outline-none focus:border-amber-400 shadow-inner"
-              />
+              <div className="relative">
+                <input
+                  id="guest-name-input"
+                  type="text"
+                  required
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  placeholder="उदा. शर्मा परिवार, आदरणीय चाचा जी, राजेश भैया, अमित जी..."
+                  className="w-full px-4 py-3.5 pr-10 rounded-2xl bg-black/50 border-2 border-amber-500/40 text-amber-100 placeholder-amber-400/40 text-sm sm:text-base focus:outline-none focus:border-amber-400 shadow-inner"
+                />
+                {guestName && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGuestName("");
+                      const inputEl = document.getElementById("guest-name-input");
+                      if (inputEl) inputEl.focus();
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 flex items-center justify-center transition-colors cursor-pointer"
+                    title="नाम साफ़ करें"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
             </div>
 
-            {/* Generate Button */}
+            {/* Generate Button: Disabled once generated for current name, re-enables on edit */}
             <button
               type="submit"
-              disabled={isGenerating || !guestName.trim()}
-              className="w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-bold text-sm sm:text-base shadow-[0_0_25px_rgba(212,175,55,0.4)] transition-all hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50"
+              disabled={isGenerating || !guestName.trim() || isAlreadyGenerated}
+              className={`w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl font-bold text-sm sm:text-base select-none transition-all ${
+                isAlreadyGenerated
+                  ? "bg-emerald-950/70 border-2 border-emerald-500/60 text-emerald-300 cursor-not-allowed opacity-90 shadow-none"
+                  : isGenerating
+                  ? "bg-amber-600 text-stone-950 opacity-75 cursor-wait"
+                  : !hasGitHubToken
+                  ? "bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:scale-[1.01] active:scale-[0.98] cursor-pointer"
+                  : "bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+              }`}
             >
-              <Sparkles className="w-5 h-5 text-stone-950 animate-pulse" />
-              <span>{isGenerating ? "कार्ड व लिंक तैयार हो रहा है..." : "लिंक बनाएं (Generate Link)"}</span>
+              {isAlreadyGenerated ? (
+                <>
+                  <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  <span>लिंक तैयार है (नीचे WhatsApp पर भेजें)</span>
+                </>
+              ) : isGenerating ? (
+                <>
+                  <Sparkles className="w-5 h-5 text-stone-950 animate-spin flex-shrink-0" />
+                  <span>कार्ड व लिंक तैयार हो रहा है...</span>
+                </>
+              ) : !hasGitHubToken ? (
+                <>
+                  <Key className="w-5 h-5 text-stone-950 flex-shrink-0" />
+                  <span>🔑 GitHub टोकन दर्ज करें व लिंक बनाएं</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-5 h-5 text-stone-950 animate-pulse flex-shrink-0" />
+                  <span>लिंक बनाएं (Generate Link)</span>
+                </>
+              )}
             </button>
           </form>
 
-          {/* Generated Result Display: ONLY निमंत्रण तैयार है!, Date, and WhatsApp share button */}
+          {/* Generated Result Display: ONLY निमंत्रण तैयार है!, Date, WhatsApp share button, and Next Guest action */}
           {generatedResult && (
             <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-amber-950/60 border border-amber-400/60 space-y-4 animate-fadeIn">
               <div className="flex items-center justify-between border-b border-amber-500/30 pb-2">
@@ -761,11 +887,24 @@ export default function InviteGenerator() {
               {/* Primary Action: WhatsApp Share with Image & Highlighted Link */}
               <div className="pt-1">
                 <button
+                  type="button"
                   onClick={() => handleShareWhatsAppWithImage(generatedResult)}
                   className="w-full flex items-center justify-center gap-2.5 py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform active:scale-[0.98] cursor-pointer"
                 >
                   <Send className="w-5 h-5 text-white" />
                   <span>WhatsApp पर भेजें (शेयर करें)</span>
+                </button>
+              </div>
+
+              {/* Quick Reset / Next Guest Action */}
+              <div className="flex items-center justify-center pt-1 border-t border-amber-500/20">
+                <button
+                  type="button"
+                  onClick={handleNextGuest}
+                  className="inline-flex items-center gap-1.5 py-1 px-3 text-xs sm:text-sm text-amber-300/80 hover:text-amber-200 font-medium transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>अगला नया निमंत्रण बनाएं (Next Guest)</span>
                 </button>
               </div>
             </div>
