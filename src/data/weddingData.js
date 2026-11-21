@@ -104,27 +104,37 @@ export const weddingData = {
     },
   ],
 
-  // Royal Gallery
+  // Royal Gallery - 6 Couple Photos
   gallery: [
     {
-      url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80",
+      url: `${import.meta.env.BASE_URL}couple-photos/photo1.jpg`,
       title: "राजसी प्रेम का सूत्रपात",
       caption: "Two souls united by destiny, blessed by traditions",
     },
     {
-      url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1000&q=80",
-      title: "वधु सौंदर्य व लालित्य",
-      caption: "Adorned in royal crimson, ready for the sacred vows",
+      url: `${import.meta.env.BASE_URL}couple-photos/photo2.jpg`,
+      title: "हाथों में हाथ, सदा का साथ",
+      caption: "Walking hand in hand along the golden sands",
     },
     {
-      url: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1000&q=80",
+      url: `${import.meta.env.BASE_URL}couple-photos/photo3.jpg`,
+      title: "लहरों के संग पावन वादा",
+      caption: "Whispers of eternal love amidst ocean waves",
+    },
+    {
+      url: `${import.meta.env.BASE_URL}couple-photos/photo4.jpg`,
       title: "अनंत पथ पर साथ",
       caption: "Walking hand in hand toward eternity",
     },
     {
-      url: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=1000&q=80",
-      title: "मुस्कुराते पल",
-      caption: "Laughter and eternal companionship",
+      url: `${import.meta.env.BASE_URL}couple-photos/photo5.jpg`,
+      title: "स्नेहमयी स्मृतियां",
+      caption: "Cherished moments and eternal companionship",
+    },
+    {
+      url: `${import.meta.env.BASE_URL}couple-photos/photo6.jpg`,
+      title: "प्रकृति की छांव में",
+      caption: "Surrounded by nature, bound by sacred destiny",
     },
   ],
 
