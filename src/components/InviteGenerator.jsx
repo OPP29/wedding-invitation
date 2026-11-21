@@ -5,9 +5,7 @@ import {
   Copy,
   Check,
   ArrowLeft,
-  Share2,
-  Download,
-  Image as ImageIcon
+  Share2
 } from "lucide-react";
 
 export default function InviteGenerator() {
@@ -24,7 +22,6 @@ export default function InviteGenerator() {
   });
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedMsg, setCopiedMsg] = useState(false);
-  const [copiedImage, setCopiedImage] = useState(false);
   const [toastNotice, setToastNotice] = useState("");
 
   const showToast = (msg) => {
@@ -32,7 +29,7 @@ export default function InviteGenerator() {
     setTimeout(() => setToastNotice(""), 4500);
   };
 
-  // Export all saved names and links to a .txt file (Hidden utility: Guest list.txt)
+  // Export all saved names and links to a .txt file (Manual utility: Guest list.txt)
   const exportToTextFile = async (listToExport = history) => {
     if (!listToExport || listToExport.length === 0) {
       alert("सुरक्षित करने हेतु कोई अतिथि नाम उपलब्ध नहीं है।");
@@ -42,7 +39,7 @@ export default function InviteGenerator() {
     const header =
       `========================================================================\n` +
       `🌸॥ श्री गणेशाय नमः ॥ 🌸\n` +
-      `मोनिका (दिव्या) संग रितेश (चिंटू) - व्यक्तिगत निमंत्रण अतिथि सूची (Guest list.txt)\n` +
+      `मोनिका संग रितेश - व्यक्तिगत निमंत्रण अतिथि सूची (Guest list.txt)\n` +
       `शुभ विवाह: 11 दिसम्बर 2026 • जमशेदपुर (झारखण्ड)\n` +
       `कुल निमंत्रित अतिथि: ${listToExport.length}\n` +
       `अंतिम अपडेट: ${new Date().toLocaleString("hi-IN")}\n` +
@@ -70,24 +67,10 @@ export default function InviteGenerator() {
     URL.revokeObjectURL(downloadUrl);
   };
 
-  // Hidden Export Triggers:
-  // 1. Visit URL with ?export=txt or ?download=txt
-  // 2. Press Ctrl + Shift + D (or Cmd + Shift + D)
-  // 3. In console: window.downloadGuestListTxt()
+  // Hidden Export Triggers (No auto-downloads, strictly manual keyboard shortcut or console):
+  // 1. Press Ctrl + Shift + D (or Cmd + Shift + D)
+  // 2. In console: window.downloadGuestListTxt()
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("export") === "txt" || params.get("download") === "txt") {
-      try {
-        const stored = localStorage.getItem("monika_ritesh_generated_invites");
-        const list = stored ? JSON.parse(stored) : [];
-        if (list.length > 0) {
-          exportToTextFile(list);
-        }
-      } catch {
-        // Ignored
-      }
-    }
-
     window.downloadGuestListTxt = () => {
       try {
         const stored = localStorage.getItem("monika_ritesh_generated_invites");
@@ -136,9 +119,9 @@ export default function InviteGenerator() {
     return `${origin}${pathname}`;
   };
 
-  // Format WhatsApp message
+  // Format WhatsApp message with highlighted link and "मोनिका संग रितेश"
   const formatWhatsAppMessage = (name, link) => {
-    return `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nसादर सप्रेम अभिवादन ${name.trim()} जी!\n\nमोनिका (दिव्या) \nसंग \nरितेश (चिंटू)\n\nपावन शुभ विवाह निमंत्रण\n🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n👉 निमंत्रण देखें:- ${link}\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
+    return `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nसादर सप्रेम अभिवादन ${name.trim()} जी!\nआप सपरिवार सादर आमंत्रित हैं।\n\n✨ मोनिका संग रितेश ✨\nपावन शुभ विवाह निमंत्रण\n🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n═══════════════════════\n🌟 डिजिटल निमंत्रण पत्र देखें:\n👉 ${link}\n═══════════════════════\n\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
   };
 
   // Generate High-Resolution Personalized Royal Card Image
@@ -297,13 +280,13 @@ export default function InviteGenerator() {
     ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
     ctx.shadowBlur = 12;
     ctx.fillStyle = "#fae092";
-    ctx.font = "bold 64px 'Rozha One', 'Cinzel Decorative', serif";
-    ctx.fillText("मोनिका (दिव्या)", 540, 365);
+    ctx.font = "bold 68px 'Rozha One', 'Cinzel Decorative', serif";
+    ctx.fillText("मोनिका", 540, 365);
     ctx.restore();
 
     // Sang
     ctx.fillStyle = "#f5da81";
-    ctx.font = "italic 30px 'Playfair Display', serif";
+    ctx.font = "italic 32px 'Playfair Display', serif";
     ctx.fillText("— संग —", 540, 430);
 
     // Groom Name
@@ -311,8 +294,8 @@ export default function InviteGenerator() {
     ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
     ctx.shadowBlur = 12;
     ctx.fillStyle = "#fae092";
-    ctx.font = "bold 64px 'Rozha One', 'Cinzel Decorative', serif";
-    ctx.fillText("रितेश (चिंटू)", 540, 500);
+    ctx.font = "bold 68px 'Rozha One', 'Cinzel Decorative', serif";
+    ctx.fillText("रितेश", 540, 500);
     ctx.restore();
 
     // 6. GUEST PLAQUE BOX (Highlighted centerpiece with guest name!)
@@ -390,11 +373,20 @@ export default function InviteGenerator() {
     ctx.stroke();
     drawDiamond(540, 1120, 5, "#fae092");
 
-    // Digital Link Footer
-    const finalDisplayUrl = url || "https://tinyurl.com/monika-ritesh-wedding";
-    ctx.fillStyle = "#ffd770";
-    ctx.font = "bold 24px monospace";
-    ctx.fillText(`👉 डिजिटल निमंत्रण देखें: ${finalDisplayUrl}`, 540, 1180);
+    // Digital Link Footer with Prominent Highlight
+    const finalDisplayUrl = url || "https://opp29.github.io/wedding-invitation/";
+    ctx.save();
+    ctx.fillStyle = "rgba(212, 175, 55, 0.16)";
+    drawRoundedRect(100, 1148, 880, 68, 16);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(245, 218, 129, 0.75)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 26px 'Rozha One', sans-serif";
+    ctx.fillText(`👉 डिजिटल निमंत्रण देखें: ${finalDisplayUrl}`, 540, 1182);
+    ctx.restore();
 
     // Output as DataURL, Blob and File
     const dataUrl = canvas.toDataURL("image/png");
@@ -467,41 +459,7 @@ export default function InviteGenerator() {
     setIsGenerating(false);
   };
 
-  // Download Generated Card Image
-  const handleDownloadCard = (card) => {
-    if (!card?.cardDataUrl) return;
-    const a = document.createElement("a");
-    a.href = card.cardDataUrl;
-    a.download = card.cardFileName || `Wedding_Invite_${card.name}.png`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
-
-  // Copy Generated Card Image to Clipboard
-  const handleCopyCardImage = async (card) => {
-    if (!card?.cardBlob) return;
-    try {
-      if (navigator.clipboard && window.ClipboardItem) {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            "image/png": card.cardBlob,
-          }),
-        ]);
-        setCopiedImage(true);
-        showToast("इमेज क्लिपबोर्ड में कॉपी हो गई! WhatsApp में Ctrl+V करके पेस्ट करें।");
-        setTimeout(() => setCopiedImage(false), 2500);
-      } else {
-        handleDownloadCard(card);
-        showToast("इमेज डाउनलोड हो गई है! WhatsApp में अटैच करके भेजें।");
-      }
-    } catch {
-      handleDownloadCard(card);
-      showToast("इमेज डाउनलोड हो गई है! WhatsApp में अटैच करके भेजें।");
-    }
-  };
-
-  // Share to WhatsApp with Image
+  // Share to WhatsApp with Image & Highlighted Link
   const handleShareWhatsAppWithImage = async (card) => {
     if (!card) return;
 
@@ -521,9 +479,8 @@ export default function InviteGenerator() {
       }
     }
 
-    // 2. Fallback for Desktop/WhatsApp Web or unsupported file sharing:
-    // Download the card image, copy it to clipboard, and open WhatsApp with the pre-filled text
-    handleDownloadCard(card);
+    // 2. Fallback for Desktop/WhatsApp Web:
+    // Copy image to clipboard without any auto-download
     if (card.cardBlob && navigator.clipboard && window.ClipboardItem) {
       try {
         await navigator.clipboard.write([
@@ -531,11 +488,11 @@ export default function InviteGenerator() {
             "image/png": card.cardBlob,
           }),
         ]);
+        showToast("इमेज क्लिपबोर्ड में कॉपी हो गई! WhatsApp में Ctrl+V करके पेस्ट करें।");
       } catch {
         // Ignored
       }
     }
-    showToast("इमेज कार्ड डाउनलोड हो गया! WhatsApp में Ctrl+V दबाकर इमेज भेजें।");
 
     const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(card.message)}`;
     window.open(waUrl, "_blank");
@@ -551,14 +508,16 @@ export default function InviteGenerator() {
   const handleCopyLink = (url) => {
     navigator.clipboard.writeText(url);
     setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
+    showToast("निमंत्रण लिंक कॉपी हो गई!");
+    setTimeout(() => setCopiedLink(false), 2200);
   };
 
   // Copy full WhatsApp message
   const handleCopyMessage = (msg) => {
     navigator.clipboard.writeText(msg);
     setCopiedMsg(true);
-    setTimeout(() => setCopiedMsg(false), 2000);
+    showToast("WhatsApp आमंत्रण संदेश कॉपी हो गया!");
+    setTimeout(() => setCopiedMsg(false), 2200);
   };
 
   return (
@@ -632,7 +591,7 @@ export default function InviteGenerator() {
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-emerald-400" />
                   <span className="text-sm sm:text-base font-bold text-emerald-300">
-                    {generatedResult.name} जी का निमंत्रण कार्ड तैयार है!
+                    {generatedResult.name} जी का निमंत्रण तैयार है!
                   </span>
                 </div>
                 <span className="text-xs text-amber-300/70 font-mono">
@@ -640,63 +599,28 @@ export default function InviteGenerator() {
                 </span>
               </div>
 
-              {/* Personalized Card Image Preview */}
-              {generatedResult.cardDataUrl && (
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs text-amber-300">
-                    <span className="font-bold flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
-                      <ImageIcon className="w-4 h-4 text-amber-400" />
-                      <span>तैयार व्यक्तिगत इमेज कार्ड:</span>
-                    </span>
-                    <button
-                      onClick={() => handleDownloadCard(generatedResult)}
-                      className="inline-flex items-center gap-1 text-amber-300 hover:text-amber-100 underline text-xs font-semibold"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>इमेज डाउनलोड</span>
-                    </button>
-                  </div>
-
-                  <div className="relative group max-w-xs sm:max-w-sm mx-auto rounded-2xl overflow-hidden border-2 border-amber-400/70 shadow-2xl bg-black/60">
-                    <img
-                      src={generatedResult.cardDataUrl}
-                      alt={`Wedding Invitation Card for ${generatedResult.name}`}
-                      className="w-full h-auto object-cover select-none"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Primary Action: WhatsApp Share with Image */}
-              <div className="pt-1 space-y-2.5">
+              {/* Primary Action: WhatsApp Share with Image & Highlighted Link */}
+              <div className="pt-1 space-y-3">
                 <button
                   onClick={() => handleShareWhatsAppWithImage(generatedResult)}
                   className="w-full flex items-center justify-center gap-2.5 py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform active:scale-[0.98]"
                 >
                   <Send className="w-5 h-5 text-white" />
-                  <span>WhatsApp पर इमेज सहित शेयर करें</span>
+                  <span>WhatsApp पर भेजें (शेयर करें)</span>
                 </button>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2.5">
                   <button
-                    onClick={() => handleDownloadCard(generatedResult)}
+                    onClick={() => handleCopyLink(generatedResult.shortUrl)}
                     className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 text-xs font-semibold transition-colors"
                   >
-                    <Download className="w-3.5 h-3.5 text-amber-300" />
-                    <span>इमेज डाउनलोड</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleCopyCardImage(generatedResult)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 text-xs font-semibold transition-colors"
-                  >
-                    {copiedImage ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-amber-300" />}
-                    <span>{copiedImage ? "कॉपी हुआ!" : "इमेज कॉपी"}</span>
+                    {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-amber-300" />}
+                    <span>{copiedLink ? "लिंक कॉपी हुआ!" : "लिंक कॉपी करें"}</span>
                   </button>
 
                   <button
                     onClick={() => handleShareWhatsAppTextOnly(generatedResult.message)}
-                    className="col-span-2 sm:col-span-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-amber-500/30 hover:bg-amber-950/40 text-amber-300 text-xs font-semibold transition-colors"
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-amber-500/30 hover:bg-amber-950/40 text-amber-300 text-xs font-semibold transition-colors"
                   >
                     <Share2 className="w-3.5 h-3.5 text-amber-400" />
                     <span>केवल टेक्स्ट शेयर</span>
