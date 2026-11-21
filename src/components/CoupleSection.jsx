@@ -49,10 +49,10 @@ export default function CoupleSection({ isActive }) {
       <div className="max-w-3xl w-full my-auto px-2 flex flex-col items-center">
         {/* Header */}
         <div className="mb-2 sm:mb-3">
-          <span className="inline-block px-5 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] mb-1">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-300 text-xs sm:text-sm font-bold tracking-wider mb-1 font-['Mukta',sans-serif]">
             वर-वधू एवं कुल परिचय
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold gold-gradient-text mt-1">
+          <h2 className="text-2xl sm:text-4xl font-extrabold gold-gradient-text font-['Mukta',sans-serif] mt-0.5">
             पवित्र पारिवारिक संबंध
           </h2>
         </div>
