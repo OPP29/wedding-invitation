@@ -6,7 +6,7 @@ let isPlaying = false;
 let wasPlayingBeforeHidden = false;
 const listeners = new Set();
 
-const TARGET_VOLUME = 0.28; // Reduced gentle ambient volume (28%)
+const TARGET_VOLUME = 0.5; // 50% volume requested
 
 export function getMusicAudio() {
   if (!musicAudio && typeof window !== "undefined") {

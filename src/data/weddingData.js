@@ -66,7 +66,7 @@ export const weddingData = {
       tagline: "मांगलिक तिलक, शगुन एवं पावन वैदिक परंपरा",
       date: "बुधवार, 09 दिसम्बर 2026",
       dateEn: "Wednesday, 09th Dec 2026",
-      time: "सायं 7:00 बजे से (Evening 7:00 PM)",
+      time: "मांगलिक लग्न मुहूर्त अनुसार",
       venue: "जमशेदपुर, झारखण्ड",
       icon: "Sparkles",
       badge: "तिलक रस्म",
