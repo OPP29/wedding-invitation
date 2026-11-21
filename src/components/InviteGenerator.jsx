@@ -3,13 +3,21 @@ import {
   Sparkles,
   Send,
   Check,
-  ArrowLeft
+  ArrowLeft,
+  Key
 } from "lucide-react";
 
 export default function InviteGenerator() {
   const [guestName, setGuestName] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedResult, setGeneratedResult] = useState(null);
+  const [hasGitHubToken, setHasGitHubToken] = useState(() => {
+    try {
+      return Boolean(localStorage.getItem("wedding_gh_pat") || (import.meta.env && import.meta.env.VITE_GITHUB_TOKEN));
+    } catch {
+      return false;
+    }
+  });
   const [history, setHistory] = useState(() => {
     try {
       const stored = localStorage.getItem("monika_ritesh_generated_invites");
@@ -126,7 +134,13 @@ export default function InviteGenerator() {
 
     if (document.fonts) {
       try {
-        await document.fonts.ready;
+        await Promise.all([
+          document.fonts.load("600 26px 'Mukta'"),
+          document.fonts.load("700 62px 'Mukta'"),
+          document.fonts.load("700 48px 'Mukta'"),
+          document.fonts.load("500 22px 'Mukta'"),
+          document.fonts.ready
+        ]);
       } catch {
         // Ignore font wait error
       }
@@ -243,67 +257,69 @@ export default function InviteGenerator() {
     ctx.lineTo(1025, 1265);
     ctx.stroke();
 
-    // 5. Typography & Content
+    // 5. Typography & Content (Crisp, High-Legibility, Flawless Devanagari)
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // Auspicious Shloka
+    // Auspicious Shloka - Clean & Balanced
     ctx.fillStyle = "#e6c875";
-    ctx.font = "bold 32px 'Rozha One', 'Yatra One', serif, sans-serif";
+    ctx.font = "600 26px 'Mukta', sans-serif";
     ctx.fillText("🌸॥ श्री गणेशाय नमः ॥ 🌸", 540, 125);
 
     // Sacred Om Emblem
     ctx.fillStyle = "#fae092";
-    ctx.font = "46px serif";
-    ctx.fillText("ॐ", 540, 185);
+    ctx.font = "40px serif";
+    ctx.fillText("ॐ", 540, 182);
 
     // Event Label
     ctx.fillStyle = "#ffd875";
-    ctx.font = "bold 34px 'Rozha One', serif, sans-serif";
-    ctx.fillText("पावन शुभ विवाह निमंत्रण", 540, 250);
+    ctx.font = "700 30px 'Mukta', sans-serif";
+    ctx.fillText("पावन शुभ विवाह निमंत्रण", 540, 245);
 
     // Divider Line
     ctx.strokeStyle = "rgba(212, 175, 55, 0.4)";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(320, 290);
-    ctx.lineTo(760, 290);
+    ctx.moveTo(320, 285);
+    ctx.lineTo(760, 285);
     ctx.stroke();
-    drawDiamond(540, 290, 6, "#fae092");
+    drawDiamond(540, 285, 6, "#fae092");
 
-    // Bride Name
+    // Bride Name - Clean, Elegant & Crisp
     ctx.save();
-    ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
-    ctx.shadowBlur = 12;
+    ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetY = 1;
     ctx.fillStyle = "#fae092";
-    ctx.font = "bold 68px 'Rozha One', 'Cinzel Decorative', serif";
-    ctx.fillText("मोनिका", 540, 365);
+    ctx.font = "700 62px 'Mukta', sans-serif";
+    ctx.fillText("मोनिका", 540, 360);
     ctx.restore();
 
     // Sang
     ctx.fillStyle = "#f5da81";
-    ctx.font = "italic 32px 'Playfair Display', serif";
-    ctx.fillText("— संग —", 540, 430);
+    ctx.font = "italic 28px 'Playfair Display', serif";
+    ctx.fillText("— संग —", 540, 422);
 
-    // Groom Name
+    // Groom Name - Clean, Elegant & Crisp
     ctx.save();
-    ctx.shadowColor = "rgba(212, 175, 55, 0.6)";
-    ctx.shadowBlur = 12;
+    ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetY = 1;
     ctx.fillStyle = "#fae092";
-    ctx.font = "bold 68px 'Rozha One', 'Cinzel Decorative', serif";
-    ctx.fillText("रितेश", 540, 500);
+    ctx.font = "700 62px 'Mukta', sans-serif";
+    ctx.fillText("रितेश", 540, 490);
     ctx.restore();
 
-    // 6. GUEST PLAQUE BOX (Highlighted centerpiece with guest name!)
+    // 6. GUEST PLAQUE BOX (Highlighted centerpiece with guest name)
     const boxX = 90;
-    const boxY = 575;
+    const boxY = 565;
     const boxW = 900;
-    const boxH = 290;
+    const boxH = 295;
     const boxR = 26;
 
     // Box Background
     ctx.save();
-    ctx.fillStyle = "rgba(12, 0, 4, 0.75)";
+    ctx.fillStyle = "rgba(12, 0, 4, 0.85)";
     drawRoundedRect(boxX, boxY, boxW, boxH, boxR);
     ctx.fill();
 
@@ -321,67 +337,68 @@ export default function InviteGenerator() {
 
     // Plaque Top Ribbon Text
     ctx.fillStyle = "#fad776";
-    ctx.font = "bold 26px 'Rozha One', 'Yatra One', serif";
-    ctx.fillText("॥ सादर सप्रेम निमंत्रण ॥", 540, 630);
+    ctx.font = "600 22px 'Mukta', sans-serif";
+    ctx.fillText("॥ सादर सप्रेम निमंत्रण ॥", 540, 622);
 
-    // Dynamic Guest Name in Golden Glow
+    // Dynamic Guest Name in Razor-Sharp Mukta Font with Ultra-Crisp Legibility
     const displayName = `${name.trim()} जी`;
-    let guestFontSize = 54;
+    let guestFontSize = 50;
     if (displayName.length > 22) {
-      guestFontSize = 40;
+      guestFontSize = 36;
     } else if (displayName.length > 16) {
-      guestFontSize = 46;
+      guestFontSize = 42;
     }
 
     ctx.save();
-    ctx.shadowColor = "rgba(255, 220, 100, 0.9)";
-    ctx.shadowBlur = 20;
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `bold ${guestFontSize}px 'Rozha One', 'Cinzel', serif`;
-    ctx.fillText(displayName, 540, 720);
+    ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetY = 1;
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = `700 ${guestFontSize}px 'Mukta', sans-serif`;
+    ctx.fillText(displayName, 540, 712);
     ctx.restore();
 
     // Plaque Bottom Subtext
     ctx.fillStyle = "#ffd97d";
-    ctx.font = "26px 'Rozha One', serif";
-    ctx.fillText("आप सपरिवार सादर आमंत्रित हैं", 540, 805);
+    ctx.font = "500 22px 'Mukta', sans-serif";
+    ctx.fillText("आप सपरिवार सादर आमंत्रित हैं", 540, 795);
 
     // 7. Event Date & Venue Details
     ctx.fillStyle = "#fae092";
-    ctx.font = "bold 32px 'Rozha One', sans-serif";
-    ctx.fillText("🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर (झारखण्ड)", 540, 930);
+    ctx.font = "600 26px 'Mukta', sans-serif";
+    ctx.fillText("🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर (झारखण्ड)", 540, 920);
 
     ctx.fillStyle = "#e5c158";
-    ctx.font = "24px 'Rozha One', sans-serif";
-    ctx.fillText("स्थान: श्री श्री लक्ष्मीनारायण मन्दिर परिसर, केबल टाउन, गोलमुरी", 540, 985);
+    ctx.font = "400 21px 'Mukta', sans-serif";
+    ctx.fillText("स्थान: श्री श्री लक्ष्मीनारायण मन्दिर परिसर, केबल टाउन, गोलमुरी", 540, 975);
 
     // Host Family
     ctx.fillStyle = "#ffd97d";
-    ctx.font = "bold 28px 'Rozha One', serif";
-    ctx.fillText("🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार", 540, 1065);
+    ctx.font = "600 24px 'Mukta', sans-serif";
+    ctx.fillText("🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार", 540, 1055);
 
     // Divider
     ctx.strokeStyle = "rgba(212, 175, 55, 0.35)";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(300, 1120);
-    ctx.lineTo(780, 1120);
+    ctx.moveTo(300, 1110);
+    ctx.lineTo(780, 1110);
     ctx.stroke();
-    drawDiamond(540, 1120, 5, "#fae092");
+    drawDiamond(540, 1110, 5, "#fae092");
 
-    // Digital Link Footer with Prominent Highlight
+    // Digital Link Footer with Prominent Highlight Badge
     const finalDisplayUrl = url || "https://opp29.github.io/wedding-invitation/";
     ctx.save();
     ctx.fillStyle = "rgba(212, 175, 55, 0.16)";
-    drawRoundedRect(100, 1148, 880, 68, 16);
+    drawRoundedRect(100, 1145, 880, 68, 16);
     ctx.fill();
     ctx.strokeStyle = "rgba(245, 218, 129, 0.75)";
     ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 26px 'Rozha One', sans-serif";
-    ctx.fillText(`👉 डिजिटल निमंत्रण देखें: ${finalDisplayUrl}`, 540, 1182);
+    ctx.font = "600 22px 'Mukta', sans-serif";
+    ctx.fillText(`👉 डिजिटल निमंत्रण देखें: ${finalDisplayUrl}`, 540, 1179);
     ctx.restore();
 
     // Output as DataURL, Blob and File
@@ -452,12 +469,163 @@ export default function InviteGenerator() {
     const updatedHistory = [newRecord, ...history];
     saveHistory(updatedHistory);
     setGeneratedResult(newRecord);
+    if (typeof window !== "undefined") {
+      window.lastGeneratedCardDataUrl = newRecord.cardDataUrl;
+    }
     setIsGenerating(false);
   };
 
-  // Share to WhatsApp with Image & Highlighted Link
+  // Base64 Unicode helpers to prevent Devanagari Hindi character corruption in GitHub API
+  const b64DecodeUnicode = (str) => {
+    try {
+      return decodeURIComponent(
+        atob(str.replace(/\s/g, ""))
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+    } catch {
+      return atob(str.replace(/\s/g, ""));
+    }
+  };
+
+  const b64EncodeUnicode = (str) => {
+    return btoa(
+      encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+        String.fromCharCode(parseInt(p1, 16))
+      )
+    );
+  };
+
+  // Update Guest list.txt directly on GitHub repo via GitHub REST API
+  const updateGitHubGuestList = async (card) => {
+    if (!card || !card.name) return false;
+
+    let token = localStorage.getItem("wedding_gh_pat") || (import.meta.env && import.meta.env.VITE_GITHUB_TOKEN);
+    if (!token) {
+      const userInput = window.prompt(
+        "GitHub पर 'Guest list.txt' सीधे अपडेट करने हेतु अपना GitHub Personal Access Token दर्ज करें:\n(यह सुरक्षित रूप से केवल आपके ब्राउज़र में रहेगा)",
+        ""
+      );
+      if (userInput && userInput.trim()) {
+        token = userInput.trim();
+        localStorage.setItem("wedding_gh_pat", token);
+        setHasGitHubToken(true);
+      } else {
+        return false;
+      }
+    }
+
+    try {
+      const owner = "OPP29";
+      const repo = "wedding-invitation";
+      const path = "public/Guest list.txt";
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+
+      // 1. Fetch current file info and SHA
+      const getRes = await fetch(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+      });
+
+      let currentSha = "";
+      let existingContent = "";
+
+      if (getRes.ok) {
+        const fileData = await getRes.json();
+        currentSha = fileData.sha;
+        if (fileData.content) {
+          existingContent = b64DecodeUnicode(fileData.content);
+        }
+      } else if (getRes.status === 404) {
+        existingContent =
+          `========================================================================\n` +
+          `🌸॥ श्री गणेशाय नमः ॥ 🌸\n` +
+          `मोनिका संग रितेश - व्यक्तिगत निमंत्रण अतिथि सूची (Guest List)\n` +
+          `शुभ विवाह: 11 दिसम्बर 2026 • जमशेदपुर (झारखण्ड)\n` +
+          `========================================================================\n\n` +
+          `[अतिथि सूची अभिलेख]\n` +
+          `------------------------------------------------------------------------\n`;
+      } else {
+        const errData = await getRes.json().catch(() => ({}));
+        showToast(`⚠️ GitHub टोकन त्रुटि: ${errData.message || getRes.statusText}`);
+        return false;
+      }
+
+      // Check if duplicate entry already present to keep list clean
+      if (existingContent.includes(card.name) && existingContent.includes(card.shortUrl || card.fullUrl)) {
+        showToast(`✓ GitHub पर ${card.name} जी पहले से दर्ज हैं।`);
+        return true;
+      }
+
+      const entryLine = `• [${card.timestamp}] ${card.name} जी | लिंक: ${card.shortUrl || card.fullUrl}`;
+      const updatedContent = existingContent.trimEnd() + "\n" + entryLine + "\n";
+
+      // 2. Commit updated content directly to GitHub
+      const putRes = await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/vnd.github.v3+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `chore: add ${card.name} to Guest list.txt`,
+          content: b64EncodeUnicode(updatedContent),
+          sha: currentSha || undefined,
+          branch: "main",
+        }),
+      });
+
+      if (putRes.ok) {
+        showToast(`✓ GitHub पर ${card.name} जी का नाम सीधे दर्ज हो गया!`);
+        return true;
+      } else {
+        const err = await putRes.json().catch(() => ({}));
+        if (putRes.status === 401 || putRes.status === 403) {
+          localStorage.removeItem("wedding_gh_pat");
+          setHasGitHubToken(false);
+          showToast("⚠️ GitHub टोकन अमान्य है। पुनः दर्ज करें।");
+        } else {
+          showToast(`⚠️ GitHub अपडेट असफल: ${err.message || putRes.statusText}`);
+        }
+        return false;
+      }
+    } catch (err) {
+      showToast(`⚠️ GitHub नेटवर्क त्रुटि: ${err.message}`);
+      return false;
+    }
+  };
+
+  // Configure / Change GitHub Token
+  const handleConfigureGitHubToken = () => {
+    const current = localStorage.getItem("wedding_gh_pat") || "";
+    const promptMsg = current
+      ? "GitHub Token वर्तमान में सेट है। बदलने हेतु नया टोकन दर्ज करें, या हटाने हेतु खाली छोड़ें:"
+      : "GitHub पर Guest list.txt सीधे ऑटो-अपडेट करने के लिए अपना GitHub Personal Access Token दर्ज करें:\n(यह सुरक्षित रूप से केवल आपके ब्राउज़र के localStorage में रहेगा)";
+    const res = window.prompt(promptMsg, current);
+    if (res !== null) {
+      const trimmed = res.trim();
+      if (trimmed) {
+        localStorage.setItem("wedding_gh_pat", trimmed);
+        setHasGitHubToken(true);
+        showToast("✓ GitHub टोकन सफलतापूर्वक सहेजा गया!");
+      } else {
+        localStorage.removeItem("wedding_gh_pat");
+        setHasGitHubToken(false);
+        showToast("GitHub टोकन हटा दिया गया।");
+      }
+    }
+  };
+
+  // Share to WhatsApp with Image & Highlighted Link + Direct GitHub Sync
   const handleShareWhatsAppWithImage = async (card) => {
     if (!card) return;
+
+    // Immediately trigger GitHub update directly
+    updateGitHubGuestList(card);
 
     // 1. Mobile Browsers: Use Web Share API if files sharing is supported
     if (card.cardFile && navigator.canShare && navigator.canShare({ files: [card.cardFile] })) {
@@ -495,7 +663,7 @@ export default function InviteGenerator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#200007] text-[#fbf6ee] font-serif p-4 sm:p-8 flex flex-col items-center">
+    <div className="min-h-screen bg-[#200007] text-[#fbf6ee] font-mukta p-4 sm:p-8 flex flex-col items-center">
       {/* Toast Notification */}
       {toastNotice && (
         <div className="fixed bottom-6 right-6 z-50 max-w-sm px-4 py-3 rounded-2xl bg-amber-500 text-stone-950 font-bold text-xs sm:text-sm shadow-2xl border-2 border-amber-300 animate-fadeIn">
@@ -513,16 +681,27 @@ export default function InviteGenerator() {
           <span>मुख्य विवाह निमंत्रण देखें</span>
         </a>
 
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs text-amber-300/80 font-medium">स्वतंत्र निमंत्रण केंद्र</span>
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={handleConfigureGitHubToken}
+            title="GitHub Sync Token (Guest list.txt)"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/40 text-[11px] sm:text-xs text-amber-300 font-medium transition-colors cursor-pointer"
+          >
+            <Key className="w-3.5 h-3.5 text-amber-400" />
+            <span>{hasGitHubToken ? "GitHub Sync: सक्रिय ✓" : "GitHub Sync सेट करें"}</span>
+          </button>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs text-amber-300/80 font-medium hidden sm:inline">स्वतंत्र निमंत्रण केंद्र</span>
+          </div>
         </div>
       </div>
 
       <div className="w-full max-w-2xl space-y-6">
         {/* Main Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-2xl sm:text-4xl font-extrabold gold-gradient-text tracking-wide">
+          <h1 className="text-2xl sm:text-4xl font-extrabold gold-gradient-text font-hindi-title">
             व्यक्तिगत निमंत्रण लिंक निर्माता
           </h1>
           <p className="text-xs sm:text-sm text-amber-200/80 max-w-xl mx-auto">
@@ -534,7 +713,7 @@ export default function InviteGenerator() {
         <div className="p-5 sm:p-7 rounded-3xl bg-gradient-to-b from-[#2a010c] to-[#1c0007] border-2 border-amber-400/70 shadow-2xl space-y-5">
           <form onSubmit={handleGenerate} className="space-y-4">
             <div>
-              <label className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-300 mb-2">
+              <label className="block text-xs sm:text-sm font-semibold text-amber-300 mb-2">
                 अतिथि / परिवार का नाम (Enter Inviter / Guest Name) *
               </label>
               <input
