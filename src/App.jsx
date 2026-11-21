@@ -204,7 +204,7 @@ export default function App() {
         <CoupleSection isActive={activeSlideIndex === 1} />
 
         {/* Slide 3: Celebration Itinerary */}
-        <EventsTimeline />
+        <EventsTimeline isActive={activeSlideIndex === 2} />
 
         {/* Slide 4: Venue & Navigation (Fullscreen Borderless) */}
         <VenueSection />

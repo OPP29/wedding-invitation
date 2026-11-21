@@ -102,20 +102,6 @@ export const weddingData = {
       themeColor: "from-rose-950/95 to-amber-950/95",
       borderGlow: "border-amber-400 ring-2 ring-amber-400/50 shadow-amber-900/50",
     },
-    {
-      id: "preetibhoj",
-      name: "प्रीतिभोज (Grand Reception)",
-      subName: "Preetibhoj Samaroh",
-      tagline: "नवदम्पति को शुभाशीर्वाद, मंगल स्नेह मिलन एवं भव्य प्रीतिभोज",
-      date: "रविवार, 13 दिसम्बर 2026",
-      dateEn: "Sunday, 13th Dec 2026",
-      time: "संध्या 7:30 बजे से",
-      venue: "जेमको मैदान, आजाद बस्ती, गुरूद्वारा रोड नं. 1, टेल्को, जमशेदपुर",
-      icon: "PartyPopper",
-      badge: "आशीर्वाद प्रीतिभोज",
-      themeColor: "from-stone-950/95 to-amber-950/95",
-      borderGlow: "border-amber-500/60 shadow-stone-900/40",
-    },
   ],
 
   // Royal Gallery
