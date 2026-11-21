@@ -497,8 +497,8 @@ export default function InviteGenerator() {
     );
   };
 
-  // Update Guest list.txt directly on GitHub repo via GitHub REST API
-  const updateGitHubGuestList = async (card) => {
+  // Update Guest list.txt directly on GitHub repo via GitHub REST API (supports concurrent multi-user sync)
+  const updateGitHubGuestList = async (card, retryCount = 0) => {
     if (!card || !card.name) return false;
 
     let token = localStorage.getItem("wedding_gh_pat") || (import.meta.env && import.meta.env.VITE_GITHUB_TOKEN);
@@ -583,6 +583,12 @@ export default function InviteGenerator() {
         showToast(`✓ GitHub पर ${card.name} जी का नाम सीधे दर्ज हो गया!`);
         return true;
       } else {
+        // Automatic Conflict Retry: If another family member committed at the exact same moment
+        if (putRes.status === 409 && retryCount < 3) {
+          await new Promise((res) => setTimeout(res, 400 + Math.random() * 300));
+          return updateGitHubGuestList(card, retryCount + 1);
+        }
+
         const err = await putRes.json().catch(() => ({}));
         if (putRes.status === 401 || putRes.status === 403) {
           localStorage.removeItem("wedding_gh_pat");
