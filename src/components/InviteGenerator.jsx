@@ -882,8 +882,18 @@ export default function InviteGenerator() {
     return nameMatch || linkMatch;
   });
 
+  // Ensure the invite page can always scroll vertically
+  useEffect(() => {
+    document.documentElement.classList.add("invite-page");
+    document.body.classList.add("invite-page");
+    return () => {
+      document.documentElement.classList.remove("invite-page");
+      document.body.classList.remove("invite-page");
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#200007] text-[#fbf6ee] font-mukta p-4 sm:p-8 flex flex-col items-center">
+    <div className="min-h-screen w-full bg-[#200007] text-[#fbf6ee] font-mukta p-4 sm:p-8 flex flex-col items-center overflow-y-auto">
       {/* Toast Notification */}
       {toastNotice && (
         <div className="fixed bottom-6 right-6 z-50 max-w-sm px-4 py-3 rounded-2xl bg-amber-500 text-stone-950 font-bold text-xs sm:text-sm shadow-2xl border-2 border-amber-300 animate-fadeIn">

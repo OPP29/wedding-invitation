@@ -46,6 +46,19 @@ html, body {
   user-select: none;
 }
 
+/* Allow standalone invite generator page to scroll naturally */
+html.invite-page,
+body.invite-page {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
+}
+
 /* Allow text selection inside form inputs and textareas */
 input, textarea, select, [contenteditable="true"] {
   -webkit-user-select: text !important;
