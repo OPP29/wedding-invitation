@@ -9,7 +9,6 @@ import {
   X,
   Download,
   Copy,
-  Search,
   RefreshCw,
   Lock
 } from "lucide-react";
@@ -36,7 +35,6 @@ export default function InviteGenerator() {
     }
   });
   const [toastNotice, setToastNotice] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
   const [isSyncingGitHub, setIsSyncingGitHub] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
 
@@ -848,15 +846,6 @@ export default function InviteGenerator() {
     window.open(waUrl, "_blank");
   };
 
-  // Filter saved invites based on search query
-  const filteredInvites = history.filter((inv) => {
-    if (!searchQuery.trim()) return true;
-    const q = searchQuery.toLowerCase().trim();
-    const nameMatch = (inv.name || "").toLowerCase().includes(q);
-    const linkMatch = (inv.shortUrl || inv.fullUrl || "").toLowerCase().includes(q);
-    return nameMatch || linkMatch;
-  });
-
   // Ensure the invite page can always scroll vertically
   useEffect(() => {
     document.documentElement.classList.add("invite-page");
@@ -1066,78 +1055,37 @@ export default function InviteGenerator() {
         {/* Saved Guest Invites History Section (STRICT REQUIREMENT: Only visible if GitHub Sync is ON) */}
         {hasGitHubToken ? (
           <div className="p-5 sm:p-7 rounded-3xl bg-gradient-to-b from-[#2a010c] to-[#1c0007] border-2 border-amber-400/70 shadow-2xl space-y-5 animate-fadeIn">
-            {/* Header & Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-amber-500/30 pb-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-lg sm:text-xl font-bold text-amber-200 font-hindi-title">
-                    📋 पूर्व निर्मित निमंत्रण लिंक सूची
-                  </h2>
-                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-semibold">
-                    {filteredInvites.length} {filteredInvites.length === history.length ? "अतिथि" : `(कुल ${history.length})`}
-                  </span>
-                </div>
-                <p className="text-xs text-amber-300/70 mt-1">
-                  सभी सहेजे गए निमंत्रण लिंक यहां उपलब्ध हैं। किसी भी समय पुनः WhatsApp पर भेजें या कॉपी करें।
-                </p>
+            {/* Header */}
+            <div className="flex items-center justify-between gap-3 border-b border-amber-500/30 pb-3">
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-amber-200 font-hindi-title">
+                  📋 पूर्व निर्मित निमंत्रण लिंक सूची
+                </h2>
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-semibold">
+                  {history.length} अतिथि
+                </span>
               </div>
 
-              <div className="flex items-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => fetchAndMergeGitHubList(undefined, true)}
-                  disabled={isSyncingGitHub}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer"
-                  title="GitHub से नवीनतम सूची सिंक करें"
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isSyncingGitHub ? "animate-spin text-amber-400" : ""}`} />
-                  <span>{isSyncingGitHub ? "सिंक हो रहा है..." : "रीफ्रेश"}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => exportToTextFile(history)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-semibold transition-colors cursor-pointer"
-                  title="संपूर्ण अतिथि सूची .txt फ़ाइल के रूप में डाउनलोड करें"
-                >
-                  <Download className="w-3.5 h-3.5 text-amber-400" />
-                  <span>सूची डाउनलोड (.txt)</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Search Filter */}
-            <div className="relative">
-              <Search className="w-4 h-4 text-amber-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="🔍 अतिथि का नाम खोजें..."
-                className="w-full pl-10 pr-9 py-2 rounded-xl bg-black/40 border border-amber-500/30 text-amber-100 placeholder-amber-400/40 text-xs sm:text-sm focus:outline-none focus:border-amber-400 transition-colors"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-400/60 hover:text-amber-300 transition-colors cursor-pointer"
-                  title="खोज साफ़ करें"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => fetchAndMergeGitHubList(undefined, true)}
+                disabled={isSyncingGitHub}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer flex-shrink-0"
+                title="GitHub से नवीनतम सूची सिंक करें"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isSyncingGitHub ? "animate-spin text-amber-400" : ""}`} />
+                <span>{isSyncingGitHub ? "सिंक हो रहा है..." : "रीफ्रेश"}</span>
+              </button>
             </div>
 
             {/* Cards List - Ultra Compact */}
-            {filteredInvites.length === 0 ? (
+            {history.length === 0 ? (
               <div className="p-6 text-center rounded-2xl bg-black/30 border border-amber-500/20 text-amber-300/70 text-xs sm:text-sm">
-                {history.length === 0
-                  ? "अभी तक कोई निमंत्रण लिंक नहीं बना है। ऊपर नाम लिखकर 'Generate Link' पर क्लिक करें।"
-                  : `'${searchQuery}' से मेल खाता कोई अतिथि नहीं मिला।`}
+                अभी तक कोई निमंत्रण लिंक नहीं बना है। ऊपर नाम लिखकर 'Generate Link' पर क्लिक करें।
               </div>
             ) : (
               <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1">
-                {filteredInvites.map((inv) => {
+                {history.map((inv) => {
                   const itemKey = inv.id || `${inv.name}-${inv.shortUrl || inv.fullUrl}`;
                   const isCopied = copiedId === (inv.id || inv.shortUrl || inv.fullUrl);
                   return (
