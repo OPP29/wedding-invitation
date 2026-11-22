@@ -209,11 +209,15 @@ export default function InviteGenerator() {
     return `${origin}${pathname}`;
   };
 
-  // Ensure honorific 'जी' is present without duplicating (e.g. 'चाचा जी' -> 'चाचा जी', 'अमित' -> 'अमित जी')
+  // Ensure honorific 'जी' is present without duplicating (e.g. 'चाचा जी' -> 'चाचा जी', 'चाचा जी जी' -> 'चाचा जी')
   const formatGuestWithJi = (name) => {
-    const trimmed = (name || "").trim();
+    const trimmed = (name || "")
+      .trim()
+      .replace(/(?:\s*जी)+$/gi, "")
+      .replace(/(?:\s*ji)+$/gi, "")
+      .trim();
     if (!trimmed) return "";
-    return /(जी|ji)$/i.test(trimmed) ? trimmed : `${trimmed} जी`;
+    return `${trimmed} जी`;
   };
 
   // Format WhatsApp message with highlighted link and "मोनिका संग रितेश"
@@ -844,16 +848,17 @@ export default function InviteGenerator() {
     }
   }, [hasGitHubToken]);
 
-  // One-click copy helper
+  // One-click copy helper (copies the complete WhatsApp invitation message)
   const handleCopyLink = async (item) => {
     const link = item.shortUrl || item.fullUrl;
     if (!link) return;
+    const textToCopy = formatWhatsAppMessage(item.name, link);
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(link);
+        await navigator.clipboard.writeText(textToCopy);
       } else {
         const textArea = document.createElement("textarea");
-        textArea.value = link;
+        textArea.value = textToCopy;
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand("copy");
@@ -861,9 +866,9 @@ export default function InviteGenerator() {
       }
       setCopiedId(item.id || link);
       setTimeout(() => setCopiedId(null), 2500);
-      showToast(`✓ ${formatGuestWithJi(item.name)} का लिंक कॉपी हो गया!`);
+      showToast(`✓ ${formatGuestWithJi(item.name)} का संपूर्ण निमंत्रण संदेश कॉपी हो गया!`);
     } catch {
-      showToast("⚠️ लिंक कॉपी करने में असमर्थ।");
+      showToast("⚠️ संदेश कॉपी करने में असमर्थ।");
     }
   };
 
@@ -906,7 +911,7 @@ export default function InviteGenerator() {
 
     // Open WhatsApp directly with text message containing the link.
     // Without an attached file, WhatsApp automatically renders the interactive Rich Link Preview card!
-    const messageText = card.message || formatWhatsAppMessage(card.name, card.shortUrl || card.fullUrl);
+    const messageText = formatWhatsAppMessage(card.name, card.shortUrl || card.fullUrl);
     const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(messageText)}`;
     window.open(waUrl, "_blank");
   };
@@ -1126,15 +1131,34 @@ export default function InviteGenerator() {
                 </span>
               </div>
 
-              {/* Primary Action: WhatsApp Share with Link Preview */}
-              <div className="pt-1">
+              {/* Primary Action: WhatsApp Share & Copy Full Message */}
+              <div className="pt-1 flex flex-col sm:flex-row items-center gap-2.5">
                 <button
                   type="button"
                   onClick={() => handleShareWhatsApp(generatedResult)}
-                  className="w-full flex items-center justify-center gap-2.5 py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform active:scale-[0.98] cursor-pointer"
+                  className="w-full flex-1 flex items-center justify-center gap-2.5 py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform active:scale-[0.98] cursor-pointer"
                 >
                   <Send className="w-5 h-5 text-white" />
                   <span>WhatsApp पर भेजें (Link Preview)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleCopyLink(generatedResult)}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-bold text-xs sm:text-sm transition-colors cursor-pointer"
+                  title="संपूर्ण निमंत्रण संदेश कॉपी करें"
+                >
+                  {copiedId === (generatedResult.id || generatedResult.shortUrl) ? (
+                    <>
+                      <Check className="w-4 h-4 text-emerald-400" />
+                      <span className="text-emerald-300">संदेश कॉपी हुआ ✓</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      <span>संदेश कॉपी करें</span>
+                    </>
+                  )}
                 </button>
               </div>
 
@@ -1236,7 +1260,7 @@ export default function InviteGenerator() {
                           type="button"
                           onClick={() => handleCopyLink(inv)}
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-semibold text-[11px] sm:text-xs transition-colors cursor-pointer"
-                          title="लिंक कॉपी करें"
+                          title="संपूर्ण निमंत्रण संदेश कॉपी करें"
                         >
                           {isCopied ? (
                             <>
