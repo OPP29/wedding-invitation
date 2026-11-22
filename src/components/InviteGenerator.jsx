@@ -6,7 +6,8 @@ import {
   ArrowLeft,
   Key,
   Plus,
-  X
+  X,
+  Download
 } from "lucide-react";
 
 export default function InviteGenerator() {
@@ -147,7 +148,7 @@ export default function InviteGenerator() {
 
   // Format WhatsApp message with highlighted link and "मोनिका संग रितेश"
   const formatWhatsAppMessage = (name, link) => {
-    return `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nसादर सप्रेम अभिवादन ${name.trim()} जी!\nआप सपरिवार सादर आमंत्रित हैं।\n\n✨ मोनिका संग रितेश ✨\nपावन शुभ विवाह निमंत्रण\n🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n═══════════════════════\n🌟 डिजिटल निमंत्रण पत्र देखें:\n👉 ${link}\n═══════════════════════\n\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
+    return `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nसादर सप्रेम अभिवादन ${name.trim()} जी!\nआप सपरिवार सादर आमंत्रित हैं।\n\n✨ मोनिका संग रितेश ✨\nपावन शुभ विवाह निमंत्रण\n🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n═══════════════════════\n🌟 डिजिटल निमंत्रण पत्र खोलें:\n${link}\n═══════════════════════\n\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
   };
 
   // Generate High-Resolution Personalized Royal Card Image
@@ -687,44 +688,15 @@ export default function InviteGenerator() {
     }
   };
 
-  // Share to WhatsApp with Image & Highlighted Link + Direct GitHub Sync
-  const handleShareWhatsAppWithImage = async (card) => {
+  // Share to WhatsApp with Link Preview & Direct GitHub Sync
+  const handleShareWhatsApp = async (card) => {
     if (!card) return;
 
     // Immediately trigger GitHub update directly
     updateGitHubGuestList(card);
 
-    // 1. Mobile Browsers: Use Web Share API if files sharing is supported
-    if (card.cardFile && navigator.canShare && navigator.canShare({ files: [card.cardFile] })) {
-      try {
-        await navigator.share({
-          title: "पावन शुभ विवाह निमंत्रण - मोनिका संग रितेश",
-          text: card.message,
-          files: [card.cardFile],
-        });
-        return;
-      } catch (err) {
-        if (err.name === "AbortError") {
-          return;
-        }
-      }
-    }
-
-    // 2. Fallback for Desktop/WhatsApp Web:
-    // Copy image to clipboard without any auto-download
-    if (card.cardBlob && navigator.clipboard && window.ClipboardItem) {
-      try {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            "image/png": card.cardBlob,
-          }),
-        ]);
-        showToast("इमेज क्लिपबोर्ड में कॉपी हो गई! WhatsApp में Ctrl+V करके पेस्ट करें।");
-      } catch {
-        // Ignored
-      }
-    }
-
+    // Open WhatsApp directly with text message containing the link.
+    // Without an attached file, WhatsApp automatically renders the interactive Rich Link Preview card!
     const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(card.message)}`;
     window.open(waUrl, "_blank");
   };
@@ -884,17 +856,31 @@ export default function InviteGenerator() {
                 </span>
               </div>
 
-              {/* Primary Action: WhatsApp Share with Image & Highlighted Link */}
+              {/* Primary Action: WhatsApp Share with Link Preview */}
               <div className="pt-1">
                 <button
                   type="button"
-                  onClick={() => handleShareWhatsAppWithImage(generatedResult)}
+                  onClick={() => handleShareWhatsApp(generatedResult)}
                   className="w-full flex items-center justify-center gap-2.5 py-4 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-transform active:scale-[0.98] cursor-pointer"
                 >
                   <Send className="w-5 h-5 text-white" />
-                  <span>WhatsApp पर भेजें (शेयर करें)</span>
+                  <span>WhatsApp पर भेजें (Link Preview)</span>
                 </button>
               </div>
+
+              {/* Optional: Download Personalized Card PNG */}
+              {generatedResult.cardDataUrl && (
+                <div className="flex items-center justify-center pt-0.5">
+                  <a
+                    href={generatedResult.cardDataUrl}
+                    download={generatedResult.cardFileName || "Shubh_Vivah_Nimantran.png"}
+                    className="inline-flex items-center gap-1.5 py-1.5 px-3.5 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <Download className="w-3.5 h-3.5 text-amber-400" />
+                    <span>व्यक्तिगत कार्ड इमेज डाउनलोड करें (.PNG)</span>
+                  </a>
+                </div>
+              )}
 
               {/* Quick Reset / Next Guest Action */}
               <div className="flex items-center justify-center pt-1 border-t border-amber-500/20">
