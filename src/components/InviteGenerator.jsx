@@ -23,6 +23,9 @@ export default function InviteGenerator() {
   };
 
   const [guestName, setGuestName] = useState("");
+  const [hindiSuggestion, setHindiSuggestion] = useState("");
+  const [selectedLang, setSelectedLang] = useState("hindi"); // "hindi" | "english"
+  const [isTransliterating, setIsTransliterating] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedResult, setGeneratedResult] = useState(null);
   const [hasGitHubToken, setHasGitHubToken] = useState(() => Boolean(getStoredGitHubToken()));
@@ -43,17 +46,72 @@ export default function InviteGenerator() {
     setTimeout(() => setToastNotice(""), 4500);
   };
 
+  // Check if string contains Devanagari Hindi characters
+  const isDevanagari = (text) => Boolean(text && /[\u0900-\u097F]/.test(text));
+
+  // Determine active effective guest name based on chosen language option
+  const effectiveGuestName = isDevanagari(guestName)
+    ? guestName.trim()
+    : selectedLang === "hindi" && hindiSuggestion
+      ? hindiSuggestion.trim()
+      : guestName.trim();
+
+  // Real-time transliteration from English/Hinglish to Hindi
+  useEffect(() => {
+    const trimmed = guestName.trim();
+    const timer = setTimeout(async () => {
+      if (!trimmed) {
+        setHindiSuggestion("");
+        setIsTransliterating(false);
+        return;
+      }
+
+      // If user typed directly in Hindi, use it directly
+      if (isDevanagari(trimmed)) {
+        setHindiSuggestion(trimmed);
+        setSelectedLang("hindi");
+        setIsTransliterating(false);
+        return;
+      }
+
+      setIsTransliterating(true);
+      try {
+        const url = `https://inputtools.google.com/request?text=${encodeURIComponent(trimmed)}&itc=hi-t-i0-und&num=1`;
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data[0] === "SUCCESS" && data[1] && data[1].length > 0) {
+            const wordsHindi = data[1].map((item) => (item[1] && item[1][0]) || item[0]);
+            const fullHindi = wordsHindi.join(" ");
+            setHindiSuggestion(fullHindi);
+            setSelectedLang("hindi"); // Default to Hindi
+          } else {
+            setHindiSuggestion("");
+          }
+        }
+      } catch {
+        setHindiSuggestion("");
+      } finally {
+        setIsTransliterating(false);
+      }
+    }, trimmed ? 220 : 0);
+
+    return () => clearTimeout(timer);
+  }, [guestName]);
+
   // Track if current name in text input is already generated
   const isAlreadyGenerated = Boolean(
     generatedResult &&
     generatedResult.name &&
-    guestName.trim() &&
-    generatedResult.name.trim().toLowerCase() === guestName.trim().toLowerCase()
+    effectiveGuestName &&
+    generatedResult.name.trim().toLowerCase() === effectiveGuestName.toLowerCase()
   );
 
   // Reset to easily create the next invite
   const handleNextGuest = () => {
     setGuestName("");
+    setHindiSuggestion("");
+    setSelectedLang("hindi");
     setGeneratedResult(null);
     const inputEl = document.getElementById("guest-name-input");
     if (inputEl) {
@@ -151,9 +209,16 @@ export default function InviteGenerator() {
     return `${origin}${pathname}`;
   };
 
+  // Ensure honorific 'जी' is present without duplicating (e.g. 'चाचा जी' -> 'चाचा जी', 'अमित' -> 'अमित जी')
+  const formatGuestWithJi = (name) => {
+    const trimmed = (name || "").trim();
+    if (!trimmed) return "";
+    return /(जी|ji)$/i.test(trimmed) ? trimmed : `${trimmed} जी`;
+  };
+
   // Format WhatsApp message with highlighted link and "मोनिका संग रितेश"
   const formatWhatsAppMessage = (name, link) => {
-    return `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nसादर सप्रेम अभिवादन ${name.trim()} जी!\nआप सपरिवार सादर आमंत्रित हैं।\n\n✨ मोनिका संग रितेश ✨\nपावन शुभ विवाह निमंत्रण\n🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n═══════════════════════\n🌟 डिजिटल निमंत्रण पत्र खोलें:\n${link}\n═══════════════════════\n\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
+    return `🌸॥ श्री गणेशाय नमः ॥ 🌸\n\nसादर सप्रेम अभिवादन ${formatGuestWithJi(name)}!\nआप सपरिवार सादर आमंत्रित हैं।\n\n✨ मोनिका संग रितेश ✨\nपावन शुभ विवाह निमंत्रण\n🗓️ 11 दिसम्बर 2026 • 📍 जमशेदपुर\n\n═══════════════════════\n🌟 डिजिटल निमंत्रण पत्र खोलें:\n${link}\n═══════════════════════\n\n🙏 सस्नेह निमंत्रित: समस्त पंडित परिवार`;
   };
 
   // Generate High-Resolution Personalized Royal Card Image
@@ -369,7 +434,7 @@ export default function InviteGenerator() {
     ctx.fillText("॥ सादर सप्रेम निमंत्रण ॥", 540, 622);
 
     // Dynamic Guest Name in Razor-Sharp Mukta Font with Ultra-Crisp Legibility
-    const displayName = `${name.trim()} जी`;
+    const displayName = formatGuestWithJi(name);
     let guestFontSize = 50;
     if (displayName.length > 22) {
       guestFontSize = 36;
@@ -441,7 +506,7 @@ export default function InviteGenerator() {
   // Generate Personalized Link & Short Link + Image Card
   const handleGenerate = async (e) => {
     if (e) e.preventDefault();
-    const trimmed = guestName.trim();
+    const trimmed = effectiveGuestName;
     if (!trimmed) return;
 
     // Strict Requirement: GitHub Sync Token is mandatory to generate the link
@@ -615,11 +680,11 @@ export default function InviteGenerator() {
 
       // Check if duplicate entry already present to keep list clean
       if (existingContent.includes(card.name) && existingContent.includes(card.shortUrl || card.fullUrl)) {
-        showToast(`✓ GitHub पर ${card.name} जी पहले से दर्ज हैं।`);
+        showToast(`✓ GitHub पर ${formatGuestWithJi(card.name)} पहले से दर्ज हैं।`);
         return true;
       }
 
-      const entryLine = `• [${card.timestamp}] ${card.name} जी | लिंक: ${card.shortUrl || card.fullUrl}`;
+      const entryLine = `• [${card.timestamp}] ${formatGuestWithJi(card.name)} | लिंक: ${card.shortUrl || card.fullUrl}`;
       const updatedContent = existingContent.trimEnd() + "\n" + entryLine + "\n";
 
       // 2. Commit updated content directly to GitHub
@@ -639,7 +704,7 @@ export default function InviteGenerator() {
       });
 
       if (putRes.ok) {
-        showToast(`✓ GitHub पर ${card.name} जी का नाम सीधे दर्ज हो गया!`);
+        showToast(`✓ GitHub पर ${formatGuestWithJi(card.name)} का नाम सीधे दर्ज हो गया!`);
         return true;
       } else {
         // Automatic Conflict Retry: If another family member committed at the exact same moment
@@ -796,7 +861,7 @@ export default function InviteGenerator() {
       }
       setCopiedId(item.id || link);
       setTimeout(() => setCopiedId(null), 2500);
-      showToast(`✓ ${item.name} जी का लिंक कॉपी हो गया!`);
+      showToast(`✓ ${formatGuestWithJi(item.name)} का लिंक कॉपी हो गया!`);
     } catch {
       showToast("⚠️ लिंक कॉपी करने में असमर्थ।");
     }
@@ -938,7 +1003,7 @@ export default function InviteGenerator() {
                   required
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="उदा. शर्मा परिवार, आदरणीय चाचा जी, राजेश भैया, अमित जी..."
+                  placeholder="उदा. Ramesh Sharma, शर्मा परिवार, चाचा जी, Sunil Uncle..."
                   className="w-full px-4 py-3.5 pr-10 rounded-2xl bg-black/50 border-2 border-amber-500/40 text-amber-100 placeholder-amber-400/40 text-sm sm:text-base focus:outline-none focus:border-amber-400 shadow-inner"
                 />
                 {guestName && (
@@ -946,6 +1011,8 @@ export default function InviteGenerator() {
                     type="button"
                     onClick={() => {
                       setGuestName("");
+                      setHindiSuggestion("");
+                      setSelectedLang("hindi");
                       const inputEl = document.getElementById("guest-name-input");
                       if (inputEl) inputEl.focus();
                     }}
@@ -956,12 +1023,60 @@ export default function InviteGenerator() {
                   </button>
                 )}
               </div>
+
+              {/* Language Choice Pills (When entered in English / Roman alphabet) */}
+              {!isDevanagari(guestName) && guestName.trim() && (
+                <div className="mt-2.5 flex items-center gap-2 flex-wrap animate-fadeIn">
+                  <span className="text-[11px] sm:text-xs text-amber-300/80 font-medium">नाम का प्रारूप चुनें:</span>
+
+                  {/* Hindi Option (Default) */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedLang("hindi")}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      selectedLang === "hindi"
+                        ? "bg-amber-500 text-stone-950 shadow-md border-2 border-amber-300 scale-[1.02]"
+                        : "bg-black/40 hover:bg-black/60 text-amber-300/80 border border-amber-500/30"
+                    }`}
+                  >
+                    {selectedLang === "hindi" && <Check className="w-3.5 h-3.5 flex-shrink-0" />}
+                    <span>
+                      🇮🇳 हिन्दी: {isTransliterating && !hindiSuggestion ? "अनुवाद हो रहा है..." : (hindiSuggestion || guestName.trim())}
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-black/25 rounded font-normal">
+                      अनुशंसित
+                    </span>
+                  </button>
+
+                  {/* English Option */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedLang("english")}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                      selectedLang === "english"
+                        ? "bg-amber-500 text-stone-950 shadow-md border-2 border-amber-300 scale-[1.02]"
+                        : "bg-black/40 hover:bg-black/60 text-amber-300/80 border border-amber-500/30"
+                    }`}
+                  >
+                    {selectedLang === "english" && <Check className="w-3.5 h-3.5 flex-shrink-0" />}
+                    <span>English: {guestName.trim()}</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Confirmation when typed directly in Hindi */}
+              {isDevanagari(guestName) && guestName.trim() && (
+                <div className="mt-2 flex items-center gap-1.5 text-xs text-emerald-300/90 font-medium animate-fadeIn">
+                  <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                  <span>✓ हिन्दी नाम दर्ज किया गया: <b>{guestName.trim()}</b></span>
+                </div>
+              )}
             </div>
 
             {/* Generate Button: Disabled once generated for current name, re-enables on edit */}
             <button
               type="submit"
-              disabled={isGenerating || !guestName.trim() || isAlreadyGenerated}
+              disabled={isGenerating || !effectiveGuestName || isAlreadyGenerated}
               className={`w-full flex items-center justify-center gap-2.5 py-4 rounded-2xl font-bold text-sm sm:text-base select-none transition-all ${
                 isAlreadyGenerated
                   ? "bg-emerald-950/70 border-2 border-emerald-500/60 text-emerald-300 cursor-not-allowed opacity-90 shadow-none"
@@ -1003,7 +1118,7 @@ export default function InviteGenerator() {
                 <div className="flex items-center gap-2">
                   <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
                   <span className="text-sm sm:text-base font-bold text-emerald-300">
-                    {generatedResult.name} जी का निमंत्रण तैयार है!
+                    {formatGuestWithJi(generatedResult.name)} का निमंत्रण तैयार है!
                   </span>
                 </div>
                 <span className="text-xs text-amber-300/70 font-mono flex-shrink-0">
@@ -1096,7 +1211,7 @@ export default function InviteGenerator() {
                       {/* Name & Date */}
                       <div className="min-w-0 flex-1 flex flex-col sm:flex-row sm:items-center sm:gap-2">
                         <span className="font-bold text-amber-200 text-xs sm:text-sm truncate">
-                          {inv.name} जी
+                          {formatGuestWithJi(inv.name)}
                         </span>
                         {inv.timestamp && (
                           <span className="text-[10px] sm:text-[11px] text-amber-400/60 font-mono truncate">
