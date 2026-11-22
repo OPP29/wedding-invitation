@@ -37,9 +37,9 @@ export default function Gallery() {
       src: `${import.meta.env.BASE_URL}couple-photos/photo4.jpg`,
       title: "अनंत पथ पर साथ",
       caption: "Walking hand in hand toward eternity",
-      position: "60% 63%",
-      origin: "60% 63%",
-      scale: 1.5,
+      position: "61% 51%",
+      origin: "61% 51%",
+      scale: 1.45,
     },
     {
       src: `${import.meta.env.BASE_URL}couple-photos/photo5.jpg`,
