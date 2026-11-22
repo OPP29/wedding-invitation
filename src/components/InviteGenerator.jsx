@@ -11,8 +11,6 @@ import {
   Copy,
   Search,
   RefreshCw,
-  Trash2,
-  ExternalLink,
   Lock
 } from "lucide-react";
 
@@ -806,29 +804,6 @@ export default function InviteGenerator() {
     }
   };
 
-  // Delete invite from local saved history
-  const handleDeleteInvite = (item) => {
-    const confirmDelete = window.confirm(
-      `क्या आप '${item.name} जी' का निमंत्रण इस सूची से हटाना चाहते हैं?`
-    );
-    if (!confirmDelete) return;
-
-    setHistory((prev) => {
-      const updated = prev.filter(
-        (i) =>
-          i.id !== item.id &&
-          (i.shortUrl || i.fullUrl) !== (item.shortUrl || item.fullUrl)
-      );
-      try {
-        localStorage.setItem("monika_ritesh_generated_invites", JSON.stringify(updated));
-      } catch {
-        // Ignored
-      }
-      return updated;
-    });
-    showToast(`✓ ${item.name} जी का निमंत्रण हटा दिया गया।`);
-  };
-
   // Configure / Change GitHub Token
   const handleConfigureGitHubToken = () => {
     const current = getStoredGitHubToken();
@@ -1138,8 +1113,8 @@ export default function InviteGenerator() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="🔍 अतिथि का नाम या लिंक खोजें..."
-                className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-black/40 border border-amber-500/30 text-amber-100 placeholder-amber-400/40 text-xs sm:text-sm focus:outline-none focus:border-amber-400 transition-colors"
+                placeholder="🔍 अतिथि का नाम खोजें..."
+                className="w-full pl-10 pr-9 py-2 rounded-xl bg-black/40 border border-amber-500/30 text-amber-100 placeholder-amber-400/40 text-xs sm:text-sm focus:outline-none focus:border-amber-400 transition-colors"
               />
               {searchQuery && (
                 <button
@@ -1153,85 +1128,64 @@ export default function InviteGenerator() {
               )}
             </div>
 
-            {/* Cards List */}
+            {/* Cards List - Ultra Compact */}
             {filteredInvites.length === 0 ? (
-              <div className="p-8 text-center rounded-2xl bg-black/30 border border-amber-500/20 text-amber-300/70 text-xs sm:text-sm">
+              <div className="p-6 text-center rounded-2xl bg-black/30 border border-amber-500/20 text-amber-300/70 text-xs sm:text-sm">
                 {history.length === 0
                   ? "अभी तक कोई निमंत्रण लिंक नहीं बना है। ऊपर नाम लिखकर 'Generate Link' पर क्लिक करें।"
                   : `'${searchQuery}' से मेल खाता कोई अतिथि नहीं मिला।`}
               </div>
             ) : (
-              <div className="space-y-3 max-h-[560px] overflow-y-auto pr-1">
+              <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1">
                 {filteredInvites.map((inv) => {
                   const itemKey = inv.id || `${inv.name}-${inv.shortUrl || inv.fullUrl}`;
                   const isCopied = copiedId === (inv.id || inv.shortUrl || inv.fullUrl);
                   return (
                     <div
                       key={itemKey}
-                      className="p-3.5 sm:p-4 rounded-2xl bg-black/40 hover:bg-black/60 border border-amber-500/30 hover:border-amber-400/60 transition-all flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 group"
+                      className="py-2 px-3 rounded-xl bg-black/35 hover:bg-black/55 border border-amber-500/20 hover:border-amber-400/50 transition-all flex items-center justify-between gap-2.5"
                     >
-                      <div className="space-y-1 min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-bold text-amber-200 text-sm sm:text-base truncate">
-                            {inv.name} जी
+                      {/* Name & Date */}
+                      <div className="min-w-0 flex-1 flex flex-col sm:flex-row sm:items-center sm:gap-2">
+                        <span className="font-bold text-amber-200 text-xs sm:text-sm truncate">
+                          {inv.name} जी
+                        </span>
+                        {inv.timestamp && (
+                          <span className="text-[10px] sm:text-[11px] text-amber-400/60 font-mono truncate">
+                            {inv.timestamp}
                           </span>
-                          {inv.timestamp && (
-                            <span className="text-[11px] text-amber-400/60 font-mono">
-                              • {inv.timestamp}
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-xs text-amber-300/80 truncate">
-                          <a
-                            href={inv.shortUrl || inv.fullUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-amber-200 hover:underline flex items-center gap-1 truncate font-mono text-[11px] sm:text-xs"
-                          >
-                            <ExternalLink className="w-3 h-3 flex-shrink-0" />
-                            <span className="truncate">{inv.shortUrl || inv.fullUrl}</span>
-                          </a>
-                        </div>
+                        )}
                       </div>
 
-                      {/* Actions */}
-                      <div className="flex items-center gap-2 flex-wrap flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-amber-500/20">
+                      {/* Actions: WhatsApp & Copy */}
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
                         <button
                           type="button"
                           onClick={() => handleShareWhatsApp(inv)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] sm:text-xs shadow transition-colors cursor-pointer"
                           title="WhatsApp पर पुनः भेजें"
                         >
-                          <Send className="w-3.5 h-3.5" />
+                          <Send className="w-3 h-3 flex-shrink-0" />
                           <span>WhatsApp</span>
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleCopyLink(inv)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-semibold text-xs transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-semibold text-[11px] sm:text-xs transition-colors cursor-pointer"
                           title="लिंक कॉपी करें"
                         >
                           {isCopied ? (
                             <>
-                              <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              <Check className="w-3 h-3 text-emerald-400 flex-shrink-0" />
                               <span className="text-emerald-300">कॉपी हुआ</span>
                             </>
                           ) : (
                             <>
-                              <Copy className="w-3.5 h-3.5" />
+                              <Copy className="w-3 h-3 flex-shrink-0" />
                               <span>कॉपी</span>
                             </>
                           )}
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteInvite(inv)}
-                          className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-300 hover:text-red-200 transition-colors cursor-pointer"
-                          title="सूची से हटाएं"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
