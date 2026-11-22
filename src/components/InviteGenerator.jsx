@@ -7,7 +7,13 @@ import {
   Key,
   Plus,
   X,
-  Download
+  Download,
+  Copy,
+  Search,
+  RefreshCw,
+  Trash2,
+  ExternalLink,
+  Lock
 } from "lucide-react";
 
 export default function InviteGenerator() {
@@ -32,6 +38,9 @@ export default function InviteGenerator() {
     }
   });
   const [toastNotice, setToastNotice] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSyncingGitHub, setIsSyncingGitHub] = useState(false);
+  const [copiedId, setCopiedId] = useState(null);
 
   const showToast = (msg) => {
     setToastNotice(msg);
@@ -659,6 +668,167 @@ export default function InviteGenerator() {
     }
   };
 
+  // Parse Guest list.txt format lines
+  const parseGuestListText = (text) => {
+    if (!text) return [];
+    const parsed = [];
+    const lines = text.split("\n");
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line) continue;
+
+      // Pattern: • [21 नव॰ 2026, 2:42 pm] Prakash जी | लिंक: https://spoo.me/dJluSh
+      const matchBullet = line.match(/^•?\s*\[(.*?)\]\s*(.*?)(?:\s*जी)?\s*\|\s*लिंक:\s*(https?:\/\/[^\s]+)/);
+      if (matchBullet) {
+        const timestamp = matchBullet[1].trim();
+        const name = matchBullet[2].trim().replace(/\s*जी$/, "");
+        const link = matchBullet[3].trim();
+        parsed.push({
+          id: `gh-${link}-${name}`,
+          name,
+          shortUrl: link,
+          fullUrl: link,
+          message: formatWhatsAppMessage(name, link),
+          timestamp,
+        });
+      }
+    }
+    return parsed;
+  };
+
+  // Fetch & merge Guest list.txt from GitHub / local fallback
+  const fetchAndMergeGitHubList = async (token = getStoredGitHubToken(), notify = false) => {
+    setIsSyncingGitHub(true);
+    let remoteContent = "";
+
+    // 1. Try GitHub REST API if token is present
+    if (token) {
+      try {
+        const owner = "OPP29";
+        const repo = "wedding-invitation";
+        const path = "public/Guest list.txt";
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`;
+        const res = await fetch(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.content) {
+            remoteContent = b64DecodeUnicode(data.content);
+          }
+        }
+      } catch {
+        // Fall back to static file
+      }
+    }
+
+    // 2. If API was unavailable or returned nothing, fallback to static public Guest list.txt
+    if (!remoteContent) {
+      try {
+        const baseUrl = getBaseWeddingUrl();
+        const staticRes = await fetch(`${baseUrl}Guest%20list.txt?t=${Date.now()}`);
+        if (staticRes.ok) {
+          remoteContent = await staticRes.text();
+        }
+      } catch {
+        // Ignored
+      }
+    }
+
+    if (remoteContent) {
+      const parsedItems = parseGuestListText(remoteContent);
+      if (parsedItems.length > 0) {
+        setHistory((prevHistory) => {
+          const combinedMap = new Map();
+
+          // Remote items first
+          for (const item of parsedItems) {
+            const key = (item.shortUrl || item.fullUrl || item.name).trim().toLowerCase();
+            combinedMap.set(key, item);
+          }
+
+          // Local items take precedence
+          for (const item of prevHistory) {
+            const key = (item.shortUrl || item.fullUrl || item.name).trim().toLowerCase();
+            const existing = combinedMap.get(key);
+            combinedMap.set(key, { ...existing, ...item });
+          }
+
+          const merged = Array.from(combinedMap.values());
+          try {
+            localStorage.setItem("monika_ritesh_generated_invites", JSON.stringify(merged));
+          } catch {
+            // Ignored
+          }
+          return merged;
+        });
+        if (notify) {
+          showToast(`✓ GitHub से ${parsedItems.length} अतिथि सिंक हो गए!`);
+        }
+      }
+    }
+    setIsSyncingGitHub(false);
+  };
+
+  // Automatically sync saved guest list when GitHub Sync is active
+  useEffect(() => {
+    if (hasGitHubToken) {
+      const timer = setTimeout(() => {
+        fetchAndMergeGitHubList();
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [hasGitHubToken]);
+
+  // One-click copy helper
+  const handleCopyLink = async (item) => {
+    const link = item.shortUrl || item.fullUrl;
+    if (!link) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(link);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = link;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+      setCopiedId(item.id || link);
+      setTimeout(() => setCopiedId(null), 2500);
+      showToast(`✓ ${item.name} जी का लिंक कॉपी हो गया!`);
+    } catch {
+      showToast("⚠️ लिंक कॉपी करने में असमर्थ।");
+    }
+  };
+
+  // Delete invite from local saved history
+  const handleDeleteInvite = (item) => {
+    const confirmDelete = window.confirm(
+      `क्या आप '${item.name} जी' का निमंत्रण इस सूची से हटाना चाहते हैं?`
+    );
+    if (!confirmDelete) return;
+
+    setHistory((prev) => {
+      const updated = prev.filter(
+        (i) =>
+          i.id !== item.id &&
+          (i.shortUrl || i.fullUrl) !== (item.shortUrl || item.fullUrl)
+      );
+      try {
+        localStorage.setItem("monika_ritesh_generated_invites", JSON.stringify(updated));
+      } catch {
+        // Ignored
+      }
+      return updated;
+    });
+    showToast(`✓ ${item.name} जी का निमंत्रण हटा दिया गया।`);
+  };
+
   // Configure / Change GitHub Token
   const handleConfigureGitHubToken = () => {
     const current = getStoredGitHubToken();
@@ -676,6 +846,7 @@ export default function InviteGenerator() {
         }
         setHasGitHubToken(true);
         showToast("✓ GitHub टोकन सफलतापूर्वक सहेजा गया!");
+        fetchAndMergeGitHubList(trimmed, true);
       } else {
         try {
           localStorage.removeItem("wedding_gh_pat");
@@ -697,9 +868,19 @@ export default function InviteGenerator() {
 
     // Open WhatsApp directly with text message containing the link.
     // Without an attached file, WhatsApp automatically renders the interactive Rich Link Preview card!
-    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(card.message)}`;
+    const messageText = card.message || formatWhatsAppMessage(card.name, card.shortUrl || card.fullUrl);
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(messageText)}`;
     window.open(waUrl, "_blank");
   };
+
+  // Filter saved invites based on search query
+  const filteredInvites = history.filter((inv) => {
+    if (!searchQuery.trim()) return true;
+    const q = searchQuery.toLowerCase().trim();
+    const nameMatch = (inv.name || "").toLowerCase().includes(q);
+    const linkMatch = (inv.shortUrl || inv.fullUrl || "").toLowerCase().includes(q);
+    return nameMatch || linkMatch;
+  });
 
   return (
     <div className="min-h-screen bg-[#200007] text-[#fbf6ee] font-mukta p-4 sm:p-8 flex flex-col items-center">
@@ -896,6 +1077,177 @@ export default function InviteGenerator() {
             </div>
           )}
         </div>
+
+        {/* Saved Guest Invites History Section (STRICT REQUIREMENT: Only visible if GitHub Sync is ON) */}
+        {hasGitHubToken ? (
+          <div className="p-5 sm:p-7 rounded-3xl bg-gradient-to-b from-[#2a010c] to-[#1c0007] border-2 border-amber-400/70 shadow-2xl space-y-5 animate-fadeIn">
+            {/* Header & Controls */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-amber-500/30 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg sm:text-xl font-bold text-amber-200 font-hindi-title">
+                    📋 पूर्व निर्मित निमंत्रण लिंक सूची
+                  </h2>
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-semibold">
+                    {filteredInvites.length} {filteredInvites.length === history.length ? "अतिथि" : `(कुल ${history.length})`}
+                  </span>
+                </div>
+                <p className="text-xs text-amber-300/70 mt-1">
+                  सभी सहेजे गए निमंत्रण लिंक यहां उपलब्ध हैं। किसी भी समय पुनः WhatsApp पर भेजें या कॉपी करें।
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => fetchAndMergeGitHubList(undefined, true)}
+                  disabled={isSyncingGitHub}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-semibold transition-colors disabled:opacity-50 cursor-pointer"
+                  title="GitHub से नवीनतम सूची सिंक करें"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isSyncingGitHub ? "animate-spin text-amber-400" : ""}`} />
+                  <span>{isSyncingGitHub ? "सिंक हो रहा है..." : "रीफ्रेश"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => exportToTextFile(history)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-xs font-semibold transition-colors cursor-pointer"
+                  title="संपूर्ण अतिथि सूची .txt फ़ाइल के रूप में डाउनलोड करें"
+                >
+                  <Download className="w-3.5 h-3.5 text-amber-400" />
+                  <span>सूची डाउनलोड (.txt)</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Search Filter */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-amber-400/60 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="🔍 अतिथि का नाम या लिंक खोजें..."
+                className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-black/40 border border-amber-500/30 text-amber-100 placeholder-amber-400/40 text-xs sm:text-sm focus:outline-none focus:border-amber-400 transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-amber-400/60 hover:text-amber-300 transition-colors cursor-pointer"
+                  title="खोज साफ़ करें"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* Cards List */}
+            {filteredInvites.length === 0 ? (
+              <div className="p-8 text-center rounded-2xl bg-black/30 border border-amber-500/20 text-amber-300/70 text-xs sm:text-sm">
+                {history.length === 0
+                  ? "अभी तक कोई निमंत्रण लिंक नहीं बना है। ऊपर नाम लिखकर 'Generate Link' पर क्लिक करें।"
+                  : `'${searchQuery}' से मेल खाता कोई अतिथि नहीं मिला।`}
+              </div>
+            ) : (
+              <div className="space-y-3 max-h-[560px] overflow-y-auto pr-1">
+                {filteredInvites.map((inv) => {
+                  const itemKey = inv.id || `${inv.name}-${inv.shortUrl || inv.fullUrl}`;
+                  const isCopied = copiedId === (inv.id || inv.shortUrl || inv.fullUrl);
+                  return (
+                    <div
+                      key={itemKey}
+                      className="p-3.5 sm:p-4 rounded-2xl bg-black/40 hover:bg-black/60 border border-amber-500/30 hover:border-amber-400/60 transition-all flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 group"
+                    >
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-bold text-amber-200 text-sm sm:text-base truncate">
+                            {inv.name} जी
+                          </span>
+                          {inv.timestamp && (
+                            <span className="text-[11px] text-amber-400/60 font-mono">
+                              • {inv.timestamp}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-xs text-amber-300/80 truncate">
+                          <a
+                            href={inv.shortUrl || inv.fullUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:text-amber-200 hover:underline flex items-center gap-1 truncate font-mono text-[11px] sm:text-xs"
+                          >
+                            <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                            <span className="truncate">{inv.shortUrl || inv.fullUrl}</span>
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-2 flex-wrap flex-shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-amber-500/20">
+                        <button
+                          type="button"
+                          onClick={() => handleShareWhatsApp(inv)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow transition-colors cursor-pointer"
+                          title="WhatsApp पर पुनः भेजें"
+                        >
+                          <Send className="w-3.5 h-3.5" />
+                          <span>WhatsApp</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleCopyLink(inv)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 font-semibold text-xs transition-colors cursor-pointer"
+                          title="लिंक कॉपी करें"
+                        >
+                          {isCopied ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              <span className="text-emerald-300">कॉपी हुआ</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5" />
+                              <span>कॉपी</span>
+                            </>
+                          )}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteInvite(inv)}
+                          className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-300 hover:text-red-200 transition-colors cursor-pointer"
+                          title="सूची से हटाएं"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="p-4 rounded-2xl bg-black/30 border border-amber-500/20 text-center space-y-2">
+            <div className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-400">
+              <Lock className="w-4 h-4" />
+            </div>
+            <p className="text-xs sm:text-sm text-amber-200/80 font-medium">
+              🔒 पूर्व निर्मित निमंत्रण लिंक सूची केवल GitHub Sync सक्रिय होने पर दिखाई देगी।
+            </p>
+            <button
+              type="button"
+              onClick={handleConfigureGitHubToken}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-300 text-xs font-semibold transition-colors cursor-pointer"
+            >
+              <Key className="w-3.5 h-3.5" />
+              <span>GitHub Sync टोकन दर्ज करें</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
